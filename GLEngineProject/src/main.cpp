@@ -146,68 +146,7 @@ void run() {
 	camera.setPosition(glm::vec3(0.0f, 8.0f, 0.0f));
 	glm::mat4 projMatrix = glm::perspective(glm::radians(60.0f), (float)width/(float)height, 0.1f, 1000.0f); // TODO: Move inside the camera class
 
-	// Textures
-	//GLuint textureAlbedo;
-	//GLuint textureNormal;
-	//GLuint textureMetalness;
-	//GLuint textureRoughness;
-	{
-		/// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		/// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		/// 
-		/// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		/// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		/// 
-		/// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);//GL_LINEAR_MIPMAP_LINEAR
-		/// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // No this should not be a mipmap filter option, google it.
-		/// 
-		/// 
-		/// int width, height, channels;
-		/// unsigned char* image;
-		/// 
-		/// // Albedo
-		/// image = SOIL_load_image("D:/OpenGL Projects/Textures/pbr/Albedo.tga", &width, &height, &channels, SOIL_LOAD_RGBA); 
-		/// 
-		/// glGenTextures(1, &textureAlbedo);
-		/// glBindTexture(GL_TEXTURE_2D, textureAlbedo);
-		/// glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-		/// glGenerateMipmap(GL_TEXTURE_2D);
-		/// 
-		/// SOIL_free_image_data(image);
-
-		/// // Normal
-		/// image = SOIL_load_image("D:/OpenGL Projects/Textures/pbr/Normal.tga", &width, &height, &channels, SOIL_LOAD_RGBA); 
-		///  
-		/// glGenTextures(1, &textureNormal);
-		/// glBindTexture(GL_TEXTURE_2D, textureNormal);
-		/// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image); // NOTE:
-		/// glGenerateMipmap(GL_TEXTURE_2D);
-		/// 
-		/// SOIL_free_image_data(image);
-		
-		// // Metalness
-		// image = SOIL_load_image("D:/OpenGL Projects/Textures/pbr/Metalness.tga", &width, &height, &channels, SOIL_LOAD_RGBA); 
-		// 
-		// glGenTextures(1, &textureMetalness);
-		// glBindTexture(GL_TEXTURE_2D, textureMetalness);
-		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-		// glGenerateMipmap(GL_TEXTURE_2D);
-		// 
-		// SOIL_free_image_data(image);
-		// 
-		// // Roughness
-		// image = SOIL_load_image("D:/OpenGL Projects/Textures/pbr/Roughness.tga", &width, &height, &channels, SOIL_LOAD_RGBA); 
-		// 
-		// glGenTextures(1, &textureRoughness);
-		// glBindTexture(GL_TEXTURE_2D, textureRoughness);
-		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-		// glGenerateMipmap(GL_TEXTURE_2D);
-		// 
-		// SOIL_free_image_data(image);
-		// glBindTexture(GL_TEXTURE_2D, 0);
-	}
-
-
+	
 	//GLuint cubeMap;
 	//{
 	//	glGenTextures(1, &cubeMap);
