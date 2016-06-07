@@ -477,7 +477,7 @@ int main(int argc, char* argv[]) {
 
 	MoveWindow(GetConsoleWindow(), 0, 0, 800, 700, true);
 
-	try {
+	try { // TODO: Eventually remove this try/catch after removing all throw statments
 		if (false) { // NOTE: set to true to bench
 			// Code for benching
 			std::vector<double> times{};
