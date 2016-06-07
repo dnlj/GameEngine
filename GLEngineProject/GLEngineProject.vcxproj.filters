@@ -93,4 +93,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="src\shaders\fragment_brdf.glsl" />
+    <None Include="src\shaders\vertex_brdf.glsl" />
+  </ItemGroup>
 </Project>
