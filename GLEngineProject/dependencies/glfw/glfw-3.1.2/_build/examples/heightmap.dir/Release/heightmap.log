@@ -1,0 +1,6 @@
+﻿  Building Custom Rule D:/OpenGL Projects/GLEngineSolution/GLEngineProject/dependencies/glfw/glfw-3.1.2/examples/CMakeLists.txt
+  CMake does not need to re-run because D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\examples\CMakeFiles\generate.stamp is up-to-date.
+  heightmap.c
+  glad.c
+  Generating Code...
+  heightmap.vcxproj -> D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\examples\Release\heightmap.exe

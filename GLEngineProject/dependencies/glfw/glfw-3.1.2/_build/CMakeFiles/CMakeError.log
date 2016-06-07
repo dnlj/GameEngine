@@ -1,0 +1,45 @@
+Determining if files pthread.h exist failed with the following output:
+Change Dir: D:/OpenGL Projects/GLEngineSolution/GLEngineProject/dependencies/glfw/glfw-3.1.2/_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTryCompileExec2786824133.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R) Build Engine version 14.0.24723.2
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/2/2016 7:46:18 PM.
+The target "BeforeGenerateProjectPriFile" listed in a BeforeTargets attribute at "C:\Program Files (x86)\MSBuild\Microsoft\NuGet\Microsoft.NuGet.targets (186,61)" does not exist in the project, and will be ignored.
+Project "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\cmTryCompileExec2786824133.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTryCompileExec2786824133.dir\Debug\".
+  Creating directory "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTryCompileExec2786824133.dir\Debug\cmTryCom.43A44A1E.tlog\".
+InitializeBuildStatus:
+  Creating "cmTryCompileExec2786824133.dir\Debug\cmTryCom.43A44A1E.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTryCompileExec2786824133.dir\Debug\\" /Fd"cmTryCompileExec2786824133.dir\Debug\vc140.pdb" /Gd /TC /errorReport:queue "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\CheckIncludeFiles.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23506 for x64
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTryCompileExec2786824133.dir\Debug\\" /Fd"cmTryCompileExec2786824133.dir\Debug\vc140.pdb" /Gd /TC /errorReport:queue "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\CheckIncludeFiles.c"
+  
+  CheckIncludeFiles.c
+D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\CheckIncludeFiles.c(2): fatal error C1083: Cannot open include file: 'pthread.h': No such file or directory [D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\cmTryCompileExec2786824133.vcxproj]
+Done Building Project "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\cmTryCompileExec2786824133.vcxproj" (default targets) -- FAILED.
+
+Build FAILED.
+
+"D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\cmTryCompileExec2786824133.vcxproj" (default target) (1) ->
+(ClCompile target) -> 
+  D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\CheckIncludeFiles.c(2): fatal error C1083: Cannot open include file: 'pthread.h': No such file or directory [D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\cmTryCompileExec2786824133.vcxproj]
+
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:00.35
+
+Source:
+/* */
+#include <pthread.h>
+
+
+int main(void){return 0;}
+

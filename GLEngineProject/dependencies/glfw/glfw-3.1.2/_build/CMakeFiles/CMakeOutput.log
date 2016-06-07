@@ -1,0 +1,125 @@
+The system is: Windows - 6.2 - AMD64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler:  
+Build flags: 
+Id flags: 
+
+The output was:
+0
+Microsoft (R) Build Engine version 14.0.24723.2
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/2/2016 7:46:14 PM.
+The target "BeforeGenerateProjectPriFile" listed in a BeforeTargets attribute at "C:\Program Files (x86)\MSBuild\Microsoft\NuGet\Microsoft.NuGet.targets (186,61)" does not exist in the project, and will be ignored.
+Project "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\3.1.0\CompilerIdC\CompilerIdC.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "Debug\".
+  Creating directory "Debug\CompilerIdC.tlog\".
+InitializeBuildStatus:
+  Creating "Debug\CompilerIdC.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /nologo /W0 /WX- /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TC /errorReport:queue CMakeCCompilerId.c
+  CMakeCCompilerId.c
+Link:
+  D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdC.lib" /MACHINE:X64 Debug\CMakeCCompilerId.obj
+  CompilerIdC.vcxproj -> D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\3.1.0\CompilerIdC\.\CompilerIdC.exe
+PostBuildEvent:
+  for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+  :VCEnd
+  CMAKE_C_COMPILER=D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\cl.exe
+FinalizeBuildStatus:
+  Deleting file "Debug\CompilerIdC.tlog\unsuccessfulbuild".
+  Touching "Debug\CompilerIdC.tlog\CompilerIdC.lastbuildstate".
+Done Building Project "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\3.1.0\CompilerIdC\CompilerIdC.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.82
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+
+The C compiler identification is MSVC, found in "D:/OpenGL Projects/GLEngineSolution/GLEngineProject/dependencies/glfw/glfw-3.1.2/_build/CMakeFiles/3.1.0/CompilerIdC/CompilerIdC.exe"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: D:/OpenGL Projects/GLEngineSolution/GLEngineProject/dependencies/glfw/glfw-3.1.2/_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTryCompileExec307787429.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R) Build Engine version 14.0.24723.2
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/2/2016 7:46:16 PM.
+The target "BeforeGenerateProjectPriFile" listed in a BeforeTargets attribute at "C:\Program Files (x86)\MSBuild\Microsoft\NuGet\Microsoft.NuGet.targets (186,61)" does not exist in the project, and will be ignored.
+Project "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\cmTryCompileExec307787429.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTryCompileExec307787429.dir\Debug\".
+  Creating directory "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTryCompileExec307787429.dir\Debug\cmTryCom.3FAB40E8.tlog\".
+InitializeBuildStatus:
+  Creating "cmTryCompileExec307787429.dir\Debug\cmTryCom.3FAB40E8.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTryCompileExec307787429.dir\Debug\\" /Fd"cmTryCompileExec307787429.dir\Debug\vc140.pdb" /Gd /TC /errorReport:queue "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\testCCompiler.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23506 for x64
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTryCompileExec307787429.dir\Debug\\" /Fd"cmTryCompileExec307787429.dir\Debug\vc140.pdb" /Gd /TC /errorReport:queue "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\testCCompiler.c"
+  
+  testCCompiler.c
+Link:
+  D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec307787429.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:/OpenGL Projects/GLEngineSolution/GLEngineProject/dependencies/glfw/glfw-3.1.2/_build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec307787429.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/OpenGL Projects/GLEngineSolution/GLEngineProject/dependencies/glfw/glfw-3.1.2/_build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec307787429.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec307787429.dir\Debug\testCCompiler.obj
+  cmTryCompileExec307787429.vcxproj -> D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec307787429.exe
+FinalizeBuildStatus:
+  Deleting file "cmTryCompileExec307787429.dir\Debug\cmTryCom.3FAB40E8.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec307787429.dir\Debug\cmTryCom.3FAB40E8.tlog\cmTryCompileExec307787429.lastbuildstate".
+Done Building Project "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\cmTryCompileExec307787429.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.99
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: D:/OpenGL Projects/GLEngineSolution/GLEngineProject/dependencies/glfw/glfw-3.1.2/_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTryCompileExec3851797341.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R) Build Engine version 14.0.24723.2
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/2/2016 7:46:17 PM.
+The target "BeforeGenerateProjectPriFile" listed in a BeforeTargets attribute at "C:\Program Files (x86)\MSBuild\Microsoft\NuGet\Microsoft.NuGet.targets (186,61)" does not exist in the project, and will be ignored.
+Project "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\cmTryCompileExec3851797341.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTryCompileExec3851797341.dir\Debug\".
+  Creating directory "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTryCompileExec3851797341.dir\Debug\cmTryCom.77AF03CE.tlog\".
+InitializeBuildStatus:
+  Creating "cmTryCompileExec3851797341.dir\Debug\cmTryCom.77AF03CE.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTryCompileExec3851797341.dir\Debug\\" /Fd"cmTryCompileExec3851797341.dir\Debug\vc140.pdb" /Gd /TC /errorReport:queue "D:\Program Files (x86)\CMake\share\cmake-3.1\Modules\CMakeCCompilerABI.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23506 for x64
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTryCompileExec3851797341.dir\Debug\\" /Fd"cmTryCompileExec3851797341.dir\Debug\vc140.pdb" /Gd /TC /errorReport:queue "D:\Program Files (x86)\CMake\share\cmake-3.1\Modules\CMakeCCompilerABI.c"
+  
+  CMakeCCompilerABI.c
+Link:
+  D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3851797341.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:/OpenGL Projects/GLEngineSolution/GLEngineProject/dependencies/glfw/glfw-3.1.2/_build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3851797341.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/OpenGL Projects/GLEngineSolution/GLEngineProject/dependencies/glfw/glfw-3.1.2/_build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3851797341.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec3851797341.dir\Debug\CMakeCCompilerABI.obj
+  cmTryCompileExec3851797341.vcxproj -> D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3851797341.exe
+FinalizeBuildStatus:
+  Deleting file "cmTryCompileExec3851797341.dir\Debug\cmTryCom.77AF03CE.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec3851797341.dir\Debug\cmTryCom.77AF03CE.tlog\cmTryCompileExec3851797341.lastbuildstate".
+Done Building Project "D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\CMakeFiles\CMakeTmp\cmTryCompileExec3851797341.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.57
+
+

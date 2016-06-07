@@ -1,0 +1,4 @@
+﻿  Building Custom Rule D:/OpenGL Projects/GLEngineSolution/GLEngineProject/dependencies/glfw/glfw-3.1.2/tests/CMakeLists.txt
+  CMake does not need to re-run because D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\tests\CMakeFiles\generate.stamp is up-to-date.
+  title.c
+  title.vcxproj -> D:\OpenGL Projects\GLEngineSolution\GLEngineProject\dependencies\glfw\glfw-3.1.2\_build\tests\Release\title.exe
