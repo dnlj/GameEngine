@@ -1,7 +1,7 @@
-GLEngineProject/backup/
-GLEngineProject/dependencies/
-GLEngineProject/output/
-GLEngineProject/temp/
+GLEngineProject/backup
+GLEngineProject/dependencies
+GLEngineProject/output
+GLEngineProject/temp
 
 # ---> C++
 # Compiled Object files
