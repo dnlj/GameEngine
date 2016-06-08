@@ -29,6 +29,7 @@
 #include <assimp/postprocess.h>
 
 // Engine
+#include <engine/engine.hpp>
 #include <engine/util.hpp>
 #include <engine/Mesh.hpp>
 #include <engine/TextureFormat.hpp>
@@ -241,7 +242,6 @@ void run() {
 	engine::TextureFormat normalFormat;
 	normalFormat.useGammaCorrection = false;
 
-	
 	// Tile
 	engine::Texture albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_tiles/old_tiles_a.tga", albedoFormat);
 	engine::Texture normal_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_tiles/old_tiles_n.tga", normalFormat);

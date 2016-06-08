@@ -3,6 +3,10 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <ctime>
+#include <string>
+#include <sstream>
+#include <iomanip>
 
 #include <glloadgen/gl_core_4_4.h>
 
@@ -10,15 +14,17 @@
 #include <GLFW/glfw3.h>
 
 namespace engine {
-namespace util {
+	namespace util {
 
-	std::string loadFile(const std::string &path);
+		std::string loadFile(const std::string &path);
 	
-	void checkGLErrors();
+		void checkGLErrors();
 
-	void printGLInfo();
+		void printGLInfo();
 
-	void initializeOpenGL();
+		void initializeOpenGL();
 
-} // namespace: util
-} // namespace: engine
+		std::string getDateString();
+
+	}
+}
