@@ -2,8 +2,8 @@ GLEngineProject/backup
 GLEngineProject/dependencies
 GLEngineProject/output
 GLEngineProject/temp
-GLEngineProject/src/log.txt
 *.VC.opendb
+*.log
 
 # ---> C++
 # Compiled Object files
