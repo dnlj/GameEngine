@@ -16,7 +16,7 @@ void glhelper::checkShaderErrors(GLuint shader) {
 		delete [] buffer;
 		glDeleteShader(shader);
 
-		throw std::runtime_error(errorMsg); // TODO: Convert to use new error handling
+		engine_error(errorMsg); // TODO: Convert to use new error handling
 	}
 }
 
@@ -39,6 +39,6 @@ void glhelper::checkLinkingErrors(GLuint program) {
 		delete [] buffer;
 		glDeleteProgram(program);
 
-		throw std::runtime_error(errorMsg); // TODO: Convert to use new error handling
+		engine_error(errorMsg); // TODO: Convert to use new error handling
 	}
 }

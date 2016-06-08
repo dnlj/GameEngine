@@ -6,7 +6,10 @@
 #include <iostream>
 
 // glLoadGen
-#include "glloadgen\gl_core_4_4.h"
+#include <glloadgen\gl_core_4_4.h>
+
+// Engine
+#include <engine/engine.hpp>
 
 
 class Shader {

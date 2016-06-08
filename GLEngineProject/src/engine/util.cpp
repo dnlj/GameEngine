@@ -71,8 +71,7 @@ namespace engine {
 		void initializeOpenGL() {
 			int loaded = ogl_LoadFunctions();
 			if (loaded == ogl_LOAD_FAILED) {
-				// TODO: Convert to use new error handling
-				throw std::runtime_error(std::string("[glLoadGen] Initialization failed: ").append("TODO: Get there error here")); // TODO: Get there error here
+				engine_error(std::string("[glLoadGen] Initialization failed: ").append("TODO: Get there error here")); // TODO: Get there error here
 			}
 
 			int num_failed = loaded - ogl_LOAD_SUCCEEDED;
@@ -80,7 +79,7 @@ namespace engine {
 				printf("[glLoadGen] %i functions failed to load.\n", num_failed);
 			}
 
-			if (!ogl_IsVersionGEQ(4, 4)) { throw std::runtime_error("OpenGL 4.4 API is not available."); } // TODO: Convert to use new error handling
+			if (!ogl_IsVersionGEQ(4, 4)) { engine_error("OpenGL 4.4 API is not available."); }
 		}
 
 		std::string getDateString() {

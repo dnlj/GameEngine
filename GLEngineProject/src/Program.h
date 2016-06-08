@@ -7,6 +7,9 @@
 // glLoadGen
 #include "glloadgen\gl_core_4_4.h"
 
+// Engine
+#include <engine/engine.hpp>
+
 // My includes
 #include "Shader.h"
 

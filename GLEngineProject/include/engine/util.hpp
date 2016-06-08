@@ -13,6 +13,9 @@
 // GLFW
 #include <GLFW/glfw3.h>
 
+// Engine
+#include <engine/engine.hpp>
+
 namespace engine {
 	namespace util {
 

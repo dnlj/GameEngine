@@ -4,7 +4,7 @@ Shader::Shader(GLenum shaderType, std::string source) : shader(0), type(shaderTy
 	shader = glCreateShader(type);
 	
 	if (shader == 0) {
-		throw std::runtime_error("glCreateShader failed."); // TODO: Convert to use new error handling
+		engine_error("glCreateShader failed."); // TODO: Convert to use new error handling
 	}
 
 	const char *charSource = source.c_str();
@@ -26,7 +26,7 @@ Shader::Shader(GLenum shaderType, std::string source) : shader(0), type(shaderTy
 		delete [] buffer;
 		deleteShader();
 
-		throw std::runtime_error(errorMsg); // TODO: Convert to use new error handling
+		engine_error(errorMsg); // TODO: Convert to use new error handling
 	}
 }
 

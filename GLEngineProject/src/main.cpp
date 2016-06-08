@@ -1,5 +1,8 @@
 ﻿// Includes
-#include <Windows.h>
+#ifdef _WIN32
+	#include <Windows.h>
+#endif
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -64,11 +67,11 @@ void setupWindow(GLFWwindow *&window, std::string title) {
 		stream << "GLFW error 0x" 
 			<< std::setfill('0') << std::setw(sizeof(int)*2) << std::hex 
 			<< error << ": " << desc;
-		throw std::runtime_error(stream.str()); // TODO: Convert to use new error handling
+		engine_error(stream.str());
 	});
 
 	// Initialize GLFW and create the window
-	if (!glfwInit()) { throw std::runtime_error("GLFW initialization failed."); } // TODO: Convert to use new error handling
+	if (!glfwInit()) { engine_error("GLFW initialization failed."); }
 
 	
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -98,7 +101,7 @@ void setupWindow(GLFWwindow *&window, std::string title) {
 		window = glfwCreateWindow(854, 480, title.c_str(), nullptr, nullptr);
 	}
 
-	if (!window) { throw std::runtime_error("GLFW failed to create window."); } // TODO: Convert to use new error handling
+	if (!window) { engine_error("GLFW failed to create window."); }
 
 	if (!fullscreen) {
 		glfwSetWindowPos(window, 700, 500);
@@ -475,32 +478,28 @@ double bench() {
 
 int main(int argc, char* argv[]) {
 
-	MoveWindow(GetConsoleWindow(), 0, 0, 800, 700, true);
+	#ifdef _WIN32
+		MoveWindow(GetConsoleWindow(), 0, 0, 800, 700, true);
+	#endif
 
-	try { // TODO: Eventually remove this try/catch after removing all throw statments
-		if (false) { // NOTE: set to true to bench
-			// Code for benching
-			std::vector<double> times{};
-			double avg = 0;
+	if (false) { // NOTE: set to true to bench
+		// Code for benching
+		std::vector<double> times{};
+		double avg = 0;
 
-			for (int i = 1; i <= 10; i++) {
-				times.push_back(bench());
-			}
-
-			for (int i = 0; i < times.size(); i++) {
-				std::cout << "Time " << i << ": " << times[i] << std::endl;
-				avg += times[i];
-			}
-
-			std::cout << "Average Time: " << avg / times.size() << std::endl;
+		for (int i = 1; i <= 10; i++) {
+			times.push_back(bench());
 		}
 
-		run();
-	} catch (std::exception e) {
-		glfwTerminate();
-		std::cerr << e.what() << std::endl;
-		getchar();
+		for (int i = 0; i < times.size(); i++) {
+			std::cout << "Time " << i << ": " << times[i] << std::endl;
+			avg += times[i];
+		}
+
+		std::cout << "Average Time: " << avg / times.size() << std::endl;
 	}
+
+	run();
 
 	glfwTerminate();
 	return 0;

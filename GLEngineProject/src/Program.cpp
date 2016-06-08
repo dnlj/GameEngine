@@ -47,7 +47,7 @@ void Program::checkLinkStatus() {
 		delete [] buffer;
 		deleteProgram();
 
-		throw std::runtime_error(errorMsg); // TODO: Convert to use new error handling
+		engine_error(errorMsg);
 	}
 }
 
@@ -64,27 +64,27 @@ void Program::use() {
 	glUseProgram(program);
 }
 
-GLint Program::getAttribLocation(const char *name) const {
+GLint Program::getAttribLocation(const char *name) const { // TODO: Convert to use strings
 	if (name == nullptr) {
-		throw std::runtime_error("name was not specified in Program::getAttrib"); // TODO: Convert to use new error handling
+		engine_error("name was not specified in Program::getAttrib");
 	}
 
 	GLint attrib = glGetAttribLocation(program, name);
 	if (attrib == -1) {
-		throw std::runtime_error(std::string("Program attribute not found: ").append(name)); // TODO: Convert to use new error handling
+		engine_error(std::string("Program attribute not found: ").append(name)); // TODO: Convert to use new error handling
 	}
 
 	return attrib;
 };
 
-GLint Program::getUniformLocation(const char *name) const {
+GLint Program::getUniformLocation(const char *name) const { // TODO: Convert to use strings
 	if (name == nullptr) {
-		throw std::runtime_error("name was not specified in Program::getUniform"); // TODO: Convert to use new error handling
+		engine_error("name was not specified in Program::getUniform"); // TODO: Convert to use new error handling
 	}
 
 	GLint uniform = glGetUniformLocation(program, name);
 	if (uniform == -1) {
-		throw std::runtime_error(std::string("Program uniform not found: ").append(name)); // TODO: Convert to use new error handling
+		engine_error(std::string("Program uniform not found: ").append(name)); // TODO: Convert to use new error handling
 	}
 
 	return uniform;
