@@ -2,13 +2,12 @@
 
 namespace engine {
 	void _error(const std::string &file, const size_t line, const std::string &msg) {
-		// TODO: Test with utf8, wcerr?
 		// TODO: Maybe add a stack trace?
 
 		std::string date = engine::util::getDateString();
 		std::string err = "[ERROR][" + date + "][" + file + ":" + std::to_string(line) + "] " + msg;
 
-		std::ofstream logFile("error.log", std::ios::app | std::ios::binary); // TODO: Make error file configurable
+		std::ofstream logFile("error.log", std::ios::app | std::ios::binary);
 
 		if (!logFile) {
 			std::cerr << "[ERROR] Failed to load log file." << std::endl;

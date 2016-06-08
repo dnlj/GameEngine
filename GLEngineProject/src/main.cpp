@@ -44,7 +44,6 @@
 #include "Program.h"
 #include "Camera.h"
 
-// TODO:
 // TODO: Add an engine::cleanup() function and call it at the end of main (should call mesh::cleanup, texture::cleanup, etc)
 // TODO: UPDATE TO OPENGL 4.5, WIL NEED TO UPDATE GLLOADGEN
 // TODO: Look into direct_state_access (GL 4.5). Could save on some gl calls such as bind
@@ -148,7 +147,7 @@ void run() {
 	// Camera
 	Camera camera;
 	camera.setPosition(glm::vec3(0.0f, 8.0f, 0.0f));
-	glm::mat4 projMatrix = glm::perspective(glm::radians(60.0f), (float)width/(float)height, 0.1f, 1000.0f); // TODO: Move inside the camera class
+	glm::mat4 projMatrix = glm::perspective(glm::radians(60.0f), (float)width/(float)height, 0.1f, 1000.0f); // TODO: Move inside the camera class and add fov, nearz, farz as members with getters/setters
 
 	
 	//GLuint cubeMap;
