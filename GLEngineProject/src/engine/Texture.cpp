@@ -74,6 +74,7 @@ namespace engine {
 		SOIL_free_image_data(image);
 
 		size_t index = textures.size();
+		textureData.format = format;
 		textures.push_back(textureData);
 
 		return Texture{index};
