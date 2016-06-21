@@ -27,6 +27,8 @@ class Program {
 		GLint getUniformLocation(const char *name) const;
 		GLuint get();
 		void use();
+
+		void getProgramUniforms();
 	private:
 		GLuint program;
 };

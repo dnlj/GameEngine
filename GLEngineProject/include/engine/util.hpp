@@ -8,7 +8,7 @@
 #include <sstream>
 #include <iomanip>
 
-#include <glloadgen/gl_core_4_4.h>
+#include <glloadgen/gl_core_4_5.h>
 
 // GLFW
 #include <GLFW/glfw3.h>

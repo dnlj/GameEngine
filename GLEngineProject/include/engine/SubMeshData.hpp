@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glloadgen/gl_core_4_4.h>
+#include <glloadgen/gl_core_4_5.h>
 
 #include <engine/Material.hpp>
 

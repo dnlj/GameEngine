@@ -1,4 +1,4 @@
-#include "Program.h"
+﻿#include "Program.h"
 
 
 Program::Program() : program(glCreateProgram()) {}
@@ -89,3 +89,46 @@ GLint Program::getUniformLocation(const char *name) const { // TODO: Convert to 
 
 	return uniform;
 };
+
+void Program::getProgramUniforms() {
+	if (false) {
+		GLint i;
+		GLint count;
+
+		GLint size; // size of the variable
+		GLenum type; // type of the variable (float, vec3 or mat4, etc)
+
+		const GLsizei bufSize = 128; // maximum name length
+		GLchar name[bufSize]; // variable name in GLSL
+		GLsizei length; // name length
+
+		glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &count);
+		printf("Active Uniforms: %d\n", count);
+
+		for (i = 0; i < count; i++) {
+			glGetActiveUniform(program, (GLuint)i, bufSize, &length, &size, &type, name);
+
+			printf("Uniform #%d Type: %u Name: %s\n", i, type, name);
+		}
+	} else {
+		//GLint numActiveAttribs = 0;
+		//GLint numActiveUniforms = 0;
+		//glGetProgramInterfaceiv(program, GL_PROGRAM_INPUT, GL_ACTIVE_RESOURCES, &numActiveAttribs);
+		//glGetProgramInterfaceiv(program, GL_UNIFORM, GL_ACTIVE_RESOURCES, &numActiveUniforms);
+		//std::vector<GLchar> nameData(256);
+		//std::vector<GLenum> properties;
+		//properties.push_back(GL_NAME_LENGTH​);
+		//properties.push_back(GL_TYPE​);
+		//properties.push_back(GL_ARRAY_SIZE​);
+		//std::vector<GLint> values(properties.size());
+		//
+		//for (int attrib = 0; attrib < numActiveAttribs; ++attrib) {
+		//	glGetProgramResourceiv(program, GL_PROGRAM_INPUT, attrib, properties.size(),
+		//		&properties[0], values.size(), NULL, &values[0]);
+		//
+		//	nameData.resize(properties[0]); //The length of the name.
+		//	glGetProgramResourceName(program, GL_PROGRAM_INPUT, attrib, nameData.size(), NULL, &nameData[0]);
+		//	std::string name((char*)&nameData[0], nameData.size() - 1);
+		//}
+	}
+}

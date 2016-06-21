@@ -24,7 +24,7 @@
     <ClCompile Include="src\engine\Mesh.cpp" />
     <ClCompile Include="src\engine\TextureFormat.cpp" />
     <ClCompile Include="src\engine\util.cpp" />
-    <ClCompile Include="src\glloadgen\gl_core_4_4.c" />
+    <ClCompile Include="src\glloadgen\gl_core_4_5.c" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\engine\Texture.cpp" />
     <ClCompile Include="src\Program.cpp" />
@@ -42,7 +42,7 @@
     <ClInclude Include="include\engine\Vertex.hpp" />
     <ClInclude Include="include\GLE\engine\Mesh.hpp" />
     <ClInclude Include="include\engine\Texture.hpp" />
-    <ClInclude Include="include\glloadgen\gl_core_4_4.h" />
+    <ClInclude Include="include\glloadgen\gl_core_4_5.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Program.h" />
     <ClInclude Include="src\Shader.h" />

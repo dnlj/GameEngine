@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 // glLoadGen
-#include <glloadgen/gl_core_4_4.h>
+#include <glloadgen/gl_core_4_5.h>
 
 // Engine
 #include <engine/util.hpp>

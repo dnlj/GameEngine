@@ -12,7 +12,7 @@
 #include <chrono>
 
 // glLoadGen
-#include <glloadgen/gl_core_4_4.h>
+#include <glloadgen/gl_core_4_5.h>
 
 // GLFW
 #include <GLFW/glfw3.h>
@@ -275,6 +275,8 @@ void run() {
 	glUniform1i(glGetUniformLocation(program.get(), "roughnessMap"), 2);
 	
 	glEnable(GL_CULL_FACE);
+
+	program.getProgramUniforms();
 
 	engine::util::checkGLErrors();
 
