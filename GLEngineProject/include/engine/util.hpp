@@ -18,16 +18,11 @@
 
 namespace engine {
 	namespace util {
-
 		std::string loadFile(const std::string &path);
-	
 		void checkGLErrors();
-
 		void printGLInfo();
-
 		void initializeOpenGL();
-
 		std::string getDateString();
-
+		std::string typeEnumToString(const GLenum &type);
 	}
 }

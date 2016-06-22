@@ -1,5 +1,4 @@
-#ifndef SHADER_H
-#define SHADER_H
+#pragma once
 
 // Includes
 #include <string>
@@ -11,17 +10,16 @@
 // Engine
 #include <engine/engine.hpp>
 
-
-class Shader {
-	public:
+namespace engine {
+	class Shader {
+		public:
 		Shader(GLenum shaderType, std::string source);
 		~Shader();
 		GLenum getType();
 		GLuint getShader();
 		void deleteShader();
-	private:
+		private:
 		GLenum type;
 		GLuint shader;
-};
-
-#endif SHADER_H
+	};
+}

@@ -37,15 +37,14 @@
 #include <engine/Mesh.hpp>
 #include <engine/TextureFormat.hpp>
 #include <engine/Texture.hpp>
+#include <engine/Shader.hpp>
+#include <engine/ShaderProgram.hpp>
 
 
 // My includes
-#include "Shader.h"
-#include "Program.h"
 #include "Camera.h"
 
 // TODO: Add an engine::cleanup() function and call it at the end of main (should call mesh::cleanup, texture::cleanup, etc)
-// TODO: UPDATE TO OPENGL 4.5, WIL NEED TO UPDATE GLLOADGEN
 // TODO: Look into direct_state_access (GL 4.5). Could save on some gl calls such as bind
 // TODO: Look into 32bit z/depth buffer. Not supported on default frame buffer or something like that?
 // TODO: Look into inverse log and other types of z buffers
@@ -74,7 +73,7 @@ void setupWindow(GLFWwindow *&window, std::string title) {
 
 	
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
@@ -136,9 +135,9 @@ void run() {
 	glDepthFunc(GL_LEQUAL);
 
 	// Program
-	Program program;
-	program.attachShader(Shader(GL_VERTEX_SHADER, engine::util::loadFile("shaders/vertex_brdf.glsl")));
-	program.attachShader(Shader(GL_FRAGMENT_SHADER, engine::util::loadFile("shaders/fragment_brdf.glsl")));
+	engine::ShaderProgram program;
+	program.attachShader(engine::Shader(GL_VERTEX_SHADER, engine::util::loadFile("shaders/vertex_brdf.glsl")));
+	program.attachShader(engine::Shader(GL_FRAGMENT_SHADER, engine::util::loadFile("shaders/fragment_brdf.glsl")));
 	program.link();
 	program.checkLinkStatus();
 	program.detachShaders();
@@ -276,7 +275,7 @@ void run() {
 	
 	glEnable(GL_CULL_FACE);
 
-	program.getProgramUniforms();
+	program.loadProgramUniforms();
 
 	engine::util::checkGLErrors();
 
@@ -444,6 +443,7 @@ void run() {
 	}
 
 
+	// TODO: Make an engine::cleanup function to encapsualte all these 
 	engine::Mesh::cleanup();
 	engine::Texture::cleanup();
 
