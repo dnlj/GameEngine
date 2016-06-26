@@ -13,6 +13,7 @@ namespace engine {
 
 	void ShaderProgram::link() {
 		glLinkProgram(program);
+		// TODO: Kinda think i should make it check link status and load uniforms in here.
 	}
 
 	void ShaderProgram::detachShaders() {
@@ -51,7 +52,7 @@ namespace engine {
 		}
 	}
 
-	GLuint ShaderProgram::get() {
+	GLuint ShaderProgram::get() const {
 		return program;
 	}
 
@@ -75,8 +76,9 @@ namespace engine {
 		}
 
 		return attrib;
-	};
+	}
 
+	// TODO: Should i make this take advantage of the properties cache?
 	GLint ShaderProgram::getUniformLocation(const char *name) const { // TODO: Convert to use strings
 		if (name == nullptr) {
 			engine_error("name was not specified in Program::getUniform");
@@ -88,7 +90,7 @@ namespace engine {
 		}
 
 		return uniform;
-	};
+	}
 
 	void ShaderProgram::loadProgramUniforms() {
 		GLint numActiveUniforms = 0;
@@ -100,7 +102,7 @@ namespace engine {
 		std::vector<GLenum> props;
 		props.push_back(GL_NAME_LENGTH);
 		props.push_back(GL_TYPE);
-		//props.push_back(GL_ARRAY_SIZE);
+		props.push_back(GL_LOCATION);
 
 		std::vector<GLint> values(props.size());
 
@@ -112,16 +114,35 @@ namespace engine {
 			std::string name(&nameData[0], nameData.size() - 1);
 			nameData.resize(values[0]-1);
 
-			properties.emplace_back(name, static_cast<GLenum>(values[1]));
+			properties.emplace_back(name, static_cast<GLenum>(values[1]), values[2]);
 		}
 
+
 		// TODO: Remove, temp for debugging
-		std::cout << "\n\n\n";
-		for (auto v : properties) {
-			std::cout << "\nname: " << v.name;
-			std::cout << "\ntype: " << util::typeEnumToString(v.type);
-			std::cout << "\n";
-		}
-		std::cout << "\n\n\n";
+		//std::cout << "\n\n\n";
+		//for (auto v : properties) {
+		//	std::cout << "\nname: " << v.name;
+		//	std::cout << "\ntype: " << util::typeEnumToString(v.type);
+		//	std::cout << "\nlocation: " << v.location;
+		//	std::cout << "\n";
+		//}
+		//std::cout << "\n\n\n";
+	}
+
+	const std::vector<ShaderProgram::UniformPair>& ShaderProgram::getProperties() const {
+		return properties;
+	}
+
+	// TODO: Not really sure if this should be part of the ShaderProgram class or the Material class. Kinda feel like it should be a private method of the Material class;
+	void ShaderProgram::setUniformInt(const size_t &index, std::vector<GLubyte> data) {
+		glUniform1i(properties[index].location, *reinterpret_cast<GLint*>(&data[0]));
+	}
+
+	void ShaderProgram::setUniformUInt(const size_t &index, std::vector<GLubyte> data) {
+		glUniform1ui(properties[index].location, *reinterpret_cast<GLuint*>(&data[0]));
+	}
+
+	void ShaderProgram::setUniformFloat(const size_t &index, std::vector<GLubyte> data) {
+		glUniform1f(properties[index].location, *reinterpret_cast<GLfloat*>(&data[0]));
 	}
 }

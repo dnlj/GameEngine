@@ -39,12 +39,15 @@
 #include <engine/Texture.hpp>
 #include <engine/Shader.hpp>
 #include <engine/ShaderProgram.hpp>
+#include <engine/Material.hpp>
 
 
 // My includes
 #include "Camera.h"
 
+// TODO: Look into using a uniform buffer object vs normal uniforms for things common to all shaders (projection matrix, mvp, model, etc)
 // TODO: Add an engine::cleanup() function and call it at the end of main (should call mesh::cleanup, texture::cleanup, etc)
+// TODO: Go through and make getters const
 // TODO: Look into direct_state_access (GL 4.5). Could save on some gl calls such as bind
 // TODO: Look into 32bit z/depth buffer. Not supported on default frame buffer or something like that?
 // TODO: Look into inverse log and other types of z buffers
@@ -263,19 +266,26 @@ void run() {
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, albedo_tex.getTexture());
-	glUniform1i(glGetUniformLocation(program.get(), "albedoMap"), 0);
+	//glUniform1i(program.getUniformLocation("albedoMap"), 0);
 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, normal_tex.getTexture());
-	glUniform1i(glGetUniformLocation(program.get(), "normalMap"), 1);
+	//glUniform1i(program.getUniformLocation("normalMap"), 1);
 	
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, roughness_tex.getTexture());
-	glUniform1i(glGetUniformLocation(program.get(), "roughnessMap"), 2);
-	
+	//glUniform1i(program.getUniformLocation("roughnessMap"), 2);
+
 	glEnable(GL_CULL_FACE);
 
-	program.loadProgramUniforms();
+	{// Material Testing
+		program.loadProgramUniforms();
+		engine::Material mat{program};
+		mat.setParameter("albedoMap", 0);
+		mat.setParameter("normalMap", 1);
+		mat.setParameter("roughnessMap", 2);
+		mat.loadParameters();
+	}
 
 	engine::util::checkGLErrors();
 
