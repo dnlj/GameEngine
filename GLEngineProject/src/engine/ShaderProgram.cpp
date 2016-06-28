@@ -134,15 +134,15 @@ namespace engine {
 	}
 
 	// TODO: Not really sure if this should be part of the ShaderProgram class or the Material class. Kinda feel like it should be a private method of the Material class;
-	void ShaderProgram::setUniformInt(const size_t &index, std::vector<GLubyte> data) {
+	void ShaderProgram::setUniformInt(const unsigned int &index, std::vector<GLubyte> data) {
 		glUniform1i(properties[index].location, *reinterpret_cast<GLint*>(&data[0]));
 	}
 
-	void ShaderProgram::setUniformUInt(const size_t &index, std::vector<GLubyte> data) {
+	void ShaderProgram::setUniformUInt(const unsigned int &index, std::vector<GLubyte> data) {
 		glUniform1ui(properties[index].location, *reinterpret_cast<GLuint*>(&data[0]));
 	}
 
-	void ShaderProgram::setUniformFloat(const size_t &index, std::vector<GLubyte> data) {
+	void ShaderProgram::setUniformFloat(const unsigned int &index, std::vector<GLubyte> data) {
 		glUniform1f(properties[index].location, *reinterpret_cast<GLfloat*>(&data[0]));
 	}
 }

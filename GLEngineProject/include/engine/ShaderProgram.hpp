@@ -14,6 +14,7 @@
 #include <engine/util.hpp>
 
 // TODO: should i make ShaderPrograms like shader pointers? so that i dont have to wory abotu passing references around? need to implement copy/move/whatever 
+// TODO: Need to simplify this class so that there isnt so many functions to call when setting one up
 namespace engine {
 	class ShaderProgram {
 		public:
@@ -32,20 +33,21 @@ namespace engine {
 			void link();
 			void detachShaders();
 			void checkLinkStatus();
-			GLint getAttribLocation(const char *name) const;
-			GLint getUniformLocation(const char *name) const;
+			GLint getAttribLocation(const char *name) const; // TODO: Conver to use const std::string &
+			GLint getUniformLocation(const char *name) const;// TODO: Conver to use const std::string &
 			GLuint get() const;
 			void use();
 			void loadProgramUniforms();
 			const std::vector<ShaderProgram::UniformPair>& getProperties() const;
 
-			//TODO: Should probably pass a pointer or reference to data instead so we dont have to copy it
+			// TODO: Look into performance of const refernece vs by value for these functions since they are simple types
+			// TODO: Should probably pass a pointer or reference to data instead so we dont have to copy it
 			// TODO: Untested
-			void setUniformInt(const size_t &index, std::vector<GLubyte> data);
+			void setUniformInt(const unsigned int &index, std::vector<GLubyte> data);
 			// TODO: Untested
-			void setUniformUInt(const size_t &index, std::vector<GLubyte> data);
+			void setUniformUInt(const unsigned int &index, std::vector<GLubyte> data);
 			// TODO: Untested
-			void setUniformFloat(const size_t &index, std::vector<GLubyte> data);
+			void setUniformFloat(const unsigned int &index, std::vector<GLubyte> data);
 
 			
 

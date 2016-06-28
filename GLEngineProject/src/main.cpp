@@ -45,6 +45,12 @@
 // My includes
 #include "Camera.h"
 
+// TODO: Need to add a way (in the material format?) to specify channels of textures to use for things. Such as using the r channel for the roughness and the g channel for the metalness and stuff like that.
+// TODO: Need to add a way to remove unused materials/textures/meshes/shaderporgrams
+// TODO: Add move and copy semantics to material/texture/mesh/shaderprogram
+// TODO: Consider using rapidjson for material format. Its pretty fast.
+// TODO: Consider refining the engine namespace into engine::gfx or engine::graphics
+// TODO: In both the Mesh.hpp and Texture.hpp under static i have a similar system settup for loading and managing them, consider creating some kind of class to generlize this and maybe implement somethign similar in the material class
 // TODO: Look into using a uniform buffer object vs normal uniforms for things common to all shaders (projection matrix, mvp, model, etc)
 // TODO: Add an engine::cleanup() function and call it at the end of main (should call mesh::cleanup, texture::cleanup, etc)
 // TODO: Go through and make getters const
@@ -136,6 +142,7 @@ void run() {
 	glClearDepth(1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+	glEnable(GL_CULL_FACE);
 
 	// Program
 	engine::ShaderProgram program;
@@ -252,41 +259,25 @@ void run() {
 	engine::Texture roughness_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_tiles/old_tiles_r.tga", normalFormat);
 
 	// Clay Brick
-	//engine::Texture albedo_tex {"D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/clay_brick/clay_brick_a.tga", true};
-	//engine::Texture normal_tex {"D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/clay_brick/clay_brick_n.tga", false};
-	//engine::Texture roughness_tex{"D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/clay_brick/clay_brick_r.tga", false};
+	//engine::Texture albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/clay_brick/clay_brick_a.tga", albedoFormat);
+	//engine::Texture normal_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/clay_brick/clay_brick_n.tga", normalFormat);
+	//engine::Texture roughness_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/clay_brick/clay_brick_r.tga", normalFormat);
 	
 	// Old Wooden Planks
-	//engine::Texture    albedo_tex{"D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_a.tga", true};
-	//engine::Texture    normal_tex{"D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_n.tga", false};
-	//engine::Texture roughness_tex{"D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_r.tga", false};
+	//engine::Texture albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_a.tga", albedoFormat);
+	//engine::Texture normal_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_n.tga", normalFormat);
+	//engine::Texture roughness_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_r.tga", normalFormat);
 	
 	//albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/test.jpg", albedoFormat);
-
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, albedo_tex.getTexture());
-	//glUniform1i(program.getUniformLocation("albedoMap"), 0);
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, normal_tex.getTexture());
-	//glUniform1i(program.getUniformLocation("normalMap"), 1);
-	
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, roughness_tex.getTexture());
-	//glUniform1i(program.getUniformLocation("roughnessMap"), 2);
-
-	glEnable(GL_CULL_FACE);
-
-	{// Material Testing
+	{ // Material Testing
 		program.loadProgramUniforms();
 		engine::Material mat{program};
-		mat.setParameter("albedoMap", 0);
-		mat.setParameter("normalMap", 1);
-		mat.setParameter("roughnessMap", 2);
+		mat.setParameter("albedoMap", albedo_tex);
+		mat.setParameter("normalMap", normal_tex);
+		mat.setParameter("roughnessMap", roughness_tex);
 		mat.loadParameters();
 	}
-
+	
 	engine::util::checkGLErrors();
 
 	glfwSetCursorPos(window, 0.0, 0.0); // If we dont have this the cam spazzes at the start depending on where you cursor was

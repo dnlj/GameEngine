@@ -13,6 +13,6 @@ namespace engine {
 		public:
 			std::vector<GLubyte> data;
 			bool use = false;
-			void (ShaderProgram::*func)(const size_t &index, std::vector<GLubyte> data);
+			void (ShaderProgram::*func)(const unsigned int &index, std::vector<GLubyte> data);
 	};
 }
