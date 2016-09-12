@@ -39,9 +39,6 @@
     <ClCompile Include="src\glloadgen\gl_core_4_5.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\ShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -52,6 +49,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\ReferenceCounter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,9 +98,6 @@
     <ClInclude Include="include\engine\ShaderProgram.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\Shader.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\engine\MaterialParameter.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -125,10 +122,13 @@
     <ClInclude Include="include\engine\Resource.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\engine\Resource.tpp" />
+    <ClInclude Include="include\engine\Shader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\fragment_brdf.glsl" />
     <None Include="src\shaders\vertex_brdf.glsl" />
-    <None Include="include\engine\Resource.tpp" />
   </ItemGroup>
 </Project>

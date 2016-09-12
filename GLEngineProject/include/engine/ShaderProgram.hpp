@@ -20,7 +20,7 @@
 namespace engine {
 	class ShaderProgram {
 		public:
-			ShaderProgram(const std::vector<Shader> &shaders, bool deleteShaders=false); // Pretty sure this should be using rvalue/move/forwqard/whatever
+			ShaderProgram(const std::vector<Shader> &shaders);
 			~ShaderProgram();
 			// TODO: In the future convert this to be like the texture/mesh class so we dont have to worry about this
 			ShaderProgram(const ShaderProgram &program) = delete; // NOTE: This must be here since the deconstructor callse glDeleteProgram

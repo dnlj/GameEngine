@@ -147,10 +147,14 @@ void run() {
 	glEnable(GL_CULL_FACE);
 
 	// Program
+	//engine::ShaderProgram program({
+	//	engine::Shader::loadShader("shaders/vertex_brdf.glsl", GL_VERTEX_SHADER),
+	//	engine::Shader::loadShader("shaders/fragment_brdf.glsl", GL_FRAGMENT_SHADER),
+	//}, true);
 	engine::ShaderProgram program({
 		engine::Shader::loadShader("shaders/vertex_brdf.glsl", GL_VERTEX_SHADER),
 		engine::Shader::loadShader("shaders/fragment_brdf.glsl", GL_FRAGMENT_SHADER),
-	}, true);
+	});
 	program.use();
 
 	// Camera

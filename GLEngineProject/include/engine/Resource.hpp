@@ -24,7 +24,6 @@ namespace engine {
 			ReferenceCounter refCounter;
 			engine::index index;
 
-		
 
 		////////////////////////////////////////////////////////////////
 		// Static
@@ -35,13 +34,13 @@ namespace engine {
 		protected:
 			class ResourceLoadInfo {
 				public:
-					Type object;
-					bool alreadyLoaded;
-				
+				Type object;
+				bool alreadyLoaded;
+
 			};
 
-			static ResourceLoadInfo loadResource(const std::string& path);
 			static engine::index getNextIndex();
+			static ResourceLoadInfo loadResource(const std::string& path);
 
 			static std::unordered_map<std::string, IndexData> lookupMap;
 			static std::vector<TypeData> container;

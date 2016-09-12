@@ -1,22 +1,17 @@
 #include <engine/ShaderProgram.hpp>
 
 namespace engine {
-	ShaderProgram::ShaderProgram(const std::vector<Shader> &shaders, bool deleteShaders) : program(glCreateProgram()) {
+	ShaderProgram::ShaderProgram(const std::vector<Shader> &shaders) : program(glCreateProgram()) {
 		// TODO: should add a check to make sure that i got a valid program returned (program != 0 i think)
 		// TODO: should check for duplicate programs, could probably use a bit field for this.
-		for (int i=0; i < shaders.size(); i++) {
-			std::cout << "Shader: "  << shaders[i].getShader() << std::endl;
+		for (int i = 0; i < shaders.size(); i++) {
+			std::cout << "Shader: " << shaders[i].getShader() << std::endl;
 			glAttachShader(program, shaders[i].getShader());
 		}
 
 		glLinkProgram(program);
 		checkLinkStatus();
 		detachShaders();
-
-		if (deleteShaders) {
-			// TODO: Delete shaders
-			// TODO: find a better way to handle this
-		}
 
 		loadProgramUniforms();
 	}

@@ -10,9 +10,11 @@ namespace engine {
 	template<class Type, class TypeData>
 	decltype(Resource<Type, TypeData>::deletedIndices) Resource<Type, TypeData>::deletedIndices;
 
+
 	template<class Type, class TypeData>
 	Resource<Type, TypeData>::Resource(engine::index index) : index{index} {
 	}
+
 
 	template<class Type, class TypeData>
 	Resource<Type, TypeData>::Resource(const IndexData& data)
@@ -24,10 +26,12 @@ namespace engine {
 	Resource<Type, TypeData>::~Resource() {
 	}
 
+
 	template<class Type, class TypeData>
 	ReferenceCounter::CounterType Resource<Type, TypeData>::getRefCount() const {
 		return refCounter.getCount();
 	}
+
 
 	////////////////////////////////////////////////////////////////
 	// Static
