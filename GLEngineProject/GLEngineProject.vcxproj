@@ -23,6 +23,7 @@
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\engine\Material.cpp" />
     <ClCompile Include="src\engine\Mesh.cpp" />
+    <ClCompile Include="src\engine\ReferenceCounter.cpp" />
     <ClCompile Include="src\engine\ResourcePath.cpp" />
     <ClCompile Include="src\engine\Shader.cpp" />
     <ClCompile Include="src\engine\ShaderProgram.cpp" />
@@ -35,10 +36,13 @@
   <ItemGroup>
     <ClInclude Include="include\engine\engine.hpp" />
     <ClInclude Include="include\engine\FileSystem\FileSystem.hpp" />
+    <ClInclude Include="include\engine\IndexData.hpp" />
     <ClInclude Include="include\engine\Material.hpp" />
     <ClInclude Include="include\engine\MaterialParameter.hpp" />
     <ClInclude Include="include\engine\Mesh.hpp" />
     <ClInclude Include="include\engine\MeshData.hpp" />
+    <ClInclude Include="include\engine\ReferenceCounter.hpp" />
+    <ClInclude Include="include\engine\Resource.hpp" />
     <ClInclude Include="include\engine\ResourcePath.hpp" />
     <ClInclude Include="include\engine\Shader.hpp" />
     <ClInclude Include="include\engine\ShaderData.hpp" />
@@ -55,6 +59,9 @@
     <ClInclude Include="src\Camera.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\engine\Resource.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
     <None Include="src\shaders\fragment_brdf.glsl" />
     <None Include="src\shaders\vertex_brdf.glsl" />
   </ItemGroup>

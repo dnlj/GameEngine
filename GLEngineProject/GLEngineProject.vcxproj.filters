@@ -51,6 +51,9 @@
     <ClCompile Include="src\engine\ResourcePath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\ReferenceCounter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GLE\engine\Mesh.hpp">
@@ -113,9 +116,19 @@
     <ClInclude Include="include\engine\FileSystem\FileSystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\engine\IndexData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\ReferenceCounter.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\Resource.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\fragment_brdf.glsl" />
     <None Include="src\shaders\vertex_brdf.glsl" />
+    <None Include="include\engine\Resource.tpp" />
   </ItemGroup>
 </Project>
