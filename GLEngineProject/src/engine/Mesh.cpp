@@ -1,7 +1,7 @@
 #include <engine/Mesh.hpp>
 
 namespace engine {
-	Mesh::Mesh(std::size_t idx) : index(idx) {
+	Mesh::Mesh(engine::index idx) : index{idx} {
 	}
 
 	Mesh::~Mesh() {
@@ -31,7 +31,7 @@ namespace engine {
 	// Static Stuff
 	////////////////////////////////////////////////////////////////
 	std::vector<MeshData> Mesh::meshes;
-	std::unordered_map<std::string, std::size_t> Mesh::pathLookup;
+	std::unordered_map<std::string, engine::index> Mesh::pathLookup;
 
 	// TODO: getting some memory warning stuff
 	// TODO: Should get rid of scale and texture scale, that should not be part of the vbo/Mesh it shoudl be part of the transform
@@ -140,7 +140,7 @@ namespace engine {
 
 		// TODO: Need to add material to meshData
 
-		size_t index = meshes.size();
+		engine::index index = static_cast<engine::index>(meshes.size());
 		pathLookup[path] = index; // TODO: This path lookup is untested
 		meshes.push_back(meshData);
 		return Mesh{index};

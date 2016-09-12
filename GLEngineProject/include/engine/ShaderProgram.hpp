@@ -12,33 +12,28 @@
 #include <engine/engine.hpp>
 #include <engine/Shader.hpp>
 #include <engine/util.hpp>
+#include <engine/Uniform.hpp>
 
+// TODO: Maybe make this take an vector of Shaders or something
 // TODO: should i make ShaderPrograms like shader pointers? so that i dont have to wory abotu passing references around? need to implement copy/move/whatever 
 // TODO: Need to simplify this class so that there isnt so many functions to call when setting one up
 namespace engine {
 	class ShaderProgram {
 		public:
-			class UniformPair { // TODO: Rename? idk
-				public:
-					UniformPair(const std::string &name, const GLenum &type, const GLint &location) : name(name), type(type), location(location) {};
-					std::string name;
-					GLenum type;
-					GLint location;
-			};
-
-			ShaderProgram();
+			ShaderProgram(const std::vector<Shader> &shaders, bool deleteShaders=false); // Pretty sure this should be using rvalue/move/forwqard/whatever
 			~ShaderProgram();
-			void attachShader(Shader &shdr);
-			void deleteProgram();
-			void link();
+			// TODO: In the future convert this to be like the texture/mesh class so we dont have to worry about this
+			ShaderProgram(const ShaderProgram &program) = delete; // NOTE: This must be here since the deconstructor callse glDeleteProgram
+
+
 			void detachShaders();
 			void checkLinkStatus();
 			GLint getAttribLocation(const char *name) const; // TODO: Conver to use const std::string &
 			GLint getUniformLocation(const char *name) const;// TODO: Conver to use const std::string &
-			GLuint get() const;
-			void use();
+			GLuint getProgram() const;
+			void use() const;
 			void loadProgramUniforms();
-			const std::vector<ShaderProgram::UniformPair>& getProperties() const;
+			const std::vector<Uniform>& getProperties() const;
 
 			// TODO: Look into performance of const refernece vs by value for these functions since they are simple types
 			// TODO: Should probably pass a pointer or reference to data instead so we dont have to copy it
@@ -53,6 +48,6 @@ namespace engine {
 
 		private:
 			GLuint program;
-			std::vector<ShaderProgram::UniformPair> properties;
+			std::vector<Uniform> properties;
 	};
 }

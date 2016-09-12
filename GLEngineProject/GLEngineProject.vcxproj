@@ -38,10 +38,12 @@
     <ClInclude Include="include\engine\Mesh.hpp" />
     <ClInclude Include="include\engine\MeshData.hpp" />
     <ClInclude Include="include\engine\Shader.hpp" />
+    <ClInclude Include="include\engine\ShaderData.hpp" />
     <ClInclude Include="include\engine\ShaderProgram.hpp" />
     <ClInclude Include="include\engine\SubMeshData.hpp" />
     <ClInclude Include="include\engine\TextureData.hpp" />
     <ClInclude Include="include\engine\TextureFormat.hpp" />
+    <ClInclude Include="include\engine\Uniform.hpp" />
     <ClInclude Include="include\engine\util.hpp" />
     <ClInclude Include="include\engine\Vertex.hpp" />
     <ClInclude Include="include\GLE\engine\Mesh.hpp" />

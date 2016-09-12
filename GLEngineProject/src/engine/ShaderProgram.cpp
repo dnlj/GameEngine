@@ -1,19 +1,28 @@
 #include <engine/ShaderProgram.hpp>
 
 namespace engine {
-	ShaderProgram::ShaderProgram() : program(glCreateProgram()) {}
+	ShaderProgram::ShaderProgram(const std::vector<Shader> &shaders, bool deleteShaders) : program(glCreateProgram()) {
+		// TODO: should add a check to make sure that i got a valid program returned (program != 0 i think)
+		// TODO: should check for duplicate programs, could probably use a bit field for this.
+		for (int i=0; i < shaders.size(); i++) {
+			std::cout << "Shader: "  << shaders[i].getShader() << std::endl;
+			glAttachShader(program, shaders[i].getShader());
+		}
+
+		glLinkProgram(program);
+		checkLinkStatus();
+		detachShaders();
+
+		if (deleteShaders) {
+			// TODO: Delete shaders
+			// TODO: find a better way to handle this
+		}
+
+		loadProgramUniforms();
+	}
 
 	ShaderProgram::~ShaderProgram() {
 		glDeleteProgram(program);
-	}
-
-	void ShaderProgram::attachShader(Shader &shdr) {
-		glAttachShader(program, shdr.getShader());
-	}
-
-	void ShaderProgram::link() {
-		glLinkProgram(program);
-		// TODO: Kinda think i should make it check link status and load uniforms in here.
 	}
 
 	void ShaderProgram::detachShaders() {
@@ -46,22 +55,19 @@ namespace engine {
 
 			errorMsg.append(buffer);
 			delete[] buffer;
-			deleteProgram();
+			
+			glDeleteProgram(program);
+			program = 0;
 
 			engine_error(errorMsg);
 		}
 	}
 
-	GLuint ShaderProgram::get() const {
+	GLuint ShaderProgram::getProgram() const {
 		return program;
 	}
 
-	void ShaderProgram::deleteProgram() {
-		glDeleteProgram(program);
-		program = 0;
-	}
-
-	void ShaderProgram::use() {
+	void ShaderProgram::use() const {
 		glUseProgram(program);
 	}
 
@@ -78,7 +84,7 @@ namespace engine {
 		return attrib;
 	}
 
-	// TODO: Should i make this take advantage of the properties cache?
+	// TODO: Should i make this take advantage of the properties cache? Probably.
 	GLint ShaderProgram::getUniformLocation(const char *name) const { // TODO: Convert to use strings
 		if (name == nullptr) {
 			engine_error("name was not specified in Program::getUniform");
@@ -129,7 +135,7 @@ namespace engine {
 		//std::cout << "\n\n\n";
 	}
 
-	const std::vector<ShaderProgram::UniformPair>& ShaderProgram::getProperties() const {
+	const std::vector<engine::Uniform>& ShaderProgram::getProperties() const {
 		return properties;
 	}
 

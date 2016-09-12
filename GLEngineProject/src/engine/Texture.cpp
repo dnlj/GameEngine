@@ -1,7 +1,7 @@
 #include <engine/Texture.hpp>
 
 namespace engine {
-	Texture::Texture(size_t idx) : index(idx) {
+	Texture::Texture(engine::index idx) : index{idx} {
 	}
 
 	Texture::~Texture() {
@@ -20,7 +20,7 @@ namespace engine {
 	// Static Stuff
 	////////////////////////////////////////////////////////////////
 	std::vector<TextureData> Texture::textures;
-	std::unordered_map<std::string, size_t> Texture::pathLookup;
+	std::unordered_map<std::string, engine::index> Texture::pathLookup;
 
 
 	Texture Texture::loadTexture(const std::string &path, const TextureFormat &format) {
@@ -73,9 +73,10 @@ namespace engine {
 		glBindTexture(GL_TEXTURE_2D, 0);
 		SOIL_free_image_data(image);
 
-		size_t index = textures.size();
+		engine::index index = static_cast<engine::index>(textures.size());
 		textureData.format = format;
 		textures.push_back(textureData);
+		pathLookup[path] = index; // TODO: Untested
 
 		return Texture{index};
 	}

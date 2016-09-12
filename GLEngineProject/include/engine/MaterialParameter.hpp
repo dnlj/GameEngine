@@ -11,6 +11,7 @@ namespace engine {
 
 	class MaterialParameter {
 		public:
+			GLint location;
 			std::vector<GLubyte> data;
 			bool use = false;
 			void (ShaderProgram::*func)(const unsigned int &index, std::vector<GLubyte> data);

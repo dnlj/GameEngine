@@ -45,6 +45,8 @@
 // My includes
 #include "Camera.h"
 
+// TODO: Add some kind of path resolver type thing (like minecraft and gmod have) so we dont have to use absolue paths for loading resources (I guess this could be done by just inclinding the assets in the working directory. Doing that woudl probably make things a lot simpler. Then you could just go /Materials/Weapons/AK47/base.mat or whatever)
+// TODO: Add include statment for glsl to make code more re-usable
 // TODO: Need to add a way (in the material format?) to specify channels of textures to use for things. Such as using the r channel for the roughness and the g channel for the metalness and stuff like that.
 // TODO: Need to add a way to remove unused materials/textures/meshes/shaderporgrams
 // TODO: Add move and copy semantics to material/texture/mesh/shaderprogram
@@ -145,12 +147,10 @@ void run() {
 	glEnable(GL_CULL_FACE);
 
 	// Program
-	engine::ShaderProgram program;
-	program.attachShader(engine::Shader(GL_VERTEX_SHADER, engine::util::loadFile("shaders/vertex_brdf.glsl")));
-	program.attachShader(engine::Shader(GL_FRAGMENT_SHADER, engine::util::loadFile("shaders/fragment_brdf.glsl")));
-	program.link();
-	program.checkLinkStatus();
-	program.detachShaders();
+	engine::ShaderProgram program({
+		engine::Shader::loadShader("shaders/vertex_brdf.glsl", GL_VERTEX_SHADER),
+		engine::Shader::loadShader("shaders/fragment_brdf.glsl", GL_FRAGMENT_SHADER),
+	}, true);
 	program.use();
 
 	// Camera
@@ -216,7 +216,7 @@ void run() {
 		glBindBuffer(GL_ARRAY_BUFFER, engine::Mesh::meshes[i].vbo);
 	
 	
-		// TODO: Need to redo this to make shaderes handled by the material
+		// TODO: Need to redo this to make shaderes handled by the mesh/material classes
 		// Position
 		GLint location = program.getAttribLocation("vertPosition");
 		glEnableVertexAttribArray(location);
@@ -253,6 +253,7 @@ void run() {
 	engine::TextureFormat normalFormat;
 	normalFormat.useGammaCorrection = false;
 
+	// TODO: need to figure out if i fixed that shader stuff or not
 	// Tile
 	engine::Texture albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_tiles/old_tiles_a.tga", albedoFormat);
 	engine::Texture normal_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_tiles/old_tiles_n.tga", normalFormat);
@@ -267,6 +268,12 @@ void run() {
 	//engine::Texture albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_a.tga", albedoFormat);
 	//engine::Texture normal_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_n.tga", normalFormat);
 	//engine::Texture roughness_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_r.tga", normalFormat);
+
+	// Error Checker
+	// TODO: Not sure why this doesnt work
+	//engine::Texture albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/error_checker/error_checker_basecolor.png", albedoFormat);
+	//engine::Texture normal_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/error_checker/error_checker_normal.png", normalFormat);
+	//engine::Texture roughness_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/error_checker/error_checker_roughness.png", normalFormat);
 	
 	//albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/test.jpg", albedoFormat);
 	{ // Material Testing
@@ -447,6 +454,7 @@ void run() {
 	// TODO: Make an engine::cleanup function to encapsualte all these 
 	engine::Mesh::cleanup();
 	engine::Texture::cleanup();
+	engine::Shader::cleanup();
 
 	glfwDestroyWindow(window);
 }
@@ -479,7 +487,6 @@ double bench() {
 }
 
 int main(int argc, char* argv[]) {
-
 	#ifdef _WIN32
 		MoveWindow(GetConsoleWindow(), 0, 0, 800, 700, true);
 	#endif

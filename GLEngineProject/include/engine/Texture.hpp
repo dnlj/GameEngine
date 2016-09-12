@@ -1,5 +1,6 @@
 #pragma once
 
+// Includes
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -17,7 +18,7 @@
 namespace engine {
 	class Texture {
 		public:
-			Texture::Texture(size_t idx);
+			Texture::Texture(engine::index idx);
 			~Texture();
 
 			GLuint getTexture();
@@ -25,7 +26,7 @@ namespace engine {
 			bool operator==(const Texture &tex) const;
 
 		private:
-			size_t index;
+			engine::index index;
 
 		////////////////////////////////////////////////////////////////
 		// Static Stuff
@@ -36,7 +37,6 @@ namespace engine {
 
 		private:
 			static std::vector<TextureData> textures;
-			static std::unordered_map<std::string, size_t> pathLookup;
-
+			static std::unordered_map<std::string, engine::index> pathLookup;
 	};
 }

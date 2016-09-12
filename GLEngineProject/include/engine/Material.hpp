@@ -5,6 +5,7 @@
 #include <engine/Texture.hpp>
 #include <engine/ShaderProgram.hpp>
 #include <engine/MaterialParameter.hpp>
+#include <engine/Uniform.hpp>
 
 namespace engine {
 
@@ -57,6 +58,7 @@ namespace engine {
 			ShaderProgram &program; // TODO: These programs should be shared between materials, with just the uniforms updating. Probably need to make something like i have for meshes, where it cashes and loads by index
 			std::vector<MaterialParameter> values;
 			std::vector<Texture> textures;
+
 
 			unsigned int findProperty(const std::string &name) const;
 
