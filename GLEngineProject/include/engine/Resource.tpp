@@ -18,8 +18,8 @@ namespace engine {
 
 	template<class Type, class TypeData>
 	Resource<Type, TypeData>::Resource(const IndexData& data)
-		: index{data.index},
-		refCounter{data.refCounter} {
+		: index{data.index}
+		, refCounter{data.refCounter} {
 	}
 
 	template<class Type, class TypeData>
@@ -77,6 +77,7 @@ namespace engine {
 	engine::index Resource<Type, TypeData>::getNextIndex() {
 		engine::index index;
 
+		// Check if there are any positions that can be re-used. If not create a new one.
 		if (deletedIndices.size() > 0) {
 			index = deletedIndices.back();
 			deletedIndices.pop_back();

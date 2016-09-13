@@ -12,9 +12,10 @@ namespace engine {
 
 		// TODO: need to make this handle multiple materials
 
-		for (int i = 0; i < model.subMeshes.size(); i++) {
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.subMeshes[i].ebo);
-			glDrawElements(GL_TRIANGLES, model.subMeshes[i].count, GL_UNSIGNED_INT, nullptr);
+		// Draw all sub models
+		for (int i = 0; i < model.subModels.size(); i++) {
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.subModels[i].ebo);
+			glDrawElements(GL_TRIANGLES, model.subModels[i].count, GL_UNSIGNED_INT, nullptr);
 		}
 
 		glBindVertexArray(0);
@@ -51,8 +52,8 @@ namespace engine {
 
 		std::cout << "vao: " << modelData.vao << std::endl;
 		std::cout << "\tvbo: " << modelData.vbo << std::endl;
-		for (int j = 0; j < modelData.subMeshes.size(); j++) {
-			std::cout << "\tebo: " << modelData.subMeshes[j].ebo << std::endl;
+		for (int j = 0; j < modelData.subModels.size(); j++) {
+			std::cout << "\tebo: " << modelData.subModels[j].ebo << std::endl;
 		}
 
 		glBindVertexArray(0);
@@ -175,7 +176,7 @@ namespace engine {
 
 	ModelData Model::setupGLObjects(const std::vector<Vertex> &vertices, const std::vector<std::vector<GLuint>> &indices) {
 		ModelData modelData{};
-		modelData.subMeshes.resize(indices.size());
+		modelData.subModels.resize(indices.size());
 
 
 		glGenVertexArrays(1, &modelData.vao);
@@ -191,14 +192,14 @@ namespace engine {
 
 
 		for (unsigned int i = 0; i < indices.size(); i++) {
-			glGenBuffers(1, &modelData.subMeshes[i].ebo);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, modelData.subMeshes[i].ebo);
+			glGenBuffers(1, &modelData.subModels[i].ebo);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, modelData.subModels[i].ebo);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices[i].size() * sizeof(GLuint), &indices[i][0], GL_STATIC_DRAW);
 
-			modelData.subMeshes[i].count = static_cast<GLsizei>(indices[i].size());
+			modelData.subModels[i].count = static_cast<GLsizei>(indices[i].size());
 
 			// TODO: Temp for debugging
-			std::cout << "\tebo: " << modelData.subMeshes[i].ebo << std::endl;
+			std::cout << "\tebo: " << modelData.subModels[i].ebo << std::endl;
 		}
 
 

@@ -13,7 +13,6 @@
 // TODO: remove this is a temp include
 #include <engine/ShaderProgram.hpp>
 
-// TODO: This class is completely untested
 namespace engine {
 	class Model : public Resource<Model, ModelData> {
 		public:

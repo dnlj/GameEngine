@@ -1,11 +1,13 @@
 #pragma once
 
+// STD
 #include <iostream>
 #include <string>
 #include <vector>
 #include <unordered_map>
 #include <fstream>
 
+// Engine
 #include <engine/ResourcePath.hpp>
 #include <engine/ReferenceCounter.hpp>
 #include <engine/IndexData.hpp>
