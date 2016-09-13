@@ -70,6 +70,7 @@
 // TODO: Models are mesh + anims + attachments + bones + etc and what ever else you may want. Mesh is just what is needed to render the object (verts/indices/normals/materials/etc)
 // TODO: Input handling seems to be broke (at the time of writing this) when vsync is not enabled. Detach input/physics from framerate.
 // TODO: Need to be calling Model/Texture/Shader/ShaderProgram cleanup somewhere after converting them to use the Resource system
+// TODO: Do more testing over the new Model/Texture/Shader/ShaderProgram/Material after you finish implementing the mto make sure they are getting cleaned up and what not
 
 void setupWindow(GLFWwindow *&window, std::string title) {
 	// GLFW setup

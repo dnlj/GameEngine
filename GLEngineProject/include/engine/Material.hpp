@@ -55,7 +55,8 @@ namespace engine {
 		private:
 			using ShaderProgramFuncPtr = void (ShaderProgram::*)(const unsigned int &index, std::vector<GLubyte> data);
 	
-			ShaderProgram &program; // TODO: These programs should be shared between materials, with just the uniforms updating. Probably need to make something like i have for meshes, where it cashes and loads by index
+			ShaderProgram &program; // TODO: These programs should be shared between materials, with just the uniforms updating.
+									// Probably need to make something like i have for meshes, where it cashes and loads by index
 			std::vector<MaterialParameter> values;
 			std::vector<Texture> textures;
 

@@ -1,42 +1,30 @@
 #pragma once
 
-// Includes
-#include <iostream>
-#include <string>
-#include <unordered_map>
-
 // glLoadGen
 #include <glloadgen/gl_core_4_5.h>
-
-// Engine
-#include <engine/util.hpp>
-#include <engine/TextureData.hpp>
 
 // SOIL
 #include <SOIL.h>
 
+// Engine
+#include <engine/Resource.hpp>
+#include <engine/TextureData.hpp>
+
+// TODO: More testing, to make sure the Resrouce class is working with cleanup and duplicate load files
 namespace engine {
-	class Texture {
+	class Texture : public Resource<Texture, TextureData> {
 		public:
-			Texture::Texture(engine::index idx);
+			using Resource<Texture, TextureData>::Resource;
 			~Texture();
+
+			bool operator==(const Texture& tex) const;
 
 			GLuint getTexture();
 
-			bool operator==(const Texture &tex) const;
-
-		private:
-			engine::index index;
-
 		////////////////////////////////////////////////////////////////
-		// Static Stuff
+		// Static
 		////////////////////////////////////////////////////////////////
 		public:
-			static Texture loadTexture(const std::string &path, const TextureFormat &format);
-			static void cleanup();
-
-		private:
-			static std::vector<TextureData> textures;
-			static std::unordered_map<std::string, engine::index> pathLookup;
+			static Texture loadTexture(const ResourcePath& path, const TextureFormat& format);
 	};
 }

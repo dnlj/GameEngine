@@ -13,6 +13,7 @@
 // TODO: remove this is a temp include
 #include <engine/ShaderProgram.hpp>
 
+// TODO: More testing, to make sure the Resrouce class is working with cleanup and duplicate load files
 namespace engine {
 	class Model : public Resource<Model, ModelData> {
 		public:
