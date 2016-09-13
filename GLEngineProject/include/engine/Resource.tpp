@@ -32,6 +32,11 @@ namespace engine {
 		return refCounter.getCount();
 	}
 
+	template<class Type, class TypeData>
+	engine::index Resource<Type, TypeData>::getIndex() const {
+		return index;
+	}
+
 
 	////////////////////////////////////////////////////////////////
 	// Static

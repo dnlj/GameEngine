@@ -19,6 +19,7 @@ namespace engine {
 			virtual ~Resource() = 0;
 
 			ReferenceCounter::CounterType getRefCount() const;
+			engine::index getIndex() const;
 
 		protected:
 			ReferenceCounter refCounter;

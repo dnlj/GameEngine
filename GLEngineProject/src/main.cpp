@@ -34,12 +34,12 @@
 // Engine
 #include <engine/engine.hpp>
 #include <engine/util.hpp>
-#include <engine/Mesh.hpp>
 #include <engine/TextureFormat.hpp>
 #include <engine/Texture.hpp>
 #include <engine/Shader.hpp>
 #include <engine/ShaderProgram.hpp>
 #include <engine/Material.hpp>
+#include <engine/Model.hpp>
 
 
 // My includes
@@ -147,10 +147,7 @@ void run() {
 	glEnable(GL_CULL_FACE);
 
 	// Program
-	//engine::ShaderProgram program({
-	//	engine::Shader::loadShader("shaders/vertex_brdf.glsl", GL_VERTEX_SHADER),
-	//	engine::Shader::loadShader("shaders/fragment_brdf.glsl", GL_FRAGMENT_SHADER),
-	//}, true);
+	// TODO: use resource paths
 	engine::ShaderProgram program({
 		engine::Shader::loadShader("shaders/vertex_brdf.glsl", GL_VERTEX_SHADER),
 		engine::Shader::loadShader("shaders/fragment_brdf.glsl", GL_FRAGMENT_SHADER),
@@ -207,50 +204,24 @@ void run() {
 
 
 	// Load some meshes for testing
-	engine::Mesh ball = engine::Mesh::loadMesh("D:/OpenGL Projects/Models/shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);
-	engine::Mesh hoola = engine::Mesh::loadMesh("D:/OpenGL Projects/Models/_my_models/hoola.obj", 2.0f, 5.0f);
-	engine::Mesh sailor = engine::Mesh::loadMesh("D:/OpenGL Projects/Models/sailor_giveaway/sailor.obj", 1.5f, 2.0f);
-	engine::Mesh hatman2 = engine::Mesh::loadMesh("D:/OpenGL Projects/Models/_my_models/hatman2.obj", 1.0f, 2.0f);
-	engine::Mesh backdrop = engine::Mesh::loadMesh("D:/OpenGL Projects/Models/_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f);
-	engine::Mesh uvplane = engine::Mesh::loadMesh("D:/OpenGL Projects/Models/_my_models/uvplane.obj", 10.0f, 1.0f);
+	engine::Model ball = engine::Model::loadModel("D:/OpenGL Projects/Models/shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);
+	engine::Model hoola = engine::Model::loadModel("D:/OpenGL Projects/Models/_my_models/hoola.obj", 2.0f, 5.0f);
+	engine::Model sailor = engine::Model::loadModel("D:/OpenGL Projects/Models/sailor_giveaway/sailor.obj", 1.5f, 2.0f);
+	engine::Model hatman2 = engine::Model::loadModel("D:/OpenGL Projects/Models/_my_models/hatman2.obj", 1.0f, 2.0f);
+	engine::Model backdrop = engine::Model::loadModel("D:/OpenGL Projects/Models/_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f);
+	engine::Model uvplane = engine::Model::loadModel("D:/OpenGL Projects/Models/_my_models/uvplane.obj", 10.0f, 1.0f);
+
+	// TODO: use resource paths
+	engine::Model ballMdl = engine::Model::loadModel("D:/OpenGL Projects/Models/shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);
 
 	//////////
-	for (int i = 0; i < engine::Mesh::meshes.size(); i++) {
-		glBindVertexArray(engine::Mesh::meshes[i].vao);
-		glBindBuffer(GL_ARRAY_BUFFER, engine::Mesh::meshes[i].vbo);
-	
-	
-		// TODO: Need to redo this to make shaderes handled by the mesh/material classes
-		// Position
-		GLint location = program.getAttribLocation("vertPosition");
-		glEnableVertexAttribArray(location);
-		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, sizeof(engine::Vertex), (GLvoid*)offsetof(engine::Vertex, position));
-	
-		// Normals
-		location = program.getAttribLocation("vertNormal");
-		glEnableVertexAttribArray(location);
-		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, sizeof(engine::Vertex), (GLvoid*)offsetof(engine::Vertex, normal));
-
-		// Normals
-		location = program.getAttribLocation("vertTangent");
-		glEnableVertexAttribArray(location);
-		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, sizeof(engine::Vertex), (GLvoid*)offsetof(engine::Vertex, tangent));
-
-		// UV
-		location = program.getAttribLocation("vertTexCoord");
-		glEnableVertexAttribArray(location);
-		glVertexAttribPointer(location, 2, GL_FLOAT, GL_FALSE, sizeof(engine::Vertex), (GLvoid*)offsetof(engine::Vertex, uv));
-
-	
-	
-		std::cout << "vao: " << engine::Mesh::meshes[i].vao << std::endl;
-		std::cout << "\tvbo: " << engine::Mesh::meshes[i].vbo << std::endl;
-		for (int j = 0; j < engine::Mesh::meshes[i].subMeshes.size(); j++) {
-			std::cout << "\tebo: " << engine::Mesh::meshes[i].subMeshes[j].ebo << std::endl;
-		}
-	
-		glBindVertexArray(0);
-	}
+	ballMdl.tempSetupGLStuff(program);
+	ball.tempSetupGLStuff(program);
+	hoola.tempSetupGLStuff(program);
+	sailor.tempSetupGLStuff(program);
+	hatman2.tempSetupGLStuff(program);
+	backdrop.tempSetupGLStuff(program);
+	uvplane.tempSetupGLStuff(program);
 	/////////
 	
 	engine::TextureFormat albedoFormat;
@@ -447,6 +418,16 @@ void run() {
 		uvplane.render();
 
 
+
+		// MODEL TEST
+		model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(15.0f, 0.0f, 0.0f)), glm::radians(-45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		mvp = projMatrix * camera.getViewMatrix() * model;
+		glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+		glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+		ballMdl.render();
+
+
+
 		// Buffers and events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -456,7 +437,6 @@ void run() {
 
 
 	// TODO: Make an engine::cleanup function to encapsualte all these 
-	engine::Mesh::cleanup();
 	engine::Texture::cleanup();
 	engine::Shader::cleanup();
 
