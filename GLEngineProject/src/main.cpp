@@ -63,14 +63,13 @@
 // TODO: Add some kind of input handler so you can easily map keys to do stuff
 // TODO: Read the unreal notes from siggraph, it covers a lot of this stuff
 // TODO: Implement IBL
-// TODO: Implement texture/normals
 // TODO: Implement multiple types of lights with attenuation
 // TODO: Make sure you are using debug/release assimp and soil, i think currently i have assimp using debug for both... not sure about soil. double check and google
 // TODO: Make a camera that is not bad, fps style no need for quaternions.
-// TODO: Models are mesh + anims + attachments + bones + etc and what ever else you may want. Mesh is just what is needed to render the object (verts/indices/normals/materials/etc)
 // TODO: Input handling seems to be broke (at the time of writing this) when vsync is not enabled. Detach input/physics from framerate.
 // TODO: Need to be calling Model/Texture/Shader/ShaderProgram cleanup somewhere after converting them to use the Resource system
 // TODO: Do more testing over the new Model/Texture/Shader/ShaderProgram/Material after you finish implementing the mto make sure they are getting cleaned up and what not
+// TODO: Update things to use the ResourcePath system instead of raw file paths
 
 void setupWindow(GLFWwindow *&window, std::string title) {
 	// GLFW setup
