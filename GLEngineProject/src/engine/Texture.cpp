@@ -47,7 +47,6 @@ namespace engine {
 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, TextureFormat::enumToOpenGL(format.filterModeMin));
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, TextureFormat::enumToOpenGL(format.filterModeMag));
-			std::cout << "11: "; engine::util::checkGLErrors();
 
 			// Load the image from a file
 			unsigned char* image;
@@ -57,7 +56,7 @@ namespace engine {
 				std::string err = "Failed to load image \"" + resolvedPath + "\" with error: ";
 				err += SOIL_last_result();
 				// TODO: Have a default texture that is loaded (hard coded so it never fails to load) and dont do a fatal error here.
-				engine_error(err);
+				engine_warning(err);
 			}
 
 			// TODO: Would like to make this part of TextureFormat
