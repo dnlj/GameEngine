@@ -60,29 +60,22 @@ namespace engine {
 				engine_error(err);
 			}
 
-			std::cout << "11.1: "; engine::util::checkGLErrors();
 			// TODO: Would like to make this part of TextureFormat
 			// Determine the format 
 			if (format.useGammaCorrection) {
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-				std::cout << "11.2: "; engine::util::checkGLErrors();
 			} else {
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-				std::cout << "11.3: "; engine::util::checkGLErrors();
 			}
-			std::cout << "12: "; engine::util::checkGLErrors();
 
 			// Generate mipmaps if needed
 			if (format.useMipmaps) {
 				glGenerateMipmap(GL_TEXTURE_2D);
 			}
 
-			std::cout << "13: "; engine::util::checkGLErrors();
-
 			// Unbind the texture and free the image data
 			glBindTexture(GL_TEXTURE_2D, 0);
 			SOIL_free_image_data(image);
-			std::cout << "14: "; engine::util::checkGLErrors();
 		}
 
 		return loadInfo.object;
