@@ -2,6 +2,7 @@
 * Switch to premake5
 * Add Doxygen to project
 * Add checks to see if the file exsits in the Model/Material/Texture/Shader/ShaderProgram classes before trying to load
+* Convert back over to using exceptions hey seem like the better option. Just make sure you stil have some kind of logging and use them properly.
 
 # Maintenance
 * Remove TODO's from code.
@@ -9,4 +10,6 @@
 * Learn and write unit tests. Especially for ResourePath and ReferenceCounter
 
 # Reference / Reading
-* None
+* http://bitsquid.blogspot.com/2012/01/sensible-error-handling-part-1.html
+* http://bitsquid.blogspot.com/2012/02/sensible-error-handling-part-2.html
+* http://bitsquid.blogspot.com/2012/02/sensible-error-handling-part-3.html
