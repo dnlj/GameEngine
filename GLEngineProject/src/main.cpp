@@ -248,9 +248,8 @@ void run() {
 	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_r.tga", normalFormat);
 
 	// Error Checker
-	// TODO: Not sure why this doesnt work
 	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_basecolor.png", albedoFormat);
-	//engine::Texture normal_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_normal.png", normalFormat);
+	//engine::Texture normal_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_normal_fixed.png", normalFormat);
 	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_roughness.png", normalFormat);
 	
 	//albedo_tex = engine::Texture::loadTexture("Texture:test.jpg", albedoFormat);

@@ -18,12 +18,13 @@ namespace engine {
 	Texture Texture::loadTexture(const ResourcePath& path, const TextureFormat& format) {
 		const auto resolvedPath = path.getResolvedPath();
 		auto& loadInfo = loadResource(resolvedPath);
-
+		
 		// Load the object if it has not already been loaded
 		if (!loadInfo.alreadyLoaded) {
+		
 			auto& textureData = container[loadInfo.object.index];
 			textureData.format = format;
-
+			
 			// TODO: Add an option to the TextureFormat for the internal format (GL_RGBA, GL_SRGB8_ALPHA8, GL_RGB, etc)
 			//			So that you can make rgba, rgb, and grayscale textures if you need them
 
@@ -46,27 +47,42 @@ namespace engine {
 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, TextureFormat::enumToOpenGL(format.filterModeMin));
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, TextureFormat::enumToOpenGL(format.filterModeMag));
+			std::cout << "11: "; engine::util::checkGLErrors();
 
 			// Load the image from a file
 			unsigned char* image;
 			image = SOIL_load_image(resolvedPath.c_str(), &width, &height, &channels, SOIL_LOAD_RGBA);
+			
+			if (image == nullptr) {
+				std::string err = "Failed to load image \"" + resolvedPath + "\" with error: ";
+				err += SOIL_last_result();
+				// TODO: Have a default texture that is loaded (hard coded so it never fails to load) and dont do a fatal error here.
+				engine_error(err);
+			}
 
+			std::cout << "11.1: "; engine::util::checkGLErrors();
 			// TODO: Would like to make this part of TextureFormat
 			// Determine the format 
 			if (format.useGammaCorrection) {
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+				std::cout << "11.2: "; engine::util::checkGLErrors();
 			} else {
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+				std::cout << "11.3: "; engine::util::checkGLErrors();
 			}
+			std::cout << "12: "; engine::util::checkGLErrors();
 
 			// Generate mipmaps if needed
 			if (format.useMipmaps) {
 				glGenerateMipmap(GL_TEXTURE_2D);
 			}
 
+			std::cout << "13: "; engine::util::checkGLErrors();
+
 			// Unbind the texture and free the image data
 			glBindTexture(GL_TEXTURE_2D, 0);
 			SOIL_free_image_data(image);
+			std::cout << "14: "; engine::util::checkGLErrors();
 		}
 
 		return loadInfo.object;
