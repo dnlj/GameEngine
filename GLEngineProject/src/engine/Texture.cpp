@@ -52,11 +52,21 @@ namespace engine {
 			unsigned char* image;
 			image = SOIL_load_image(resolvedPath.c_str(), &width, &height, &channels, SOIL_LOAD_RGBA);
 			
+			bool failedToLoad = false;
 			if (image == nullptr) {
 				std::string err = "Failed to load image \"" + resolvedPath + "\" with error: ";
 				err += SOIL_last_result();
-				// TODO: Have a default texture that is loaded (hard coded so it never fails to load) and dont do a fatal error here.
 				engine_warning(err);
+
+				failedToLoad = true;
+				
+				width = 2;
+				height = 2;
+				channels = 4;
+				image = new unsigned char[4 * 4] {
+					255, 000, 000, 255,    000, 255, 000, 255,
+					000, 255, 000, 255,    255, 000, 000, 255,
+				};
 			}
 
 			// TODO: Would like to make this part of TextureFormat
@@ -74,7 +84,11 @@ namespace engine {
 
 			// Unbind the texture and free the image data
 			glBindTexture(GL_TEXTURE_2D, 0);
-			SOIL_free_image_data(image);
+			if (!failedToLoad) {
+				SOIL_free_image_data(image);
+			} else {
+				delete [] image;
+			}
 		}
 
 		return loadInfo.object;
