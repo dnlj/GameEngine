@@ -205,16 +205,18 @@ void run() {
 	//glUniform1i(program.getUniformLocation("cubeMap"), 2);
 
 
-	// Load some meshes for testing
-	engine::Model ball = engine::Model::loadModel("D:/OpenGL Projects/Models/shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);
-	engine::Model hoola = engine::Model::loadModel("D:/OpenGL Projects/Models/_my_models/hoola.obj", 2.0f, 5.0f);
-	engine::Model sailor = engine::Model::loadModel("D:/OpenGL Projects/Models/sailor_giveaway/sailor.obj", 1.5f, 2.0f);
-	engine::Model hatman2 = engine::Model::loadModel("D:/OpenGL Projects/Models/_my_models/hatman2.obj", 1.0f, 2.0f);
-	engine::Model backdrop = engine::Model::loadModel("D:/OpenGL Projects/Models/_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f);
-	engine::Model uvplane = engine::Model::loadModel("D:/OpenGL Projects/Models/_my_models/uvplane.obj", 10.0f, 1.0f);
+	// Register resource directories
+	engine::ResourcePath::AddResourceDir("Model", "D:/OpenGL Projects/Models/");
+	engine::ResourcePath::AddResourceDir("Texture", "D:/OpenGL Projects/Textures/");
 
-	// TODO: use resource paths
-	engine::Model ballMdl = engine::Model::loadModel("D:/OpenGL Projects/Models/shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);
+	// Load some meshes for testing
+	engine::Model ball = engine::Model::loadModel("Model:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);
+	engine::Model hoola = engine::Model::loadModel("Model:_my_models/hoola.obj", 2.0f, 5.0f);
+	engine::Model sailor = engine::Model::loadModel("Model:sailor_giveaway/sailor.obj", 1.5f, 2.0f);
+	engine::Model hatman2 = engine::Model::loadModel("Model:_my_models/hatman2.obj", 1.0f, 2.0f);
+	engine::Model backdrop = engine::Model::loadModel("Model:_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f);
+	engine::Model uvplane = engine::Model::loadModel("Model:_my_models/uvplane.obj", 10.0f, 1.0f);
+	engine::Model ballMdl = engine::Model::loadModel("Model:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);
 
 	//////////
 	ballMdl.tempSetupGLStuff(program);
@@ -230,29 +232,28 @@ void run() {
 	engine::TextureFormat normalFormat;
 	normalFormat.useGammaCorrection = false;
 
-	// TODO: need to figure out if i fixed that shader stuff or not
 	// Tile
-	engine::Texture albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_tiles/old_tiles_a.tga", albedoFormat);
-	engine::Texture normal_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_tiles/old_tiles_n.tga", normalFormat);
-	engine::Texture roughness_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_tiles/old_tiles_r.tga", normalFormat);
+	engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_tiles/old_tiles_a.tga", albedoFormat);
+	engine::Texture normal_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_tiles/old_tiles_n.tga", normalFormat);
+	engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_tiles/old_tiles_r.tga", normalFormat);
 
 	// Clay Brick
-	//engine::Texture albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/clay_brick/clay_brick_a.tga", albedoFormat);
-	//engine::Texture normal_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/clay_brick/clay_brick_n.tga", normalFormat);
-	//engine::Texture roughness_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/clay_brick/clay_brick_r.tga", normalFormat);
+	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/clay_brick/clay_brick_a.tga", albedoFormat);
+	//engine::Texture normal_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/clay_brick/clay_brick_n.tga", normalFormat);
+	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/clay_brick/clay_brick_r.tga", normalFormat);
 	
 	// Old Wooden Planks
-	//engine::Texture albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_a.tga", albedoFormat);
-	//engine::Texture normal_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_n.tga", normalFormat);
-	//engine::Texture roughness_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_r.tga", normalFormat);
+	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_a.tga", albedoFormat);
+	//engine::Texture normal_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_n.tga", normalFormat);
+	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_r.tga", normalFormat);
 
 	// Error Checker
 	// TODO: Not sure why this doesnt work
-	//engine::Texture albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/error_checker/error_checker_basecolor.png", albedoFormat);
-	//engine::Texture normal_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/error_checker/error_checker_normal.png", normalFormat);
-	//engine::Texture roughness_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/error_checker/error_checker_roughness.png", normalFormat);
+	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_basecolor.png", albedoFormat);
+	//engine::Texture normal_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_normal.png", normalFormat);
+	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_roughness.png", normalFormat);
 	
-	//albedo_tex = engine::Texture::loadTexture("D:/OpenGL Projects/Textures/test.jpg", albedoFormat);
+	//albedo_tex = engine::Texture::loadTexture("Texture:test.jpg", albedoFormat);
 	{ // Material Testing
 		program.loadProgramUniforms();
 		engine::Material mat{program};
@@ -264,12 +265,16 @@ void run() {
 	
 	engine::util::checkGLErrors();
 
-	glfwSetCursorPos(window, 0.0, 0.0); // If we dont have this the cam spazzes at the start depending on where you cursor was
+	// If we dont have this the cam spazzes at the start depending on where you cursor was
+	glfwSetCursorPos(window, 0.0, 0.0);
 
+	// Setup lighting and material properties
 	glm::vec3 lightPosition = glm::vec3(0.0f);
 	float roughness = 0.5f;
 	float metalness = 0.0f; // 0.0 = 0.04 because we lerp between 0.04 and texture value
 	float intensity	= 2.0f;
+
+	// Main game loop
 	while (!glfwWindowShouldClose(window)) {
 		// TODO: Move this fps stuff into a function
 		static int frameCount = 0;
