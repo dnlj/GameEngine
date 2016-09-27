@@ -64,9 +64,6 @@ float geometric(float r, float dotNV, float dotNL) {
 
 vec3 brdf(float r, vec3 n, vec3 v, vec3 l, vec3 f0) {
 	vec3 h = normalize(v + l);
-	n = normalize(n);
-	v = normalize(v);
-	l = normalize(l);
 
 	float dotNH = max(EPSILON, dot(n, h));
 	float dotHV = max(EPSILON, dot(h, v));
@@ -122,7 +119,6 @@ void main() {
 
 	color.rgb	= (diffuse + specular) * dotNL * lightColor * intensity;
 	color.a		= 1.0;
-
 
 	// Testing
 	//vec3 zero = vec3(0.0, 0.0, 0.0);
