@@ -46,17 +46,11 @@
 // My includes
 #include "Camera.h"
 
-// TODO: Add some kind of path resolver type thing (like minecraft and gmod have) so we dont have to use absolue paths for loading resources (I guess this could be done by just inclinding the assets in the working directory. Doing that woudl probably make things a lot simpler. Then you could just go /Materials/Weapons/AK47/base.mat or whatever)
 // TODO: Add include statment for glsl to make code more re-usable
 // TODO: Need to add a way (in the material format?) to specify channels of textures to use for things. Such as using the r channel for the roughness and the g channel for the metalness and stuff like that.
-// TODO: Need to add a way to remove unused materials/textures/meshes/shaderporgrams
-// TODO: Add move and copy semantics to material/texture/mesh/shaderprogram
 // TODO: Consider using rapidjson for material format. Its pretty fast.
 // TODO: Consider refining the engine namespace into engine::gfx or engine::graphics
-// TODO: In both the Mesh.hpp and Texture.hpp under static i have a similar system settup for loading and managing them, consider creating some kind of class to generlize this and maybe implement somethign similar in the material class
 // TODO: Look into using a uniform buffer object vs normal uniforms for things common to all shaders (projection matrix, mvp, model, etc)
-// TODO: Add an engine::cleanup() function and call it at the end of main (should call mesh::cleanup, texture::cleanup, etc)
-// TODO: Go through and make getters const
 // TODO: Look into direct_state_access (GL 4.5). Could save on some gl calls such as bind
 // TODO: Look into 32bit z/depth buffer. Not supported on default frame buffer or something like that?
 // TODO: Look into inverse log and other types of z buffers
@@ -69,7 +63,6 @@
 // TODO: Input handling seems to be broke (at the time of writing this) when vsync is not enabled. Detach input/physics from framerate.
 // TODO: Need to be calling Model/Texture/Shader/ShaderProgram cleanup somewhere after converting them to use the Resource system
 // TODO: Do more testing over the new Model/Texture/Shader/ShaderProgram/Material after you finish implementing the mto make sure they are getting cleaned up and what not
-// TODO: Update things to use the ResourcePath system instead of raw file paths
 
 void setupWindow(GLFWwindow *&window, std::string title) {
 	// GLFW setup
@@ -216,10 +209,8 @@ void run() {
 	engine::Model hatman2 = engine::Model::loadModel("Model:_my_models/hatman2.obj", 1.0f, 2.0f);
 	engine::Model backdrop = engine::Model::loadModel("Model:_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f);
 	engine::Model uvplane = engine::Model::loadModel("Model:_my_models/uvplane.obj", 10.0f, 1.0f);
-	engine::Model ballMdl = engine::Model::loadModel("Model:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);
 
 	//////////
-	ballMdl.tempSetupGLStuff(program);
 	ball.tempSetupGLStuff(program);
 	hoola.tempSetupGLStuff(program);
 	sailor.tempSetupGLStuff(program);
@@ -233,9 +224,9 @@ void run() {
 	normalFormat.useGammaCorrection = false;
 
 	// Tile
-	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_tiles/old_tiles_a.tga", albedoFormat);
-	//engine::Texture normal_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_tiles/old_tiles_n.tga", normalFormat);
-	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_tiles/old_tiles_r.tga", normalFormat);
+	engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_tiles/old_tiles_a.tga", albedoFormat);
+	engine::Texture normal_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_tiles/old_tiles_n.tga", normalFormat);
+	engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_tiles/old_tiles_r.tga", normalFormat);
 
 	// Clay Brick
 	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/clay_brick/clay_brick_a.tga", albedoFormat);
@@ -248,9 +239,9 @@ void run() {
 	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_r.tga", normalFormat);
 
 	// Error Checker
-	engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_basecolor.png", albedoFormat);
-	engine::Texture normal_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_normal_fixed.png", normalFormat);
-	engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_roughness.png", normalFormat);
+	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_basecolor.png", albedoFormat);
+	//engine::Texture normal_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_normal_fixed.png", normalFormat);
+	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_roughness.png", normalFormat);
 	
 	//albedo_tex = engine::Texture::loadTexture("Texture:test.jpg", albedoFormat);
 	{ // Material Testing
@@ -424,16 +415,6 @@ void run() {
 		uvplane.render();
 
 
-
-		// MODEL TEST
-		model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(15.0f, 0.0f, 0.0f)), glm::radians(-45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		mvp = projMatrix * camera.getViewMatrix() * model;
-		glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-		glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-		ballMdl.render();
-
-
-
 		// Buffers and events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -444,6 +425,7 @@ void run() {
 
 	// TODO: Make an engine::cleanup function to encapsualte all these 
 	engine::Texture::cleanup();
+	engine::Model::cleanup();
 	engine::Shader::cleanup();
 
 	glfwDestroyWindow(window);
