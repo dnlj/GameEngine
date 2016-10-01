@@ -30,9 +30,6 @@
     <ClCompile Include="src\engine\engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\glloadgen\gl_core_4_5.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\ShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -66,6 +63,9 @@
     <ClCompile Include="src\imgui_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\glloadgen\gl_core_4_5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GLE\engine\Mesh.hpp">
@@ -93,9 +93,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\engine\engine.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\glloadgen\gl_core_4_5.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\engine\ShaderProgram.hpp">
@@ -160,6 +157,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui_test.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\glloadgen\gl_core_4_5.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glloadgen/gl_core_4_5.h>
+#include <glloadgen/gl_core_4_5.hpp>
 
 #include <vector>
 

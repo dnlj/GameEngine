@@ -30,7 +30,7 @@
     <ClCompile Include="src\engine\Texture.cpp" />
     <ClCompile Include="src\engine\TextureFormat.cpp" />
     <ClCompile Include="src\engine\util.cpp" />
-    <ClCompile Include="src\glloadgen\gl_core_4_5.c" />
+    <ClCompile Include="src\glloadgen\gl_core_4_5.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\imgui\imgui_draw.cpp" />
@@ -60,7 +60,7 @@
     <ClInclude Include="include\engine\util.hpp" />
     <ClInclude Include="include\engine\Vertex.hpp" />
     <ClInclude Include="include\GLE\engine\Mesh.hpp" />
-    <ClInclude Include="include\glloadgen\gl_core_4_5.h" />
+    <ClInclude Include="include\glloadgen\gl_core_4_5.hpp" />
     <ClInclude Include="include\imgui\imconfig.h" />
     <ClInclude Include="include\imgui\imgui.h" />
     <ClInclude Include="include\imgui\imgui_internal.h" />

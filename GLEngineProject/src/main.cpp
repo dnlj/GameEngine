@@ -13,7 +13,7 @@
 #include <chrono>
 
 // glLoadGen
-#include <glloadgen/gl_core_4_5.h>
+#include <glloadgen/gl_core_4_5.hpp>
 
 // GLFW
 #include <GLFW/glfw3.h>

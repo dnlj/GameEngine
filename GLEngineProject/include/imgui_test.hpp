@@ -10,7 +10,7 @@
 
 #include <imgui/imgui.h>
 
-#include <glloadgen/gl_core_4_5.h>
+#include <glloadgen/gl_core_4_5.hpp>
 #include <GLFW/glfw3.h>
 
 IMGUI_API bool ImGui_ImplGlfwGL3_Init(GLFWwindow* window, bool install_callbacks);
