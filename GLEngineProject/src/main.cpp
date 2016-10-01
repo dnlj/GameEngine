@@ -3,7 +3,7 @@
 	#include <Windows.h>
 #endif
 
-// STD
+// C++ STD
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -42,6 +42,11 @@
 #include <engine/Material.hpp>
 #include <engine/Model.hpp>
 
+// ImGui
+//#define IMGUI_DISABLE_TEST_WINDOWS
+#include <imgui/imgui.h>
+// TODO: This is temp until i get around to doing this myself
+#include <imgui_test.hpp>
 
 // My includes
 #include "Camera.h"
@@ -63,6 +68,49 @@
 // TODO: Input handling seems to be broke (at the time of writing this) when vsync is not enabled. Detach input/physics from framerate.
 // TODO: Need to be calling Model/Texture/Shader/ShaderProgram cleanup somewhere after converting them to use the Resource system
 // TODO: Do more testing over the new Model/Texture/Shader/ShaderProgram/Material after you finish implementing the mto make sure they are getting cleaned up and what not
+
+// TODO: Temp while testing
+void imguiInit(GLFWwindow *window) {
+	// Setup ImGui binding
+	ImGui_ImplGlfwGL3_Init(window, true);
+}
+
+// TODO: Temp while testing
+void imguiTest(GLFWwindow *window) {
+	static bool show_test_window = true;
+	static bool show_another_window = false;
+	static ImVec4 clear_color = ImColor(0, 0, 0);
+
+	ImGui_ImplGlfwGL3_NewFrame();
+	// 1. Show a simple window
+	// Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
+	{
+		static float f = 0.0f;
+		ImGui::Text("Hello, world!");
+		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+		ImGui::ColorEdit3("clear color", (float*)&clear_color);
+		if (ImGui::Button("Test Window")) show_test_window ^= 1;
+		if (ImGui::Button("Another Window")) show_another_window ^= 1;
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	}
+
+	// 2. Show another simple window, this time using an explicit Begin/End pair
+	if (show_another_window) {
+		ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_FirstUseEver);
+		ImGui::Begin("Another Window", &show_another_window);
+		ImGui::Text("Hello");
+		ImGui::End();
+	}
+
+	// 3. Show the ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
+	if (show_test_window) {
+		ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
+		ImGui::ShowTestWindow(&show_test_window);
+	}
+
+	// Rendering
+	ImGui::Render();
+}
 
 void setupWindow(GLFWwindow *&window, std::string title) {
 	// GLFW setup
@@ -96,24 +144,27 @@ void setupWindow(GLFWwindow *&window, std::string title) {
 
 	// Window setup
 	constexpr bool fullscreen = false;
-	if (fullscreen) {
-		GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-		const GLFWvidmode *videoMode = glfwGetVideoMode(monitor);
+	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode *videoMode = glfwGetVideoMode(monitor);
 
+	if (fullscreen) {
 		window = glfwCreateWindow(videoMode->width, videoMode->height, title.c_str(), monitor, nullptr);
 	} else {
-		window = glfwCreateWindow(854, 480, title.c_str(), nullptr, nullptr);
+		window = glfwCreateWindow(1280, 720, title.c_str(), nullptr, nullptr);
 	}
 
 	if (!window) { engine_error("GLFW failed to create window."); }
 
 	if (!fullscreen) {
-		glfwSetWindowPos(window, 700, 500);
+		int width, height;
+		glfwGetWindowSize(window, &width, &height);
+
+		glfwSetWindowPos(window, videoMode->width / 2 - width / 2, videoMode->height / 2 - height / 2);
 	}
 
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1); // VSYNC 0=off        x = rate/x        1=rate/1 2=rate/2 etc...
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetWindowSizeCallback(window, [](GLFWwindow *window, int width, int height){ glViewport(0, 0, width, height); });
 	//glfwSetWindowFocusCallback(window, [](GLFWwindow *window, int focus) { printf("Focus: %i\n", focus); });
 }
@@ -246,14 +297,14 @@ void run() {
 	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_roughness.png", normalFormat);
 	
 	//albedo_tex = engine::Texture::loadTexture("Texture:test.jpg", albedoFormat);
-	{ // Material Testing
-		program.loadProgramUniforms();
-		engine::Material mat{program};
-		mat.setParameter("albedoMap", albedo_tex);
-		mat.setParameter("normalMap", normal_tex);
-		mat.setParameter("roughnessMap", roughness_tex);
-		mat.loadParameters();
-	}
+	// Material Testing
+	program.loadProgramUniforms();
+	engine::Material mat{program};
+	mat.setParameter("albedoMap", albedo_tex);
+	mat.setParameter("normalMap", normal_tex);
+	mat.setParameter("roughnessMap", roughness_tex);
+	mat.loadParameters();
+	
 	
 	engine::util::checkGLErrors();
 
@@ -265,6 +316,9 @@ void run() {
 	float roughness = 0.5f;
 	float metalness = 0.0f; // 0.0 = 0.04 because we lerp between 0.04 and texture value
 	float intensity	= 2.0f;
+
+	// ImGui setup
+	imguiInit(window);
 
 	// Main game loop
 	while (!glfwWindowShouldClose(window)) {
@@ -374,6 +428,7 @@ void run() {
 		glUniform3fv(program.getUniformLocation("viewPos"), 1, &camera.getPosition()[0]);
 		glUniform3fv(program.getUniformLocation("lightPos"), 1, &lightPosition[0]);
 
+		mat.loadParameters();
 
 		glm::mat4 model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		glm::mat4 mvp = projMatrix * camera.getViewMatrix() * model;
@@ -408,13 +463,17 @@ void run() {
 		mvp = projMatrix * camera.getViewMatrix() * model;
 		glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 		glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-		//backdrop.render();
+		backdrop.render();
 
-		model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(10.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(10.0f, 0.01f, 0.0f)), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		mvp = projMatrix * camera.getViewMatrix() * model;
 		glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 		glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
 		uvplane.render();
+
+
+		// Imgui
+		imguiTest(window);
 
 
 		// Buffers and events
@@ -429,6 +488,8 @@ void run() {
 	engine::Texture::cleanup();
 	engine::Model::cleanup();
 	engine::Shader::cleanup();
+
+	ImGui::Shutdown();
 
 	glfwDestroyWindow(window);
 }

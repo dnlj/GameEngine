@@ -36,58 +36,83 @@ glm::vec3 Camera::getForward() const {
 }
 
 void Camera::handleInput(GLFWwindow *window, float dt) {
-	static float moveSpeed		= 4.0f;
-	static float sensitivity	= 15.0f;
+	static double storedMouseX = 0.0f;
+	static double storedMouseY = 0.0f;
+	static bool mouseWasDown = false;
+	static float sensitivity = 15.0f;
+	static float moveSpeed = 4.0f;
 
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)) {
-		moveSpeed =  8.0f;
-	} else {
-		moveSpeed =  4.0f;
-	}
-
-	int w = glfwGetKey(window, GLFW_KEY_W);
-	int a = glfwGetKey(window, GLFW_KEY_A);
-	int s = glfwGetKey(window, GLFW_KEY_S);
-	int d = glfwGetKey(window, GLFW_KEY_D);
-
-	if (w && !s) {
-		addPosition(getForward() * moveSpeed * dt);
-	}
-	if (a && !d) {
-		addPosition(getRight() * -moveSpeed * dt);
-	}
-	if (s && !w) {
-		addPosition(getForward() * -moveSpeed * dt);
-	}
-	if (d && !a) {
-		addPosition(getRight() * moveSpeed * dt);
-	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE)) {
-		addPosition(getUp() * moveSpeed * dt);
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL)) {
-		addPosition(getUp() * -moveSpeed * dt);
-	}
-	
 	double mouseX, mouseY;
 	glfwGetCursorPos(window, &mouseX, &mouseY);
 
-	// TODO: This borks when you dont have vsync on, this is problem
-	mouseX = mouseX * sensitivity * dt;
-	mouseY = mouseY * sensitivity * dt;
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_3)) {
+		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)) {
+			moveSpeed =  16.0f;
+		} else {
+			moveSpeed =  8.0f;
+		}
 
-	glm::quat pitch	= glm::angleAxis(glm::radians((float)mouseY), getRight());
-	glm::quat yaw	= glm::angleAxis(glm::radians((float)mouseX), up);
+		int w = glfwGetKey(window, GLFW_KEY_W);
+		int a = glfwGetKey(window, GLFW_KEY_A);
+		int s = glfwGetKey(window, GLFW_KEY_S);
+		int d = glfwGetKey(window, GLFW_KEY_D);
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) && !glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2)) {
-		camRoll += 0.5f * dt;
-	} else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) && !glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1)) {
-		camRoll -= 0.5f * dt;
+		if (w && !s) {
+			addPosition(getForward() * moveSpeed * dt);
+		}
+		if (a && !d) {
+			addPosition(getRight() * -moveSpeed * dt);
+		}
+		if (s && !w) {
+			addPosition(getForward() * -moveSpeed * dt);
+		}
+		if (d && !a) {
+			addPosition(getRight() * moveSpeed * dt);
+		}
+		if (glfwGetKey(window, GLFW_KEY_SPACE)) {
+			addPosition(getUp() * moveSpeed * dt);
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL)) {
+			addPosition(getUp() * -moveSpeed * dt);
+		}
+
+		if (!mouseWasDown) {
+			glfwSetCursorPos(window, 0.0, 0.0);
+			mouseX = 0.0f;
+			mouseY = 0.0f;
+		}
+
+		mouseWasDown = true;
+
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+		// TODO: This borks when you dont have vsync on, this is problem
+		float deltaX = mouseX * sensitivity * dt;
+		float deltaY = mouseY * sensitivity * dt;
+
+		glm::quat pitch	= glm::angleAxis(glm::radians(deltaY), getRight());
+		glm::quat yaw	= glm::angleAxis(glm::radians(deltaX), up);
+
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) && !glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2)) {
+			camRoll += 0.5f * dt;
+		} else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) && !glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1)) {
+			camRoll -= 0.5f * dt;
+		}
+
+		orientation = orientation * pitch * yaw;
+
+		glfwSetCursorPos(window, 0.0, 0.0);
+	} else {
+		if (mouseWasDown) {
+			glfwSetCursorPos(window, storedMouseX, storedMouseY);
+		}
+
+		mouseWasDown = false;
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+		storedMouseX = mouseX;
+		storedMouseY = mouseY;
 	}
-
-	orientation = orientation * pitch * yaw;
-
-	glfwSetCursorPos(window, 0.0, 0.0);
 }
 
 glm::quat Camera::getOrientation() const {

@@ -31,6 +31,10 @@
     <ClCompile Include="src\engine\TextureFormat.cpp" />
     <ClCompile Include="src\engine\util.cpp" />
     <ClCompile Include="src\glloadgen\gl_core_4_5.c" />
+    <ClCompile Include="src\imgui\imgui.cpp" />
+    <ClCompile Include="src\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\imgui_test.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +61,13 @@
     <ClInclude Include="include\engine\Vertex.hpp" />
     <ClInclude Include="include\GLE\engine\Mesh.hpp" />
     <ClInclude Include="include\glloadgen\gl_core_4_5.h" />
+    <ClInclude Include="include\imgui\imconfig.h" />
+    <ClInclude Include="include\imgui\imgui.h" />
+    <ClInclude Include="include\imgui\imgui_internal.h" />
+    <ClInclude Include="include\imgui\stb_rect_pack.h" />
+    <ClInclude Include="include\imgui\stb_textedit.h" />
+    <ClInclude Include="include\imgui\stb_truetype.h" />
+    <ClInclude Include="include\imgui_test.hpp" />
     <ClInclude Include="src\Camera.h" />
   </ItemGroup>
   <ItemGroup>
