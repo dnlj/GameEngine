@@ -64,7 +64,9 @@
       <FileType>Document</FileType>
     </ClInclude>
     <None Include="src\shaders\fragment_brdf.glsl" />
+    <None Include="src\shaders\fragment_brdf_ibl.glsl" />
     <None Include="src\shaders\vertex_brdf.glsl" />
+    <None Include="src\shaders\vertex_brdf_ibl.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8D5FBFEF-0C40-472D-BEDE-F7034B6A8968}</ProjectGuid>

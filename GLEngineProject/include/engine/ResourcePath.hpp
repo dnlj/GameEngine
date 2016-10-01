@@ -1,5 +1,6 @@
 #pragma once
 
+// C++ STD
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -7,6 +8,8 @@
 #include <unordered_map>
 #include <regex>
 
+// Engine
+#include <engine/engine.hpp>
 #include <engine/FileSystem/FileSystem.hpp>
 
 

@@ -119,6 +119,12 @@ void setupWindow(GLFWwindow *&window, std::string title) {
 }
 
 void run() {
+	// Register resource directories
+	engine::ResourcePath::AddResourceDir("Shader", "shaders/");
+	engine::ResourcePath::AddResourceDir("Model", "D:/OpenGL Projects/Models/");
+	engine::ResourcePath::AddResourceDir("Texture", "D:/OpenGL Projects/Textures/");
+
+	// Setup the window
 	static char *windowTitle = "Window Title";
 	GLFWwindow *window = nullptr;
 	setupWindow(window, windowTitle);
@@ -144,8 +150,8 @@ void run() {
 	// Program
 	// TODO: use resource paths
 	engine::ShaderProgram program({
-		engine::Shader::loadShader("shaders/vertex_brdf.glsl", GL_VERTEX_SHADER),
-		engine::Shader::loadShader("shaders/fragment_brdf.glsl", GL_FRAGMENT_SHADER),
+		engine::Shader::loadShader("Shader:vertex_brdf_ibl.glsl", GL_VERTEX_SHADER),
+		engine::Shader::loadShader("Shader:fragment_brdf_ibl.glsl", GL_FRAGMENT_SHADER),
 	});
 	program.use();
 
@@ -197,10 +203,6 @@ void run() {
 	//glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 	//glUniform1i(program.getUniformLocation("cubeMap"), 2);
 
-
-	// Register resource directories
-	engine::ResourcePath::AddResourceDir("Model", "D:/OpenGL Projects/Models/");
-	engine::ResourcePath::AddResourceDir("Texture", "D:/OpenGL Projects/Textures/");
 
 	// Load some meshes for testing
 	engine::Model ball = engine::Model::loadModel("Model:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);

@@ -13,9 +13,8 @@ namespace engine {
 			std::cerr << "[ERROR] Failed to load log file." << std::endl;
 		} else {
 			logFile << err << std::endl;
+			std::cerr << err << std::endl;
 		}
-
-		std::cerr << err << std::endl;
 
 		abort();
 	}

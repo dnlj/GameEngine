@@ -44,11 +44,10 @@ namespace engine {
 		return !(*this == other);
 	}
 
-	// TODO: unstested
 	std::string ResourcePath::getResolvedPath() const {
 		const auto& vec = typeLookup[type];
 
-		// Remove any paths equivalent to dir
+		// Get the first path of the file
 		for (auto it = vec.begin(); it != vec.end(); ++it) {
 			auto p = *it + path;
 			if (FileSystem::exists(p)) {
@@ -56,13 +55,14 @@ namespace engine {
 			}
 		}
 
+		// The path doesnt exist
 		return path;
 	}
 
 	void ResourcePath::checkPath() {
+		// We require this so we dont have to do more complicated path resolution.
 		if (path.find("..") != std::string::npos) {
-			// TODO: Add actual error handling
-			std::cerr << "ERROR: \"..\" not allowed in resource paths.\n";
+			engine_error("\"..\" is not allowed in resource paths.");
 		}
 	}
 
@@ -73,24 +73,15 @@ namespace engine {
 
 	void ResourcePath::AddResourceDir(const std::string& type, const std::string& dir) {
 		auto& vec = typeLookup[type];
-	
-		//FileSystem::create_directories(dir); // TODO: Remove this is just for testing
 
 		if (!FileSystem::exists(dir)) {
-			// TODO :add proper error handling
-			// not even sure if this is really an error
-			std::cerr << "ERROR: Path does not exist.\n";
-			return;
+			engine_warning("Path " + dir + " does not exist.");
 		} else {
 			for (const auto& v : vec) {
-				std::error_code code; // TODO: Handel this error code
 				if (FileSystem::equivalent(v, dir)) {
-					// TODO :add proper error handling
-					std::cerr << "ERROR: attempted to add a path that has already been added.\n";
+					engine_warning("attempted to add a path that has already been added.");
 					return;
 				}
-
-				//std::cout << code.message() << std::endl; // TODO: Remove
 			}
 		}
 

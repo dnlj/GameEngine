@@ -3,9 +3,8 @@
 namespace engine {
 	ShaderProgram::ShaderProgram(const std::vector<Shader> &shaders) : program(glCreateProgram()) {
 		// TODO: should add a check to make sure that i got a valid program returned (program != 0 i think)
-		// TODO: should check for duplicate programs, could probably use a bit field for this.
+
 		for (int i = 0; i < shaders.size(); i++) {
-			std::cout << "Shader: " << shaders[i].getShader() << std::endl;
 			glAttachShader(program, shaders[i].getShader());
 		}
 
@@ -117,17 +116,6 @@ namespace engine {
 
 			properties.emplace_back(name, static_cast<GLenum>(values[1]), values[2]);
 		}
-
-
-		// TODO: Remove, temp for debugging
-		//std::cout << "\n\n\n";
-		//for (auto v : properties) {
-		//	std::cout << "\nname: " << v.name;
-		//	std::cout << "\ntype: " << util::typeEnumToString(v.type);
-		//	std::cout << "\nlocation: " << v.location;
-		//	std::cout << "\n";
-		//}
-		//std::cout << "\n\n\n";
 	}
 
 	const std::vector<engine::Uniform>& ShaderProgram::getProperties() const {

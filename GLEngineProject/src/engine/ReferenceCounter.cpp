@@ -11,10 +11,8 @@ namespace engine {
 	}
 
 	ReferenceCounter::~ReferenceCounter() {
-		std::cout << "~ReferenceCounter()\n";
 		decrement();
 		if (*refCount == 0) {
-			std::cout << "Delete\n";
 			delete refCount;
 		}
 	};
