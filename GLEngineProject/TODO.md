@@ -2,7 +2,7 @@
 * Switch to premake5
 * Add Doxygen to project
 * Add checks to see if the file exsits in the Model/Material/Texture/Shader/ShaderProgram classes before trying to load
-* Convert back over to using exceptions hey seem like the better option. Just make sure you stil have some kind of logging and use them properly.
+* Convert back over to using exceptions hey seem like the better option (especially for hot reloading shaders/scripts/assets). Just make sure you stil have some kind of logging and use them properly.
 
 # Maintenance
 * Remove TODO's from code.

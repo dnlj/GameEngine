@@ -73,6 +73,18 @@
 void imguiInit(GLFWwindow *window) {
 	// Setup ImGui binding
 	ImGui_ImplGlfwGL3_Init(window, true);
+
+	// Setup custom style
+	ImGuiStyle& style = ImGui::GetStyle();
+
+	style.Colors[ImGuiCol_WindowBg] = ImVec4{0.05f, 0.05f, 0.05f, 0.60f};
+
+	style.FrameRounding = 0.0f;
+	style.WindowRounding = 0.0f;
+	style.ScrollbarRounding = 0.0f;
+	style.GrabRounding = 0.0f;
+	style.ChildWindowRounding = 0.0f;
+
 }
 
 // TODO: Temp while testing
@@ -100,12 +112,6 @@ void imguiTest(GLFWwindow *window) {
 		ImGui::Begin("Another Window", &show_another_window);
 		ImGui::Text("Hello");
 		ImGui::End();
-	}
-
-	// 3. Show the ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
-	if (show_test_window) {
-		ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
-		ImGui::ShowTestWindow(&show_test_window);
 	}
 
 	// Rendering
@@ -308,14 +314,10 @@ void run() {
 	
 	engine::util::checkGLErrors();
 
-	// If we dont have this the cam spazzes at the start depending on where you cursor was
-	glfwSetCursorPos(window, 0.0, 0.0);
-
 	// Setup lighting and material properties
 	glm::vec3 lightPosition = glm::vec3(0.0f);
-	float roughness = 0.5f;
 	float metalness = 0.0f; // 0.0 = 0.04 because we lerp between 0.04 and texture value
-	float intensity	= 2.0f;
+	float intensity	= 1.0f;
 
 	// ImGui setup
 	imguiInit(window);
@@ -364,116 +366,96 @@ void run() {
 
 			lastPressed = framePressed;
 		}
-
-
-		{
-			static float lastRoughness = roughness;
-			static float lastMetalness = metalness;
-			static float lastIntensity = intensity;
-			static float inc = 0.3f;
-			static float inc2 = 5.0f;
-			
-			if (glfwGetKey(window, GLFW_KEY_UP)) {
-				roughness += (float)(inc * dt);
-			}
-
-			if (glfwGetKey(window, GLFW_KEY_DOWN)) {
-				roughness -= (float)(inc * dt);
-			}
-
-			if (glfwGetKey(window, GLFW_KEY_LEFT)) {
-				metalness -= (float)(inc * dt);
-			}
-
-			if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
-				metalness += (float)(inc * dt);
-			}
-
-			if (glfwGetKey(window, GLFW_KEY_PAGE_DOWN)) {
-				intensity -= (float)(inc2 * dt);
-			}
-
-			if (glfwGetKey(window, GLFW_KEY_PAGE_UP)) {
-				intensity += (float)(inc2 * dt);
-			}
-
-			roughness = std::min(1.0f, std::max(0.0f, roughness));
-			metalness = std::min(1.0f, std::max(0.0f, metalness));
-			intensity = std::max(0.0f, intensity);
-
-			if ((lastRoughness != roughness) || (lastMetalness != metalness) || (lastIntensity != intensity)) {
-				std::cout << "roughness: " << std::fixed << std::setprecision(6) << roughness
-				<< "\tmetalness: " << std::fixed << std::setprecision(6) << metalness
-				<< "\tintensity: " << std::fixed << std::setprecision(6) << intensity << '\n';
-			}
-
-			lastRoughness = roughness;
-			lastMetalness = metalness;
-			lastIntensity = intensity;
-		}
-
-		//glUniform1f(program.getUniformLocation("roughness"), roughness); // NOTE: Disabled currently since we are using a texture, left incase we want to enabled later for testing (Will also need to enable in shader)
+		
 		glUniform1f(program.getUniformLocation("metalness"), metalness);
 		glUniform1f(program.getUniformLocation("intensity"), intensity);
 		
 
-		camera.handleInput(window, (float)dt);
+		camera.handleInput(window, static_cast<float>(dt));
 
 
 		// OpenGL drawing
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		program.use();
+			program.use();
 
-		glUniform3fv(program.getUniformLocation("viewPos"), 1, &camera.getPosition()[0]);
-		glUniform3fv(program.getUniformLocation("lightPos"), 1, &lightPosition[0]);
+			glUniform3fv(program.getUniformLocation("viewPos"), 1, &camera.getPosition()[0]);
+			glUniform3fv(program.getUniformLocation("lightPos"), 1, &lightPosition[0]);
 
-		mat.loadParameters();
+			mat.loadParameters();
 
-		glm::mat4 model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		glm::mat4 mvp = projMatrix * camera.getViewMatrix() * model;
-		glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-		glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+			glm::mat4 model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			glm::mat4 mvp = projMatrix * camera.getViewMatrix() * model;
+			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
 
-		model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		mvp = projMatrix * camera.getViewMatrix() * model;
-		glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-		glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-		ball.render();
+			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			mvp = projMatrix * camera.getViewMatrix() * model;
+			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+			ball.render();
 
-		model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		mvp = projMatrix * camera.getViewMatrix() * model;
-		glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-		glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-		hoola.render();
+			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			mvp = projMatrix * camera.getViewMatrix() * model;
+			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+			hoola.render();
 
-		model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -2.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		mvp = projMatrix * camera.getViewMatrix() * model;
-		glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-		glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-		sailor.render();
+			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -2.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			mvp = projMatrix * camera.getViewMatrix() * model;
+			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+			sailor.render();
 
-		model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		mvp = projMatrix * camera.getViewMatrix() * model;
-		glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-		glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-		hatman2.render();
+			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			mvp = projMatrix * camera.getViewMatrix() * model;
+			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+			hatman2.render();
 		
-		model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		mvp = projMatrix * camera.getViewMatrix() * model;
-		glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-		glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-		backdrop.render();
+			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			mvp = projMatrix * camera.getViewMatrix() * model;
+			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+			backdrop.render();
 
-		model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(10.0f, 0.01f, 0.0f)), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		mvp = projMatrix * camera.getViewMatrix() * model;
-		glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-		glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-		uvplane.render();
+			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(10.0f, 0.01f, 0.0f)), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			mvp = projMatrix * camera.getViewMatrix() * model;
+			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+			uvplane.render();
+		}
 
 
 		// Imgui
-		imguiTest(window);
+		ImGui_ImplGlfwGL3_NewFrame();
+		{
+			constexpr float padding = 10.0f;
+			
+			ImGui::SetNextWindowPos({padding, padding}, ImGuiSetCond_Once);
+			ImGui::SetNextWindowCollapsed(true, ImGuiSetCond_Once);
+			if (ImGui::Begin("Settings", nullptr, {300.0f, height - padding * 2}, -1.0f, ImGuiWindowFlags_NoMove)) {
+
+				if (ImGui::CollapsingHeader("Shader Sliders", "shader sliders", true, true)) {
+					ImGui::SliderFloat("metalness", &metalness, 0.0f, 1.0f);
+					ImGui::SliderFloat("intensity", &intensity, 0.0f, 50.0f);
+				}
+
+				if (ImGui::CollapsingHeader("Instructions")) {
+					ImGui::BulletText("Hold middle mouse to move");
+					ImGui::BulletText("Press F to toggle light position");
+					ImGui::BulletText("mouse = look");
+					ImGui::BulletText("wasd = move");
+					ImGui::BulletText("ctrl = down");
+					ImGui::BulletText("space = up");
+				}
+			}
+			
+			ImGui::End();
+
+			ImGui::Render();
+		}		
 
 
 		// Buffers and events
