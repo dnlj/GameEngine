@@ -36,15 +36,20 @@ vec3 toLinear(vec3 color, float gamma = 2.2) {
 ///////////////////////////////////////////////////////////////////////
 // Specular
 ///////////////////////////////////////////////////////////////////////
-// TODO: Document what type of fresnel this is (Optimized schlick from ue4 i think)
-vec3 fresnel(vec3 f0, float dotHV) {
+// Fresnel - Schlick's approximation
+vec3 fresnel_schlick(vec3 f0, float dotHV) {
+	return f0 + (1.0 - f0) * pow(1.0 - dotHV, 5);
+}
+
+// Fresnel - Schlick's approximation, approximated ["Real Shading in Unreal Engine 4", SIGGRAPH 2013]
+vec3 fresnel_schlick_approx(vec3 f0, float dotHV) {
 	float power = ((-5.55473 * dotHV) - 6.98316) * dotHV;
 	return f0 + (1.0 - f0) * exp2(power);
 	
 }
 
-// TODO: Document what type of distribution this is (GGX? idk)
-float distribution(float r, float dotNH) {
+// Distribution - GGX(Trowbridge - Reitz) ["Real Shading in Unreal Engine 4", SIGGRAPH 2013]
+float distribution_ggx_tr(float r, float dotNH) {
 	float alpha = r * r; // "Hotness" remap, used by Disney and UE4. Not to be used with IBL? Look into this further
 	float alphaSquared = alpha * alpha;
 	float dotNHSquared = dotNH * dotNH;
@@ -55,9 +60,9 @@ float distribution(float r, float dotNH) {
 	return top / bottom;
 }
 
-// TODO: Document what type of geometric this is (Smith i think?)
-float geometric(float r, float dotNV, float dotNL) {
-	float k = pow(r + 1.0, 2) / 8.0;
+// Geometric - Smith Schlick GGX ["Real Shading in Unreal Engine 4", SIGGRAPH 2013]
+float geometric_smith_schlick_ggx(float r, float dotNV, float dotNL) {
+	float k = pow(r + 1.0, 2) / 8.0; // k = ((r+1)/2)^2
 
 	float a = dotNL / ((dotNL * (1.0 - k)) + k);
 	float b = dotNV / ((dotNV * (1.0 - k)) + k);
@@ -65,18 +70,11 @@ float geometric(float r, float dotNV, float dotNL) {
 	return a * b;
 }
 
-vec3 brdf(float r, vec3 n, vec3 v, vec3 l, vec3 f0) {
-	vec3 h = normalize(v + l);
-
-	// We use epsilon here to avoid division by zero
-	float dotNH = max(EPSILON, dot(n, h));
-	float dotHV = max(EPSILON, dot(h, v));
-	float dotNL = max(EPSILON, dot(n, l));
-	float dotNV = max(EPSILON, dot(n, v));
-
-	float d	= distribution(r, dotNH);
-	vec3 f	= fresnel(f0, dotHV);
-	float g	= geometric(r, dotNV, dotNL);
+// Calculate specular term
+vec3 specular(vec3 f0, float r, float dotNH, float dotHV, float dotNL, float dotNV) {
+	float d	= distribution_ggx_tr(r, dotNH);
+	vec3 f	= fresnel_schlick_approx(f0, dotHV);
+	float g	= geometric_smith_schlick_ggx(r, dotNV, dotNL);
 	
 	vec3 spec = (d * f * g) / (4.0 * dotNL * dotNV);
 	return spec;
@@ -86,14 +84,42 @@ vec3 brdf(float r, vec3 n, vec3 v, vec3 l, vec3 f0) {
 ///////////////////////////////////////////////////////////////////////
 // Diffuse
 ///////////////////////////////////////////////////////////////////////
+// Lambert diffuse
 vec3 lambert(vec3 diff) {
 	return diff / PI;
 }
+
+// Calculate diffuse term
+vec3 diffuse(vec3 albedo) {
+	return lambert(albedo);
+}
+
 
 ///////////////////////////////////////////////////////////////////////
 // IBL
 ///////////////////////////////////////////////////////////////////////
 
+
+
+///////////////////////////////////////////////////////////////////////
+// Lighting
+///////////////////////////////////////////////////////////////////////
+// Calculate lighting
+vec3 calcLight(vec3 albedo, vec3 f0, float r, vec3 n, vec3 v, vec3 l) {
+	vec3 lightColor = vec3(1.0, 1.0, 1.0);
+	vec3 h = normalize(v + l);
+
+	// We use epsilon here to avoid division by zero
+	float dotNH = max(EPSILON, dot(n, h));
+	float dotHV = max(EPSILON, dot(h, v));
+	float dotNL = max(EPSILON, dot(n, l));
+	float dotNV = max(EPSILON, dot(n, v));
+
+	vec3 diff = diffuse(albedo);
+	vec3 spec = specular(f0, r, dotNH, dotHV, dotNL, dotNV);
+
+	return (diff + spec) * dotNL * lightColor;
+}
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -112,30 +138,34 @@ void main() {
 	normal = normalize(tbnMatrix * normal);
 
 	// Get enviroment color
-	vec3 incident = normalize(fragPosition - viewPos);
-	vec3 reflected = reflect(incident, normal);
-	vec3 envColor = texture(cubeMap, reflected).rgb;
+	vec3 incident	= normalize(fragPosition - viewPos);
+	vec3 reflected	= reflect(incident, normal);
+	vec3 envColor	= texture(cubeMap, reflected).rgb;
 
 	// Variables
-	vec3 n			= normalize(normal);
-	vec3 l			= normalize(lightPos - fragPosition);
-	vec3 v			= normalize(viewPos - fragPosition);
-	float r			= max(0.025, roughness); 
-	float dotNL		= max(0.0, dot(n, l));
-	vec3 lightColor	= vec3(1.0, 1.0, 1.0);
+	float lightDist = length(lightPos - fragPosition); // Distance from the fragment to the light
+	vec3 lightDir	= normalize(lightPos - fragPosition); // Light direction
+	vec3 viewDir	= normalize(viewPos - fragPosition); // View direction
+
+	// Specular F0
+	vec3 f0			= mix(vec3(0.04), albedo.rgb, metalness);
 
 	// Albedo
-	vec3 f0			= mix(vec3(0.04), albedo.rgb, metalness);
-	vec3 realAlbedo = albedo.rgb - albedo.rgb * metalness; // TODO: Replace this with a lerp?
+	vec3 realAlbedo = mix(albedo.rgb, vec3(0.00), metalness);
 
-	// Other
-	vec3 specular	= brdf(r, n, v, l, f0);
-	vec3 diffuse	= lambert(realAlbedo);
+	// Attenuation
+	float attenuation = 1.0 / (lightDist * lightDist);
+	attenuation = 1.0; // TODO: Remove, this is just for testing so i can see everything
 
-	color.rgb	= (diffuse + specular) * dotNL * lightColor * intensity;
+	// Calculate final lighting
+	vec3 light = calcLight(realAlbedo, f0, roughness, normal, viewDir, lightDir);
+
+	// TODO: is this the correct way to do "intensity"? if so, what are the unit of intensity?
+	color.rgb	= light * intensity * attenuation;
 	color.a		= 1.0;
 
 
-	color.rgb *= 0.000000000000000000001f;
-	color.rgb += envColor;
+	//color.rgb *= 0.000000000000000000001;
+	//color.rgb += envColor;
+	color.rgb += envColor*0.00000000000000000000000001;
 }

@@ -13,3 +13,5 @@
 * http://bitsquid.blogspot.com/2012/01/sensible-error-handling-part-1.html
 * http://bitsquid.blogspot.com/2012/02/sensible-error-handling-part-2.html
 * http://bitsquid.blogspot.com/2012/02/sensible-error-handling-part-3.html
+* http://graphicrants.blogspot.com/2013/08/specular-brdf-reference.html
+* http://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf

@@ -463,7 +463,7 @@ void run() {
 
 				if (ImGui::CollapsingHeader("Shader Sliders", "shader sliders", true, true)) {
 					ImGui::SliderFloat("metalness", &metalness, 0.0f, 1.0f);
-					ImGui::SliderFloat("intensity", &intensity, 0.0f, 50.0f);
+					ImGui::SliderFloat("intensity", &intensity, 0.0f, 200.0f);
 				}
 
 				if (ImGui::CollapsingHeader("Instructions")) {
