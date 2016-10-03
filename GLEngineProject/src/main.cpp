@@ -224,23 +224,14 @@ void run() {
 	
 	GLuint cubeMap;
 	{
-		std::vector<std::string> cubemapTextures {
-			"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/posx.jpg",
-			"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/negx.jpg",
-			"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/posy.jpg",
-			"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/negy.jpg",
-			"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/posz.jpg",
-			"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/negz.jpg",
+		std::vector<std::string> cubemapTextures {// PiazzaDelPopolo1 NissiBeach2 Yokohama3 LancellottiChapel
+			"D:/OpenGL Projects/Textures/cubemaps/Yokohama3/posx.jpg",
+			"D:/OpenGL Projects/Textures/cubemaps/Yokohama3/negx.jpg",
+			"D:/OpenGL Projects/Textures/cubemaps/Yokohama3/posy.jpg",
+			"D:/OpenGL Projects/Textures/cubemaps/Yokohama3/negy.jpg",
+			"D:/OpenGL Projects/Textures/cubemaps/Yokohama3/posz.jpg",
+			"D:/OpenGL Projects/Textures/cubemaps/Yokohama3/negz.jpg",
 		};
-
-		//std::vector<std::string> cubemapTextures{
-		//	"D:/OpenGL Projects/Textures/cubemaps/NissiBeach2/posx.jpg",
-		//	"D:/OpenGL Projects/Textures/cubemaps/NissiBeach2/negx.jpg",
-		//	"D:/OpenGL Projects/Textures/cubemaps/NissiBeach2/posy.jpg",
-		//	"D:/OpenGL Projects/Textures/cubemaps/NissiBeach2/negy.jpg",
-		//	"D:/OpenGL Projects/Textures/cubemaps/NissiBeach2/posz.jpg",
-		//	"D:/OpenGL Projects/Textures/cubemaps/NissiBeach2/negz.jpg",
-		//};
 		
 		std::vector<GLuint> cubemapEnums {
 			GL_TEXTURE_CUBE_MAP_POSITIVE_X,
@@ -440,7 +431,6 @@ void run() {
 		}
 
 		{ // Skybox
-			glEnable(GL_DEPTH_CLAMP);
 			skyboxProgram.use();
 
 			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -453,7 +443,6 @@ void run() {
 			glUniform1i(skyboxProgram.getUniformLocation("cubeMap"), 0);
 
 			skybox.render();
-			glDisable(GL_DEPTH_CLAMP);
 		}
 
 

@@ -8,7 +8,7 @@ out vec3 fragTexCoord;
 
 
 void main() {
-	gl_Position = mvp * vec4(vertPosition, 0.0);
+	gl_Position = (mvp * vec4(vertPosition, 1.0)).xyww;
 
 	fragTexCoord = vertPosition;
 }
