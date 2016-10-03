@@ -12,8 +12,6 @@ out vec3 fragPosition;
 out vec2 fragTexCoord;
 out mat3 tbnMatrix;
 
-//out vec3 smoothNormal;
-
 // TODO: Consider calculating bitangents ahdead of time
 
 void main() {
@@ -30,8 +28,4 @@ void main() {
 	vec3 bitangent	= cross(tangent, normal);
 
 	tbnMatrix = mat3(tangent, bitangent, normal);
-
-	// TEMP
-	//smoothNormal = vertNormal;
-	//smoothNormal = normalize(vec3(modelMatrix * vec4(vertNormal, 0.0)));
 }

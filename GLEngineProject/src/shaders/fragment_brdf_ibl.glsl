@@ -10,11 +10,11 @@ out vec4 color;
 uniform sampler2D albedoMap;
 uniform sampler2D normalMap;
 uniform sampler2D roughnessMap;
+uniform samplerCube cubeMap;
 
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
-//uniform float roughness;
 uniform float intensity;
 uniform float metalness;
 
@@ -111,6 +111,11 @@ void main() {
 	// Transform normal into world space
 	normal = normalize(tbnMatrix * normal);
 
+	// Get enviroment color
+	vec3 incident = normalize(fragPosition - viewPos);
+	vec3 reflected = reflect(incident, normal);
+	vec3 envColor = texture(cubeMap, reflected).rgb;
+
 	// Variables
 	vec3 n			= normalize(normal);
 	vec3 l			= normalize(lightPos - fragPosition);
@@ -129,4 +134,8 @@ void main() {
 
 	color.rgb	= (diffuse + specular) * dotNL * lightColor * intensity;
 	color.a		= 1.0;
+
+
+	color.rgb *= 0.000000000000000000001f;
+	color.rgb += envColor;
 }

@@ -304,7 +304,7 @@ void run() {
 	//engine::Texture normal_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_normal_fixed.png", normalFormat);
 	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_roughness.png", normalFormat);
 	
-	//albedo_tex = engine::Texture::loadTexture("Texture:test.jpg", albedoFormat);
+	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:test.jpg", albedoFormat);
 
 	// Material Testing
 	program.use(); // TODO: if this isnt here the first call to mat.loadParameters causes a GL_INVALID_OPERATION. figure out why
@@ -382,11 +382,16 @@ void run() {
 
 		{ // BRDF
 			program.use();
-			
+
 			glUniform1f(program.getUniformLocation("metalness"), metalness);
 			glUniform1f(program.getUniformLocation("intensity"), intensity);
 			
 			mat.loadParameters();
+
+			// TODO: need to handle this cubemap texture properly
+			glActiveTexture(GL_TEXTURE3);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
+			glUniform1i(program.getUniformLocation("cubeMap"), 3);
 			
 			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
 			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
@@ -397,6 +402,7 @@ void run() {
 			mvp = projMatrix * camera.getViewMatrix() * model;
 			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+
 			ball.render();
 			
 			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
