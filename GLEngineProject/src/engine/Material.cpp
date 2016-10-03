@@ -11,13 +11,16 @@ namespace engine {
 	}
 
 	void Material::loadParameters() {
-		// TODO: Need to also make this load textures
-
+		// NOTE: Make sure your program is in use before calling this or else you will get a GL_INVALID_OPERATION
+		// TODO: look into direct state access. not sure if that would fix the above problem
+		
+		// Set textures
 		for (int i=0; i < textures.size(); i++) {
 			glActiveTexture(GL_TEXTURE0 + static_cast<GLenum>(i));
 			glBindTexture(GL_TEXTURE_2D, textures[i].getTexture());
 		}
 
+		// Set uniforms
 		for (int i=0; i < values.size(); i++) {
 			if (values[i].use) {
 				(program.*values[i].func)(i, values[i].data);

@@ -205,12 +205,16 @@ void run() {
 	glEnable(GL_CULL_FACE);
 
 	// Program
-	// TODO: use resource paths
 	engine::ShaderProgram program({
 		engine::Shader::loadShader("Shader:vertex_brdf_ibl.glsl", GL_VERTEX_SHADER),
 		engine::Shader::loadShader("Shader:fragment_brdf_ibl.glsl", GL_FRAGMENT_SHADER),
 	});
-	program.use();
+	
+	engine::ShaderProgram skyboxProgram({
+		engine::Shader::loadShader("Shader:vertex_skybox.glsl", GL_VERTEX_SHADER),
+		engine::Shader::loadShader("Shader:fragment_skybox.glsl", GL_FRAGMENT_SHADER),
+	});
+
 
 	// Camera
 	Camera camera;
@@ -218,64 +222,71 @@ void run() {
 	glm::mat4 projMatrix = glm::perspective(glm::radians(60.0f), (float)width/(float)height, 0.1f, 1000.0f); // TODO: Move inside the camera class and add fov, nearz, farz as members with getters/setters
 
 	
-	//GLuint cubeMap;
-	//{
-	//	glGenTextures(1, &cubeMap);
-	//	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
-	//
-	//	std::vector<std::string> cubemapTextures {
-	//		"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/negx.jpg",
-	//		"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/negy.jpg",
-	//		"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/negz.jpg",
-	//		"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/posx.jpg",
-	//		"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/posy.jpg",
-	//		"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/posz.jpg",
-	//	};
-	//
-	//	std::vector<GLuint> cubemapEnums {
-	//		GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-	//		GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-	//		GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
-	//		GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-	//		GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-	//		GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-	//	};
-	//
-	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE); 
-	//
-	//	int width, height;
-	//	unsigned char* image;  
-	//	for(GLuint i = 0; i < 6; i++) {
-	//		image = SOIL_load_image(cubemapTextures[i].c_str(), &width, &height, 0, SOIL_LOAD_RGB);
-	//		glTexImage2D(cubemapEnums[i], 0, GL_SRGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-	//		SOIL_free_image_data(image);
-	//	}
-	//}
-	//
-	//glActiveTexture(GL_TEXTURE2);
-	//glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
-	//glUniform1i(program.getUniformLocation("cubeMap"), 2);
+	GLuint cubeMap;
+	{
+		std::vector<std::string> cubemapTextures {
+			"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/posx.jpg",
+			"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/negx.jpg",
+			"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/posy.jpg",
+			"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/negy.jpg",
+			"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/posz.jpg",
+			"D:/OpenGL Projects/Textures/cubemaps/PiazzaDelPopolo1/negz.jpg",
+		};
+
+		//std::vector<std::string> cubemapTextures{
+		//	"D:/OpenGL Projects/Textures/cubemaps/NissiBeach2/posx.jpg",
+		//	"D:/OpenGL Projects/Textures/cubemaps/NissiBeach2/negx.jpg",
+		//	"D:/OpenGL Projects/Textures/cubemaps/NissiBeach2/posy.jpg",
+		//	"D:/OpenGL Projects/Textures/cubemaps/NissiBeach2/negy.jpg",
+		//	"D:/OpenGL Projects/Textures/cubemaps/NissiBeach2/posz.jpg",
+		//	"D:/OpenGL Projects/Textures/cubemaps/NissiBeach2/negz.jpg",
+		//};
+		
+		std::vector<GLuint> cubemapEnums {
+			GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+			GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+			GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+			GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+			GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+			GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
+		};
+		
+		glGenTextures(1, &cubeMap);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
+		
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE); 
+		
+		int width, height;
+		unsigned char* image;  
+		for(GLuint i = 0; i < 6; i++) {
+			image = SOIL_load_image(cubemapTextures[i].c_str(), &width, &height, 0, SOIL_LOAD_RGB);
+			glTexImage2D(cubemapEnums[i], 0, GL_SRGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+			SOIL_free_image_data(image);
+		}
+	}
 
 
 	// Load some meshes for testing
 	engine::Model ball = engine::Model::loadModel("Model:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);
 	engine::Model hoola = engine::Model::loadModel("Model:_my_models/hoola.obj", 2.0f, 5.0f);
 	engine::Model sailor = engine::Model::loadModel("Model:sailor_giveaway/sailor.obj", 1.5f, 2.0f);
+	engine::Model skybox = engine::Model::loadModel("Model:_my_models/skybox.obj", 10.0f, 1.0f);
 	engine::Model hatman2 = engine::Model::loadModel("Model:_my_models/hatman2.obj", 1.0f, 2.0f);
-	engine::Model backdrop = engine::Model::loadModel("Model:_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f);
 	engine::Model uvplane = engine::Model::loadModel("Model:_my_models/uvplane.obj", 10.0f, 1.0f);
+	engine::Model backdrop = engine::Model::loadModel("Model:_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f);
 
 	//////////
 	ball.tempSetupGLStuff(program);
 	hoola.tempSetupGLStuff(program);
 	sailor.tempSetupGLStuff(program);
+	skybox.tempSetupGLStuff(program);
 	hatman2.tempSetupGLStuff(program);
-	backdrop.tempSetupGLStuff(program);
 	uvplane.tempSetupGLStuff(program);
+	backdrop.tempSetupGLStuff(program);
 	/////////
 	
 	engine::TextureFormat albedoFormat;
@@ -303,16 +314,18 @@ void run() {
 	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_roughness.png", normalFormat);
 	
 	//albedo_tex = engine::Texture::loadTexture("Texture:test.jpg", albedoFormat);
+
 	// Material Testing
+	program.use(); // TODO: if this isnt here the first call to mat.loadParameters causes a GL_INVALID_OPERATION. figure out why
 	program.loadProgramUniforms();
 	engine::Material mat{program};
 	mat.setParameter("albedoMap", albedo_tex);
 	mat.setParameter("normalMap", normal_tex);
 	mat.setParameter("roughnessMap", roughness_tex);
-	mat.loadParameters();
-	
-	
+
+
 	engine::util::checkGLErrors();
+
 
 	// Setup lighting and material properties
 	glm::vec3 lightPosition = glm::vec3(0.0f);
@@ -367,64 +380,80 @@ void run() {
 			lastPressed = framePressed;
 		}
 		
-		glUniform1f(program.getUniformLocation("metalness"), metalness);
-		glUniform1f(program.getUniformLocation("intensity"), intensity);
 		
-
 		camera.handleInput(window, static_cast<float>(dt));
 
 
 		// OpenGL drawing
-		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glm::mat4 model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		glm::mat4 mvp = projMatrix * camera.getViewMatrix() * model;
 
+		{ // BRDF
 			program.use();
-
+			
+			glUniform1f(program.getUniformLocation("metalness"), metalness);
+			glUniform1f(program.getUniformLocation("intensity"), intensity);
+			
+			mat.loadParameters();
+			
+			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 			glUniform3fv(program.getUniformLocation("viewPos"), 1, &camera.getPosition()[0]);
 			glUniform3fv(program.getUniformLocation("lightPos"), 1, &lightPosition[0]);
-
-			mat.loadParameters();
-
-			glm::mat4 model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-			glm::mat4 mvp = projMatrix * camera.getViewMatrix() * model;
-			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-
+			
 			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 			mvp = projMatrix * camera.getViewMatrix() * model;
 			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
 			ball.render();
-
+			
 			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 			mvp = projMatrix * camera.getViewMatrix() * model;
 			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
 			hoola.render();
-
+			
 			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -2.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 			mvp = projMatrix * camera.getViewMatrix() * model;
 			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
 			sailor.render();
-
+			
 			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 			mvp = projMatrix * camera.getViewMatrix() * model;
 			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
 			hatman2.render();
-		
+			
 			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 			mvp = projMatrix * camera.getViewMatrix() * model;
 			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
 			backdrop.render();
-
+			
 			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(10.0f, 0.01f, 0.0f)), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 			mvp = projMatrix * camera.getViewMatrix() * model;
 			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
 			uvplane.render();
+		}
+
+		{ // Skybox
+			glEnable(GL_DEPTH_CLAMP);
+			skyboxProgram.use();
+
+			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			glm::mat4 mvp = projMatrix * glm::mat4{glm::mat3{camera.getViewMatrix()}} *model;
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
+
+			glUniformMatrix4fv(skyboxProgram.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+			glUniform1i(skyboxProgram.getUniformLocation("cubeMap"), 0);
+
+			skybox.render();
+			glDisable(GL_DEPTH_CLAMP);
 		}
 
 
@@ -463,8 +492,11 @@ void run() {
 		glfwPollEvents();
 
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE)) {glfwSetWindowShouldClose(window, GL_TRUE);}
+
+		//engine::util::checkGLErrors();
 	}
 
+	engine::util::checkGLErrors();
 
 	// TODO: Make an engine::cleanup function to encapsualte all these 
 	engine::Texture::cleanup();

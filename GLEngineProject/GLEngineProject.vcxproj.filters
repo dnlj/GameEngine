@@ -169,5 +169,7 @@
     <None Include="src\shaders\fragment_brdf_ibl.glsl" />
     <None Include="src\shaders\vertex_brdf_ibl.glsl" />
     <None Include="TODO.md" />
+    <None Include="src\shaders\fragment_skybox.glsl" />
+    <None Include="src\shaders\vertex_skybox.glsl" />
   </ItemGroup>
 </Project>
