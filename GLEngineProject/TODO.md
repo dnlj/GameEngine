@@ -1,4 +1,5 @@
 # General
+* Add the cleanup functions to the Resource classes. Currently leaking memory i think. Maybe handle this by adding deconstructors to the xxxxData types?.
 * Switch to premake5
 * Add Doxygen to project
 * Add checks to see if the file exsits in the Model/Material/Texture/Shader/ShaderProgram classes before trying to load

@@ -41,6 +41,7 @@
 #include <engine/ShaderProgram.hpp>
 #include <engine/Material.hpp>
 #include <engine/Model.hpp>
+#include <engine/CubeMap.hpp>
 
 // ImGui
 //#define IMGUI_DISABLE_TEST_WINDOWS
@@ -68,72 +69,6 @@
 // TODO: Input handling seems to be broke (at the time of writing this) when vsync is not enabled. Detach input/physics from framerate.
 // TODO: Need to be calling Model/Texture/Shader/ShaderProgram cleanup somewhere after converting them to use the Resource system
 // TODO: Do more testing over the new Model/Texture/Shader/ShaderProgram/Material after you finish implementing the mto make sure they are getting cleaned up and what not
-
-
-namespace { // Cubemap conversion
-	// TODO: make a cubemap class
-	// TODO: make a load the six files
-
-	std::vector<std::vector<glm::u8vec3>> loadCubeMap(const engine::ResourcePath &path) {
-		int width;
-		int height;
-		int channels;
-		unsigned int faceSize = 0;
-
-		unsigned char* image = SOIL_load_image(path.getResolvedPath().c_str(), &width, &height, &channels, SOIL_LOAD_RGB);
-		std::cout << "width: " << width << "\theight: " << height << "\tchannels: " << channels << "\n";
-
-		std::vector<std::vector<glm::u8vec3>> images;
-
-		for (int i = 0; i < 6; ++i) {
-			images.emplace_back();
-		}
-
-
-		if (3 * width == 4 * height) { // Horizontal cross
-			faceSize = width / 4;
-			std::cout << "Horizontal Cross: " << faceSize << "\n";
-
-		} else if (3 * height == 4 * width) { // Vertical cross
-			faceSize = height / 4;
-			std::cout << "Vertical Cross: " << faceSize << "\n";
-
-		} else if (width == 6 * height) { // Horizontal line
-			faceSize = width / 6;
-			std::cout << "Horizontal Line: " << faceSize << "\n";
-			
-			for (unsigned int i = 0; i < 6; ++i) {
-				for (size_t y = 0; y < faceSize; ++y) {
-					for (size_t x = 0; x < faceSize; ++x) {
-						size_t xComp = x * channels + i * faceSize * 3;
-						size_t yComp = y * width * channels;
-						size_t index = xComp + yComp;
-						images[i].emplace_back(image[index + 0], image[index + 1], image[index + 2]);
-					}
-				}
-			}
-		} else if (height == 6 * width) { // Vertical line
-			faceSize = height / 6;
-			std::cout << "Vertical Line: " << faceSize << "\n";
-
-			for (unsigned int i = 0; i < 6; ++i) {
-				for (size_t y = 0; y < faceSize; ++y) {
-					for (size_t x = 0; x < faceSize; ++x) {
-						size_t xComp = x * channels;
-						size_t yComp = y * width * channels + i * width * faceSize * channels;
-						size_t index = xComp + yComp;
-						images[i].emplace_back(image[index + 0], image[index + 1], image[index + 2]);
-					}
-				}
-			}
-		}
-
-
-		SOIL_free_image_data(image);
-
-		return images;
-	}
-}
 
 
 // TODO: Temp while testing
@@ -289,47 +224,8 @@ void run() {
 	glm::mat4 projMatrix = glm::perspective(glm::radians(60.0f), (float)width/(float)height, 0.1f, 1000.0f); // TODO: Move inside the camera class and add fov, nearz, farz as members with getters/setters
 
 	
-	GLuint cubeMap;
-	{
-		std::vector<std::string> cubemapTextures {// PiazzaDelPopolo1 NissiBeach2 Yokohama3 LancellottiChapel
-			"D:/OpenGL Projects/Textures/cubemaps/Yokohama3/posx.jpg",
-			"D:/OpenGL Projects/Textures/cubemaps/Yokohama3/negx.jpg",
-			"D:/OpenGL Projects/Textures/cubemaps/Yokohama3/posy.jpg",
-			"D:/OpenGL Projects/Textures/cubemaps/Yokohama3/negy.jpg",
-			"D:/OpenGL Projects/Textures/cubemaps/Yokohama3/posz.jpg",
-			"D:/OpenGL Projects/Textures/cubemaps/Yokohama3/negz.jpg",
-		};
-		
-		std::vector<GLuint> cubemapEnums {
-			GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-			GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-			GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-			GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-			GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-			GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
-		};
-		
-		glGenTextures(1, &cubeMap);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
-		
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE); 
-		
-		{
-			auto images = loadCubeMap("Texture:vertical_cube.png");
-
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_SRGB8, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, &images[0][0]);
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_SRGB8, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, &images[1][0]);
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_SRGB8, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, &images[2][0]);
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_SRGB8, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, &images[3][0]);
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_SRGB8, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, &images[4][0]);
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_SRGB8, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, &images[5][0]);
-		}
-	}
-
+	// Load a CubeMap
+	engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:vertical_cube.png");
 
 	// Load some meshes for testing
 	engine::Model ball = engine::Model::loadModel("Model:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);
@@ -460,7 +356,7 @@ void run() {
 
 			// TODO: need to handle this cubemap texture properly
 			glActiveTexture(GL_TEXTURE3);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap.getCubeMapTexture());
 			glUniform1i(program.getUniformLocation("cubeMap"), 3);
 			
 			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
@@ -513,7 +409,7 @@ void run() {
 			glm::mat4 mvp = projMatrix * glm::mat4{glm::mat3{camera.getViewMatrix()}} *model;
 
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap.getCubeMapTexture());
 
 			glUniformMatrix4fv(skyboxProgram.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 			glUniform1i(skyboxProgram.getUniformLocation("cubeMap"), 0);
@@ -556,7 +452,7 @@ void run() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
-		if (glfwGetKey(window, GLFW_KEY_ESCAPE)) {glfwSetWindowShouldClose(window, GL_TRUE);}
+		if (glfwGetKey(window, GLFW_KEY_ESCAPE)) { glfwSetWindowShouldClose(window, GL_TRUE); }
 
 		//engine::util::checkGLErrors();
 	}
@@ -567,6 +463,7 @@ void run() {
 	engine::Texture::cleanup();
 	engine::Model::cleanup();
 	engine::Shader::cleanup();
+	engine::CubeMap::cleanup();
 
 	ImGui::Shutdown();
 
