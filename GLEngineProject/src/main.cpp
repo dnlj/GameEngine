@@ -69,6 +69,73 @@
 // TODO: Need to be calling Model/Texture/Shader/ShaderProgram cleanup somewhere after converting them to use the Resource system
 // TODO: Do more testing over the new Model/Texture/Shader/ShaderProgram/Material after you finish implementing the mto make sure they are getting cleaned up and what not
 
+
+namespace { // Cubemap conversion
+	// TODO: make a cubemap class
+	// TODO: make a load the six files
+
+	std::vector<std::vector<glm::u8vec3>> loadCubeMap(const engine::ResourcePath &path) {
+		int width;
+		int height;
+		int channels;
+		unsigned int faceSize = 0;
+
+		unsigned char* image = SOIL_load_image(path.getResolvedPath().c_str(), &width, &height, &channels, SOIL_LOAD_RGB);
+		std::cout << "width: " << width << "\theight: " << height << "\tchannels: " << channels << "\n";
+
+		std::vector<std::vector<glm::u8vec3>> images;
+
+		for (int i = 0; i < 6; ++i) {
+			images.emplace_back();
+		}
+
+
+		if (3 * width == 4 * height) { // Horizontal cross
+			faceSize = width / 4;
+			std::cout << "Horizontal Cross: " << faceSize << "\n";
+
+		} else if (3 * height == 4 * width) { // Vertical cross
+			faceSize = height / 4;
+			std::cout << "Vertical Cross: " << faceSize << "\n";
+
+		} else if (width == 6 * height) { // Horizontal line
+			faceSize = width / 6;
+			std::cout << "Horizontal Line: " << faceSize << "\n";
+			
+			for (unsigned int i = 0; i < 6; ++i) {
+				for (size_t y = 0; y < faceSize; ++y) {
+					for (size_t x = 0; x < faceSize; ++x) {
+						size_t xComp = x * channels + i * faceSize * 3;
+						size_t yComp = y * width * channels;
+						size_t index = xComp + yComp;
+						images[i].emplace_back(image[index + 0], image[index + 1], image[index + 2]);
+					}
+				}
+			}
+		} else if (height == 6 * width) { // Vertical line
+			faceSize = height / 6;
+			std::cout << "Vertical Line: " << faceSize << "\n";
+
+			for (unsigned int i = 0; i < 6; ++i) {
+				for (size_t y = 0; y < faceSize; ++y) {
+					for (size_t x = 0; x < faceSize; ++x) {
+						size_t xComp = x * channels;
+						size_t yComp = y * width * channels + i * width * faceSize * channels;
+						size_t index = xComp + yComp;
+						images[i].emplace_back(image[index + 0], image[index + 1], image[index + 2]);
+					}
+				}
+			}
+		}
+
+
+		SOIL_free_image_data(image);
+
+		return images;
+	}
+}
+
+
 // TODO: Temp while testing
 void imguiInit(GLFWwindow *window) {
 	// Setup ImGui binding
@@ -251,12 +318,15 @@ void run() {
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE); 
 		
-		int width, height;
-		unsigned char* image;  
-		for(GLuint i = 0; i < 6; i++) {
-			image = SOIL_load_image(cubemapTextures[i].c_str(), &width, &height, 0, SOIL_LOAD_RGB);
-			glTexImage2D(cubemapEnums[i], 0, GL_SRGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-			SOIL_free_image_data(image);
+		{
+			auto images = loadCubeMap("Texture:vertical_cube.png");
+
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_SRGB8, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, &images[0][0]);
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_SRGB8, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, &images[1][0]);
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_SRGB8, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, &images[2][0]);
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_SRGB8, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, &images[3][0]);
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_SRGB8, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, &images[4][0]);
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_SRGB8, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, &images[5][0]);
 		}
 	}
 
