@@ -25,6 +25,7 @@ namespace engine {
 		// Static
 		////////////////////////////////////////////////////////////////
 		public:
+			// TODO: Need to make a test.cube file or something so i can handle cubemaps that use multiple files
 			static CubeMap loadCubeMap(const ResourcePath& path);
 	};
 }

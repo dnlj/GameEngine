@@ -39,12 +39,12 @@ namespace engine {
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-			unsigned char* image = SOIL_load_image(path.getResolvedPath().c_str(), &width, &height, &channels, SOIL_LOAD_RGB);
+			unsigned char* image = SOIL_load_image(path.getResolvedPath().c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
 			std::cout << "width: " << width << "\theight: " << height << "\tchannels: " << channels << "\n";
 
 			std::vector<std::vector<glm::u8vec3>> images;
 
-			for (int i = 0; i < 6; ++i) {
+			for (int i = 0; i < 12; ++i) {
 				images.emplace_back();
 
 				// Reserve some memory. Probably not going to have cubemaps smaller than 128.
@@ -57,6 +57,39 @@ namespace engine {
 				faceSize = width / 4;
 				std::cout << "Horizontal Cross: " << faceSize << "\n";
 
+				//  0   1   2   3  | --  +Y  --  --
+				//  4   5   6   7  | -X  +Z  +X  -Z
+				//  8   9  10  11  | --  -Y  --  --
+
+				posXIndex = 6;
+				negXIndex = 4;
+				posYIndex = 1;
+				negYIndex = 9;
+				posZIndex = 5;
+				negZIndex = 7;
+
+				std::vector<glm::u8vec3> img;
+				img.reserve(faceSize*faceSize);
+
+				const size_t rowWidth = width * channels;
+
+				for (unsigned int i = 0; i < 12; ++i) {
+					for (size_t y = 0; y < faceSize; ++y) {
+						for (size_t x = 0; x < faceSize; ++x) {
+							size_t xComp = x * channels + (i % 4) * faceSize * channels;
+							size_t yComp = y * rowWidth + (i / 4) * rowWidth * faceSize;
+							size_t index = xComp + yComp;
+
+							unsigned char r = image[index + 0];
+							unsigned char g = image[index + 1];
+							unsigned char b = image[index + 2];
+
+							glm::u8vec3 color{r, g, b};
+
+							images[i].push_back(color);
+						}
+					}
+				}
 			} else if (3 * height == 4 * width) { // Vertical cross
 				faceSize = height / 4;
 				std::cout << "Vertical Cross: " << faceSize << "\n";
@@ -65,10 +98,12 @@ namespace engine {
 				faceSize = width / 6;
 				std::cout << "Horizontal Line: " << faceSize << "\n";
 
+				//  0  1  2  3  4  5 | +X  -X  +Y  -Y  +Z  -Z
+
 				for (unsigned int i = 0; i < 6; ++i) {
 					for (size_t y = 0; y < faceSize; ++y) {
 						for (size_t x = 0; x < faceSize; ++x) {
-							size_t xComp = x * channels + i * faceSize * 3;
+							size_t xComp = x * channels + i * faceSize * channels;
 							size_t yComp = y * width * channels;
 							size_t index = xComp + yComp;
 							images[i].emplace_back(image[index + 0], image[index + 1], image[index + 2]);
@@ -78,6 +113,13 @@ namespace engine {
 			} else if (height == 6 * width) { // Vertical line
 				faceSize = height / 6;
 				std::cout << "Vertical Line: " << faceSize << "\n";
+
+				// 0 | +X
+				// 1 | -X
+				// 2 | +Y
+				// 3 | -Y
+				// 4 | +Z
+				// 5 | -Z
 
 				for (unsigned int i = 0; i < 6; ++i) {
 					for (size_t y = 0; y < faceSize; ++y) {

@@ -225,7 +225,10 @@ void run() {
 
 	
 	// Load a CubeMap
-	engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:vertical_cube.png");
+	engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/horizontal_cross.png");
+	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/horizontal_line.png");
+	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/vertical_cross.png");
+	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/vertical_line.png");
 
 	// Load some meshes for testing
 	engine::Model ball = engine::Model::loadModel("Model:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);
