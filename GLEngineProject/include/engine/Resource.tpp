@@ -49,7 +49,6 @@ namespace engine {
 			if (it->second.refCounter.getCount() == 1) {
 				container[it->second.index].deleteData();
 				deletedIndices.emplace_back(it->second.index);
-				// TODO: memory in "container" is not actually freed, it can just be overwritten now
 				it = lookupMap.erase(it);
 			} else {
 				++it;
