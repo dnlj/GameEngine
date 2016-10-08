@@ -21,14 +21,18 @@
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\engine\CubeMap.cpp" />
+    <ClCompile Include="src\engine\CubeMapData.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\engine\Material.cpp" />
     <ClCompile Include="src\engine\Model.cpp" />
+    <ClCompile Include="src\engine\ModelData.cpp" />
     <ClCompile Include="src\engine\ReferenceCounter.cpp" />
     <ClCompile Include="src\engine\ResourcePath.cpp" />
     <ClCompile Include="src\engine\Shader.cpp" />
+    <ClCompile Include="src\engine\ShaderData.cpp" />
     <ClCompile Include="src\engine\ShaderProgram.cpp" />
     <ClCompile Include="src\engine\Texture.cpp" />
+    <ClCompile Include="src\engine\TextureData.cpp" />
     <ClCompile Include="src\engine\TextureFormat.cpp" />
     <ClCompile Include="src\engine\util.cpp" />
     <ClCompile Include="src\glloadgen\gl_core_4_5.cpp" />
@@ -54,7 +58,6 @@
     <ClInclude Include="include\engine\Shader.hpp" />
     <ClInclude Include="include\engine\ShaderData.hpp" />
     <ClInclude Include="include\engine\ShaderProgram.hpp" />
-    <ClInclude Include="include\engine\SubMeshData.hpp" />
     <ClInclude Include="include\engine\SubModelData.hpp" />
     <ClInclude Include="include\engine\Texture.hpp" />
     <ClInclude Include="include\engine\TextureData.hpp" />

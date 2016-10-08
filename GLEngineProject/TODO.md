@@ -1,14 +1,17 @@
 # General
 * Add support for HDR cube maps
 * Add the cleanup functions to the Resource classes. Currently leaking memory i think. Maybe handle this by adding deconstructors to the xxxxData types?.
-* Switch to premake5
-* Add Doxygen to project
 * Add checks to see if the file exsits in the Model/Material/Texture/Shader/ShaderProgram classes before trying to load
 * Convert back over to using exceptions hey seem like the better option (especially for hot reloading shaders/scripts/assets). Just make sure you stil have some kind of logging and use them properly.
+* Look into nanogui
 
 # Maintenance
+* Move unnecessary includes into the cpp files and out of the headers
+* Switch to premake5
+* Add Doxygen to project
 * Remove TODO's from code.
 * Document code
+* Document Resource. It really needs it
 * Learn and write unit tests. Especially for ResourePath and ReferenceCounter
 
 # Reference / Reading

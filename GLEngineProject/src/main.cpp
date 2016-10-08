@@ -67,7 +67,6 @@
 // TODO: Make sure you are using debug/release assimp and soil, i think currently i have assimp using debug for both... not sure about soil. double check and google
 // TODO: Make a camera that is not bad, fps style no need for quaternions.
 // TODO: Input handling seems to be broke (at the time of writing this) when vsync is not enabled. Detach input/physics from framerate.
-// TODO: Need to be calling Model/Texture/Shader/ShaderProgram cleanup somewhere after converting them to use the Resource system
 // TODO: Do more testing over the new Model/Texture/Shader/ShaderProgram/Material after you finish implementing the mto make sure they are getting cleaned up and what not
 
 
@@ -226,8 +225,8 @@ void run() {
 	
 	// Load a CubeMap
 	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/horizontal_cross.png");
-	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/horizontal_line.png");
-	engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/vertical_cross.png");
+	engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/horizontal_line.png");
+	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/vertical_cross.png");
 	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/vertical_line.png");
 
 	// Load some meshes for testing
@@ -462,11 +461,7 @@ void run() {
 
 	engine::util::checkGLErrors();
 
-	// TODO: Make an engine::cleanup function to encapsualte all these 
-	engine::Texture::cleanup();
-	engine::Model::cleanup();
-	engine::Shader::cleanup();
-	engine::CubeMap::cleanup();
+	engine::cleanup();
 
 	ImGui::Shutdown();
 
@@ -501,6 +496,8 @@ double bench() {
 }
 
 int main(int argc, char* argv[]) {
+	std::atexit(engine::_atExit);
+
 	#ifdef _WIN32
 		MoveWindow(GetConsoleWindow(), 0, 0, 800, 700, true);
 	#endif

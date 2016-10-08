@@ -19,4 +19,7 @@ namespace engine {
 	using index = unsigned int;
 	void _error(const std::string &file, const std::size_t line, const std::string &msg);
 	void _warning(const std::string &file, const std::size_t line, const std::string &msg);
+	void _atExit();
+
+	void cleanup();
 }

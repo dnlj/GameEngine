@@ -47,6 +47,7 @@ namespace engine {
 
 			// Remove anything that is no longer referenced externally
 			if (it->second.refCounter.getCount() == 1) {
+				container[it->second.index].deleteData();
 				deletedIndices.emplace_back(it->second.index);
 				// TODO: memory in "container" is not actually freed, it can just be overwritten now
 				it = lookupMap.erase(it);
@@ -66,11 +67,11 @@ namespace engine {
 
 			lookupMap.emplace(path, IndexData{resrc.index, resrc.refCounter});
 
-			return{resrc, false};
+			return {resrc, false};
 		}
 
 		// Has already been loaded and is either currently still in use or has not been cleaned up yet
-		return{Type{found->second}, true};
+		return {Type{found->second}, true};
 	}
 
 	template<class Type, class TypeData>

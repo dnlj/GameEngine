@@ -37,8 +37,8 @@ namespace engine {
 		protected:
 			class ResourceLoadInfo {
 				public:
-				Type object;
-				bool alreadyLoaded;
+					Type object;
+					bool alreadyLoaded;
 
 			};
 

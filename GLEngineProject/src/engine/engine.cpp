@@ -1,4 +1,9 @@
+// Engine
 #include <engine/engine.hpp>
+#include <engine/CubeMap.hpp>
+#include <engine/Texture.hpp>
+#include <engine/Shader.hpp>
+#include <engine/Model.hpp>
 
 namespace engine {
 	void _error(const std::string &file, const std::size_t line, const std::string &msg) {
@@ -34,5 +39,17 @@ namespace engine {
 		}
 
 		std::cerr << err << std::endl;
+	}
+
+	void _atExit() {
+		std::cout << "at exit\n";
+		cleanup();
+	}
+
+	void cleanup() {
+		engine::CubeMap::cleanup();
+		engine::Texture::cleanup();
+		engine::Model::cleanup();
+		engine::Shader::cleanup();
 	}
 }

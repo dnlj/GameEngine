@@ -34,6 +34,7 @@ namespace engine {
 		
 			// Check if glCreateShader was successful
 			if (shaderData.shader == 0) {
+				glDeleteShader(shaderData.shader);
 				engine_error("glCreateShader failed.");
 			}
 		

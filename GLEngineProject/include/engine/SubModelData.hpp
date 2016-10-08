@@ -6,8 +6,8 @@
 namespace engine {
 	class SubModelData {
 		public:
-		//Material mat;
-		GLuint ebo;
-		GLsizei count;
+			//Material mat;
+			GLuint ebo;
+			GLsizei count;
 	};
 }
