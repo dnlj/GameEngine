@@ -1,4 +1,9 @@
+// STD
+#include <iostream>
+
+// Engine
 #include <engine/TextureData.hpp>
+
 
 namespace engine {
 	void TextureData::deleteData() {

@@ -1,13 +1,9 @@
 #pragma once
 
-#include <iostream>
+// STD
 #include <string>
-#include <fstream>
-#include <ctime>
-#include <string>
-#include <sstream>
-#include <iomanip>
 
+// glLoadGen
 #include <glloadgen/gl_core_4_5.hpp>
 
 // GLFW
@@ -15,6 +11,7 @@
 
 // Engine
 #include <engine/engine.hpp>
+
 
 namespace engine {
 	namespace util {

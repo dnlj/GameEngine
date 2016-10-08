@@ -1,8 +1,6 @@
 #pragma once
 
-// Includes
-#include <string>
-#include <iostream>
+// STD
 #include <vector>
 
 // glLoadGen
@@ -11,8 +9,8 @@
 // Engine
 #include <engine/engine.hpp>
 #include <engine/Shader.hpp>
-#include <engine/util.hpp>
 #include <engine/Uniform.hpp>
+
 
 // TODO: Maybe make this take an vector of Shaders or something
 // TODO: should i make ShaderPrograms like shader pointers? so that i dont have to wory abotu passing references around? need to implement copy/move/whatever 

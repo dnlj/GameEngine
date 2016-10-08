@@ -1,16 +1,9 @@
 #pragma once
 
-// C++ STD
-#include <iostream>
-#include <iomanip>
+// STD
 #include <string>
-#include <algorithm>
+#include <vector>
 #include <unordered_map>
-#include <regex>
-
-// Engine
-#include <engine/engine.hpp>
-#include <engine/FileSystem/FileSystem.hpp>
 
 
 namespace engine {

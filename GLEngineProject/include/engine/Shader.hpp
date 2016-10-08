@@ -3,6 +3,7 @@
 #include <engine/ShaderData.hpp>
 #include <engine/Resource.hpp>
 
+
 // TODO: More testing, to make sure the Resrouce class is working with cleanup and duplicate load files
 namespace engine {
 	class Shader : public Resource<Shader, ShaderData> {

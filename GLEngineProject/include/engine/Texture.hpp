@@ -3,12 +3,10 @@
 // glLoadGen
 #include <glloadgen/gl_core_4_5.hpp>
 
-// SOIL
-#include <SOIL.h>
-
 // Engine
 #include <engine/Resource.hpp>
 #include <engine/TextureData.hpp>
+
 
 // TODO: More testing, to make sure the Resrouce class is working with cleanup and duplicate load files
 namespace engine {

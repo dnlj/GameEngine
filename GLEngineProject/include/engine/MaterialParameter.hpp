@@ -1,10 +1,14 @@
 #pragma once
 
-#include <glloadgen/gl_core_4_5.hpp>
-
+// STD
 #include <vector>
 
+// glLoadGen
+#include <glloadgen/gl_core_4_5.hpp>
+
+// Engine
 #include <engine/ShaderProgram.hpp>
+
 
 namespace engine {
 	class Material;

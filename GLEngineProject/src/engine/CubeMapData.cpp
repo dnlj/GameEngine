@@ -1,4 +1,9 @@
+// STD
+#include <iostream>
+
+// Engine
 #include <engine/CubeMapData.hpp>
+
 
 namespace engine {
 	void CubeMapData::deleteData() {

@@ -1,11 +1,10 @@
 #pragma once
 
-#include <algorithm>
-
-#include <engine/Texture.hpp>
+// Engine
 #include <engine/ShaderProgram.hpp>
+#include <engine/Texture.hpp>
 #include <engine/MaterialParameter.hpp>
-#include <engine/Uniform.hpp>
+
 
 namespace engine {
 

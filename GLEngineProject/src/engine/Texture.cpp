@@ -1,4 +1,9 @@
+// SOIL
+#include <SOIL.h>
+
+// Engine
 #include <engine/Texture.hpp>
+
 
 namespace engine {
 	Texture::~Texture() {

@@ -12,6 +12,7 @@
 #include <engine/ReferenceCounter.hpp>
 #include <engine/IndexData.hpp>
 
+
 namespace engine {
 	template<class Type, class TypeData>
 	class Resource {

@@ -1,4 +1,9 @@
+// STD
+#include <iostream>
+
+// Engine
 #include <engine/ShaderData.hpp>
+
 
 namespace engine {
 	void ShaderData::deleteData() {

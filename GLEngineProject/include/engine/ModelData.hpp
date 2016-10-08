@@ -8,6 +8,7 @@
 #include <engine/SubModelData.hpp>
 #include <engine/Resource.hpp>
 
+
 namespace engine {
 	class ModelData {
 		public:

@@ -1,4 +1,12 @@
+// STD
+#include <iostream>
+#include <string>
+
+// Engine
 #include <engine/ResourcePath.hpp>
+#include <engine/engine.hpp>
+#include <engine/FileSystem/FileSystem.hpp>
+
 
 namespace engine {
 	ResourcePath::ResourcePath(const std::string& path)

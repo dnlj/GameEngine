@@ -1,8 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
-
 
 // TODO: we would need to use a int counter localized because what if we had two calls to loadModel then we would have two ref counts from caching.
 // Sinze we are caching this it actualy should be able to be handled. line above may be wrong

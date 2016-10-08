@@ -1,10 +1,5 @@
 #pragma once
 
-// Assimp
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
 // Engine
 #include <engine/Resource.hpp>
 #include <engine/ModelData.hpp>
@@ -12,6 +7,7 @@
 
 // TODO: remove this is a temp include
 #include <engine/ShaderProgram.hpp>
+
 
 // TODO: More testing, to make sure the Resrouce class is working with cleanup and duplicate load files
 namespace engine {

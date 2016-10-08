@@ -1,6 +1,9 @@
 #pragma once
 
+// Engine
 #include <engine/Shader.hpp>
+#include <engine/util.hpp>
+
 
 namespace engine {
 	Shader::~Shader() {
@@ -15,7 +18,6 @@ namespace engine {
 	}
 
 	
-
 	////////////////////////////////////////////////////////////////
 	// Static
 	////////////////////////////////////////////////////////////////

@@ -171,13 +171,13 @@
     <ClInclude Include="include\imgui_test.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\glloadgen\gl_core_4_5.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\engine\CubeMap.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\engine\CubeMapData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\glloadgen\gl_core_4_5.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

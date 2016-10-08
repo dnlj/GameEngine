@@ -1,4 +1,10 @@
+// STD
+#include <iostream>
+#include <vector>
+
+// Engine
 #include <engine/ReferenceCounter.hpp>
+
 
 namespace engine {
 	ReferenceCounter::ReferenceCounter(CounterType init) {

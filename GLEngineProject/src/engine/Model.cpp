@@ -1,4 +1,11 @@
+// Assimp
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+// Engine
 #include <engine/Model.hpp>
+
 
 namespace engine {
 	Model::~Model() {

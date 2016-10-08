@@ -1,4 +1,12 @@
+// GLM
+#include <glm/glm.hpp>
+
+// SOIL
+#include <SOIL.h>
+
+// Engine
 #include <engine/CubeMap.hpp>
+
 
 namespace engine {
 	CubeMap::~CubeMap() {

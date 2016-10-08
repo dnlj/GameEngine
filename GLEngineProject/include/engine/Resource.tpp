@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace engine {
 	template<class Type, class TypeData>
 	decltype(Resource<Type, TypeData>::container) Resource<Type, TypeData>::container;

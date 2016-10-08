@@ -1,8 +1,11 @@
 #pragma once
 
+// STD
 #include <string>
 
+// glLoadGen
 #include <glloadgen/gl_core_4_5.hpp>
+
 
 namespace engine {
 	class Uniform { // TODO: Rename? idk

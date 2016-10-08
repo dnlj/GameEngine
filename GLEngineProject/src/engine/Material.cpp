@@ -1,4 +1,7 @@
+// Engine
 #include <engine/Material.hpp>
+#include <engine/Uniform.hpp>
+
 
 namespace engine {
 	Material::Material(ShaderProgram &program) : program(program) { // TODO: Need to change how this works to use a global manager like mesh or to pass a index or something. Could make a manager like mesh but in Material annd let Material manage the programs instead of some external thing

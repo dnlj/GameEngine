@@ -1,4 +1,6 @@
+// Engine
 #include <engine/TextureFormat.hpp>
+
 
 namespace engine {
 	GLenum TextureFormat::enumToOpenGL(FilterMin e) {

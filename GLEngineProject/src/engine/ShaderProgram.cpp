@@ -1,4 +1,10 @@
+// STD
+#include <iostream>
+#include <string>
+
+// Engine
 #include <engine/ShaderProgram.hpp>
+
 
 namespace engine {
 	ShaderProgram::ShaderProgram(const std::vector<Shader> &shaders) : program(glCreateProgram()) {
