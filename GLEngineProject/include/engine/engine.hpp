@@ -1,11 +1,18 @@
 #pragma once
 
+// STD
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <ctime>
 #include <chrono>
 #include <iomanip>
+
+// glLoadGen
+#include <glloadgen/gl_core_4_5.hpp>
+
+// GLFW
+#include <GLFW/glfw3.h>
 
 // Engine
 #include <engine/util.hpp>
@@ -22,4 +29,6 @@ namespace engine {
 	void _atExit();
 
 	void cleanup();
+	GLFWwindow* getWindow();
+	void setupWindow(GLFWwindow*& window, std::string title = "Window Title");
 }
