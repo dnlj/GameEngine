@@ -19,7 +19,7 @@ namespace engine {
 			using Resource<CubeMap, CubeMapData>::Resource;
 			~CubeMap();
 
-			GLuint getCubeMapTexture();
+			GLuint getCubeMapTexture() const;
 
 		////////////////////////////////////////////////////////////////
 		// Static

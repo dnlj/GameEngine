@@ -4,8 +4,8 @@ namespace engine {
 	CubeMap::~CubeMap() {
 	}
 
-	GLuint CubeMap::getCubeMapTexture() {
-		return container[index].texture;
+	GLuint CubeMap::getCubeMapTexture() const {
+		return getDataAt(index).texture;
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ namespace engine {
 
 		// Load the object if it has not already been loaded
 		if (!loadInfo.alreadyLoaded) {
-			auto& cubeMapData = container[loadInfo.object.index];
+			auto& cubeMapData = loadInfo.data;
 
 			int width;
 			int height;

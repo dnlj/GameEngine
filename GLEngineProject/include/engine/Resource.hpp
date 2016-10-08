@@ -38,13 +38,16 @@ namespace engine {
 			class ResourceLoadInfo {
 				public:
 					Type object;
+					TypeData& data;
 					bool alreadyLoaded;
 
 			};
 
-			static engine::index getNextIndex();
 			static ResourceLoadInfo loadResource(const std::string& path);
+			static const TypeData& getDataAt(engine::index index);
 
+		private:
+			static engine::index getNextIndex();
 			static std::unordered_map<std::string, IndexData> lookupMap;
 			static std::vector<TypeData> container;
 			static std::vector<engine::index> deletedIndices; // TODO: may want to use some kind of queue or something here

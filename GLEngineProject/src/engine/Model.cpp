@@ -7,7 +7,8 @@ namespace engine {
 	// TODO: Eventually this render function should be removed and everything that needs to be rendered should be
 	//			sorted by material/texture to reduce gl calls
 	void Model::render() const {
-		const ModelData &model = container[index]; // TODO: Since this is a reference could this cause problems if the vector re-allocates?
+		const ModelData &model = getDataAt(index); // TODO: Since this is a reference could this cause problems if the vector re-allocates?
+
 		glBindVertexArray(model.vao);
 
 		// TODO: need to make this handle multiple materials
@@ -22,7 +23,8 @@ namespace engine {
 	}
 
 	void Model::tempSetupGLStuff(const ShaderProgram& program) {
-		const auto& modelData = container[index];
+		const auto& modelData = getDataAt(index);
+
 		glBindVertexArray(modelData.vao);
 		glBindBuffer(GL_ARRAY_BUFFER, modelData.vbo);
 
@@ -163,8 +165,7 @@ namespace engine {
 				}
 			}
 
-
-			container[loadInfo.object.index] = setupGLObjects(vertices, indices);
+			loadInfo.data = setupGLObjects(vertices, indices);
 
 			std::cout << "\tMaterials: " << scene->mNumMaterials << std::endl; // TODO: Temp for testing, need to make  sure multiple materials work before removing
 

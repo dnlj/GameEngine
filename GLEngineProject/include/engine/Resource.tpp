@@ -66,11 +66,16 @@ namespace engine {
 
 			lookupMap.emplace(path, IndexData{resrc.index, resrc.refCounter});
 
-			return {resrc, false};
+			return {resrc, container[resrc.index], false};
 		}
 
 		// Has already been loaded and is either currently still in use or has not been cleaned up yet
-		return {Type{found->second}, true};
+		return {Type{found->second}, container[found->second.index], true};
+	}
+
+	template<class Type, class TypeData>
+	const TypeData& Resource<Type, TypeData>::getDataAt(engine::index index) {
+		return container[index];
 	}
 
 	template<class Type, class TypeData>

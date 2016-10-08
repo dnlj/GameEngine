@@ -8,8 +8,8 @@ namespace engine {
 		return index == tex.index;
 	}
 
-	GLuint Texture::getTexture() {
-		return container[index].texture;
+	GLuint Texture::getTexture() const {
+		return getDataAt(index).texture;
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -21,8 +21,7 @@ namespace engine {
 		
 		// Load the object if it has not already been loaded
 		if (!loadInfo.alreadyLoaded) {
-		
-			auto& textureData = container[loadInfo.object.index];
+			auto& textureData = loadInfo.data;
 			textureData.format = format;
 			
 			// TODO: Add an option to the TextureFormat for the internal format (GL_RGBA, GL_SRGB8_ALPHA8, GL_RGB, etc)

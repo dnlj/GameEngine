@@ -7,11 +7,11 @@ namespace engine {
 	}
 
 	GLuint Shader::getType() const {
-		return container[index].type;
+		return getDataAt(index).type;
 	}
 
 	GLuint Shader::getShader() const {
-		return container[index].shader;
+		return getDataAt(index).shader;
 	}
 
 	
@@ -26,7 +26,7 @@ namespace engine {
 
 		// Load the object if it has not already been loaded
 		if (!loadInfo.alreadyLoaded) {
-			auto& shaderData = container[loadInfo.object.index];
+			auto& shaderData = loadInfo.data;
 		
 			// Attempt to create a shader
 			shaderData.shader = glCreateShader(type);

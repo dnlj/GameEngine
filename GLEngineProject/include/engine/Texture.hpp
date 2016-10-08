@@ -19,7 +19,7 @@ namespace engine {
 
 			bool operator==(const Texture& tex) const;
 
-			GLuint getTexture();
+			GLuint getTexture() const;
 
 		////////////////////////////////////////////////////////////////
 		// Static
