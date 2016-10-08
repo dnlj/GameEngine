@@ -27,5 +27,11 @@ namespace engine {
 		public:
 			// TODO: Need to make a test.cube file or something so i can handle cubemaps that use multiple files
 			static CubeMap loadCubeMap(const ResourcePath& path);
+
+		private:
+			static void setupHorizontalCross(unsigned char* image, int width, int height, int channels);
+			static void setupVerticalCross(unsigned char* image, int width, int height, int channels);
+			static void setupHorizontalLine(unsigned char* image, int width, int height, int channels);
+			static void setupVerticalLine(unsigned char* image, int width, int height, int channels);
 	};
 }
