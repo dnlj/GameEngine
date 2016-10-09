@@ -119,6 +119,48 @@ void imguiTest(GLFWwindow *window) {
 	ImGui::Render();
 }
 
+double getNextDeltaTime() {
+	using seconds = std::chrono::duration<double>;
+	static auto last = std::chrono::high_resolution_clock::now();
+
+	auto current = std::chrono::high_resolution_clock::now();
+	auto dt = std::chrono::duration_cast<seconds>(current - last).count();
+	
+	last = current;
+
+	return dt;
+}
+
+void runMenu(int width, int height, float& metalness, float& intensity) {
+	ImGui_ImplGlfwGL3_NewFrame();
+	{
+		constexpr float padding = 10.0f;
+
+		ImGui::SetNextWindowPos({padding, padding}, ImGuiSetCond_Once);
+		ImGui::SetNextWindowCollapsed(true, ImGuiSetCond_Once);
+		if (ImGui::Begin("Settings", nullptr, {300.0f, height - padding * 2}, -1.0f, ImGuiWindowFlags_NoMove)) {
+
+			if (ImGui::CollapsingHeader("Shader Sliders", "shader sliders", true, true)) {
+				ImGui::SliderFloat("metalness", &metalness, 0.0f, 1.0f);
+				ImGui::SliderFloat("intensity", &intensity, 0.0f, 200.0f);
+			}
+
+			if (ImGui::CollapsingHeader("Instructions")) {
+				ImGui::BulletText("Hold middle mouse to move");
+				ImGui::BulletText("Press F to toggle light position");
+				ImGui::BulletText("mouse = look");
+				ImGui::BulletText("wasd = move");
+				ImGui::BulletText("ctrl = down");
+				ImGui::BulletText("space = up");
+			}
+		}
+
+		ImGui::End();
+
+		ImGui::Render();
+	}
+}
+
 void run() {
 	// Register resource directories
 	engine::ResourcePath::AddResourceDir("Shader", "shaders/");
@@ -238,30 +280,7 @@ void run() {
 
 	// Main game loop
 	while (!glfwWindowShouldClose(window)) {
-		// TODO: Move this fps stuff into a function
-		static int frameCount = 0;
-		static double frameTotal = 0.0;
-		static double lastFrameTime	= 0.0;
-
-		double dt = glfwGetTime() - lastFrameTime;
-		lastFrameTime = glfwGetTime();
-		frameTotal += dt;
-		frameCount += 1;
-
-		if (frameTotal >= 1.0f) {
-			std::string title(windowTitle);
-			title += " FPS: " + std::to_string((double)frameCount / frameTotal);
-			title += " FT: " + std::to_string(frameTotal / (double)frameCount);
-
-			glfwSetWindowTitle(window, title.c_str());
-
-			frameTotal = 0.0;
-			frameCount = 0;
-		}
-
-		if (dt > 1.0f) {
-			dt = 1.0f;
-		}
+		double dt = getNextDeltaTime();
 		
 		{ // Light input
 			static bool toggle = true;
@@ -290,7 +309,9 @@ void run() {
 		glm::mat4 model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		glm::mat4 mvp = projMatrix * camera.getViewMatrix() * model;
 
-		{ // BRDF
+
+		// Models
+		{
 			program.use();
 
 			glUniform1f(program.getUniformLocation("metalness"), metalness);
@@ -346,7 +367,8 @@ void run() {
 			uvplane.render();
 		}
 
-		{ // Skybox
+		// Skybox
+		{
 			skyboxProgram.use();
 
 			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -363,33 +385,7 @@ void run() {
 
 
 		// Imgui
-		ImGui_ImplGlfwGL3_NewFrame();
-		{
-			constexpr float padding = 10.0f;
-			
-			ImGui::SetNextWindowPos({padding, padding}, ImGuiSetCond_Once);
-			ImGui::SetNextWindowCollapsed(true, ImGuiSetCond_Once);
-			if (ImGui::Begin("Settings", nullptr, {300.0f, height - padding * 2}, -1.0f, ImGuiWindowFlags_NoMove)) {
-
-				if (ImGui::CollapsingHeader("Shader Sliders", "shader sliders", true, true)) {
-					ImGui::SliderFloat("metalness", &metalness, 0.0f, 1.0f);
-					ImGui::SliderFloat("intensity", &intensity, 0.0f, 200.0f);
-				}
-
-				if (ImGui::CollapsingHeader("Instructions")) {
-					ImGui::BulletText("Hold middle mouse to move");
-					ImGui::BulletText("Press F to toggle light position");
-					ImGui::BulletText("mouse = look");
-					ImGui::BulletText("wasd = move");
-					ImGui::BulletText("ctrl = down");
-					ImGui::BulletText("space = up");
-				}
-			}
-			
-			ImGui::End();
-
-			ImGui::Render();
-		}		
+		runMenu(width, height, metalness, intensity);
 
 
 		// Buffers and events
