@@ -4,8 +4,13 @@
 // SOIL
 #include <SOIL.h>
 
+// RapidJSON
+#include <rapidjson/document.h>
+#include <rapidjson/error/en.h>
+
 // Engine
 #include <engine/CubeMap.hpp>
+#include <engine/util.hpp>
 
 
 namespace engine {
@@ -27,17 +32,6 @@ namespace engine {
 		if (!loadInfo.alreadyLoaded) {
 			auto& cubeMapData = loadInfo.data;
 
-			int width;
-			int height;
-			int channels;
-			int faceSize = 0;
-			int posXIndex = 0;
-			int negXIndex = 1;
-			int posYIndex = 2;
-			int negYIndex = 3;
-			int posZIndex = 4;
-			int negZIndex = 5;
-
 			glGenTextures(1, &cubeMapData.texture);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapData.texture);
 
@@ -47,8 +41,73 @@ namespace engine {
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
+			{ // Split Sides
+				auto pos = resolvedPath.find_last_of('.');
+				if (pos != std::string::npos) {
+					if (resolvedPath.substr(pos + 1) == "cube") {
+						// TODO: wrap this stuff to have simpler file loading system
+						rapidjson::Document doc;
+						rapidjson::ParseResult res = doc.Parse(engine::util::loadFile(resolvedPath).c_str());
+
+						if (!res) {
+							std::string error = "JSON parse error: ";
+							error += rapidjson::GetParseError_En(res.Code());
+							error += " (" + res.Offset();
+							error += ")";
+
+							engine_error(error);
+						}
+
+						assert(doc.IsObject()); // TODO: Better error handling
+						assert(doc.HasMember("cube_sides")); // TODO: Better error handling
+
+						rapidjson::Value::MemberIterator cubeSides = doc.FindMember("cube_sides");
+						assert(cubeSides != doc.MemberEnd()); // TODO: Better error handling
+						assert(cubeSides->value.IsObject()); // TODO: Better error handling
+
+						auto posX = cubeSides->value.FindMember("pos_x");
+						assert(posX != doc.MemberEnd()); // TODO: Better error handling
+						assert(posX->value.IsString());
+
+						auto negX = cubeSides->value.FindMember("neg_x");
+						assert(posX != doc.MemberEnd()); // TODO: Better error handling
+						assert(posX->value.IsString());
+
+						auto posY = cubeSides->value.FindMember("pos_y");
+						assert(posX != doc.MemberEnd()); // TODO: Better error handling
+						assert(posX->value.IsString());
+
+						auto negY = cubeSides->value.FindMember("neg_y");
+						assert(posX != doc.MemberEnd()); // TODO: Better error handling
+						assert(posX->value.IsString());
+
+						auto posZ = cubeSides->value.FindMember("pos_z");
+						assert(posX != doc.MemberEnd()); // TODO: Better error handling
+						assert(posX->value.IsString());
+
+						auto negZ = cubeSides->value.FindMember("neg_z");
+						assert(posX != doc.MemberEnd()); // TODO: Better error handling
+						assert(posX->value.IsString());
+
+						setupSplitSides({
+							engine::ResourcePath{posX->value.GetString()}.getResolvedPath(),
+							engine::ResourcePath{negX->value.GetString()}.getResolvedPath(),
+							engine::ResourcePath{posY->value.GetString()}.getResolvedPath(),
+							engine::ResourcePath{negY->value.GetString()}.getResolvedPath(),
+							engine::ResourcePath{posZ->value.GetString()}.getResolvedPath(),
+							engine::ResourcePath{negZ->value.GetString()}.getResolvedPath()
+						});
+							
+						return loadInfo.object;
+					}
+				};
+			}
+
+			int width;
+			int height;
+			int channels;
+
 			unsigned char* image = SOIL_load_image(path.getResolvedPath().c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
-			std::cout << "width: " << width << "\theight: " << height << "\tchannels: " << channels << "\n";
 
 			if (3 * width == 4 * height) { // Horizontal cross
 				setupHorizontalCross(image, width, height, channels);
@@ -228,5 +287,23 @@ namespace engine {
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_SRGB8, faceSize, faceSize, 0, GL_RGB, GL_UNSIGNED_BYTE, &subImage[0]);
 			subImage.resize(0); // Only changes size. Does not affect capacity?
 		}
+	}
+
+	void CubeMap::setupSplitSides(const std::vector<std::string>& images) {
+		std::cout << "Split Sides: \n";
+
+		int width;
+		int height;
+		int channels;
+		unsigned char* image;
+
+		for (int i = 0; i < images.size(); ++i) {
+			std::cout << i << ": " << images[i].c_str() << std::endl;
+			image = SOIL_load_image(images[i].c_str(), &width, &height, &channels, SOIL_LOAD_RGB);
+
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_SRGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+			SOIL_free_image_data(image);
+		}
+
 	}
 }

@@ -87,8 +87,8 @@ void Camera::handleInput(GLFWwindow *window, float dt) {
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 		// TODO: This borks when you dont have vsync on, this is problem
-		float deltaX = mouseX * sensitivity * dt;
-		float deltaY = mouseY * sensitivity * dt;
+		float deltaX = static_cast<float>(mouseX * sensitivity * dt);
+		float deltaY = static_cast<float>(mouseY * sensitivity * dt);
 
 		glm::quat pitch	= glm::angleAxis(glm::radians(deltaY), getRight());
 		glm::quat yaw	= glm::angleAxis(glm::radians(deltaX), up);

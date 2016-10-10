@@ -28,5 +28,6 @@ namespace engine {
 			static void setupVerticalCross(unsigned char* image, int width, int height, int channels);
 			static void setupHorizontalLine(unsigned char* image, int width, int height, int channels);
 			static void setupVerticalLine(unsigned char* image, int width, int height, int channels);
+			static void setupSplitSides(const std::vector<std::string>& images);
 	};
 }

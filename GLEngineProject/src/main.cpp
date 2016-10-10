@@ -167,6 +167,10 @@ void run() {
 	engine::ResourcePath::AddResourceDir("Model", "D:/OpenGL Projects/Models/");
 	engine::ResourcePath::AddResourceDir("Texture", "D:/OpenGL Projects/Textures/");
 
+	//engine::CubeMap::loadCubeMap("Texture:CubeMaps/single_sides.cube");
+	//getchar();
+	//return;
+
 	// Setup the window
 	static char *windowTitle = "Window Title";
 	GLFWwindow* window = engine::getWindow();
@@ -208,8 +212,9 @@ void run() {
 
 	
 	// Load a CubeMap
+	engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/split_sides.cube");
 	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/horizontal_cross.png");
-	engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/horizontal_line.png");
+	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/horizontal_line.png");
 	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/vertical_cross.png");
 	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/vertical_line.png");
 
@@ -333,7 +338,6 @@ void run() {
 			mvp = projMatrix * camera.getViewMatrix() * model;
 			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-
 			ball.render();
 			
 			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -391,6 +395,7 @@ void run() {
 		// Buffers and events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
 
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE)) { glfwSetWindowShouldClose(window, GL_TRUE); }
 	}
