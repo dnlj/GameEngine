@@ -6,6 +6,7 @@
 
 // RapidJSON
 #include <rapidjson/document.h>
+#include <rapidjson/error/error.h>
 #include <rapidjson/error/en.h>
 
 // Engine
@@ -54,40 +55,67 @@ namespace engine {
 							error += rapidjson::GetParseError_En(res.Code());
 							error += " (" + res.Offset();
 							error += ")";
-
 							engine_error(error);
 						}
 
-						assert(doc.IsObject()); // TODO: Better error handling
-						assert(doc.HasMember("cube_sides")); // TODO: Better error handling
+						if (!doc.IsObject()) {
+							std::string error = "Cube map \"";
+							error += resolvedPath;
+							error += "\" has invalid json";
+							engine_error(error);
+						}
 
 						rapidjson::Value::MemberIterator cubeSides = doc.FindMember("cube_sides");
-						assert(cubeSides != doc.MemberEnd()); // TODO: Better error handling
-						assert(cubeSides->value.IsObject()); // TODO: Better error handling
+						if (cubeSides == doc.MemberEnd() || !cubeSides->value.IsObject()) {
+							std::string error = "Cube map \"";
+							error += resolvedPath;
+							error += "\" is missing field \"cube_sides\"";
+							engine_error(error);
+						}
+
 
 						auto posX = cubeSides->value.FindMember("pos_x");
-						assert(posX != doc.MemberEnd()); // TODO: Better error handling
-						assert(posX->value.IsString());
+						if (posX == doc.MemberEnd() || !posX->value.IsString()) {
+							std::string error = "Cube map \"";
+							error += resolvedPath + "\" is missing field \"pos_x\"";
+							engine_error(error);
+						}
 
 						auto negX = cubeSides->value.FindMember("neg_x");
-						assert(posX != doc.MemberEnd()); // TODO: Better error handling
-						assert(posX->value.IsString());
+						if (negX == doc.MemberEnd() || !negX->value.IsString()) {
+							std::string error = "Cube map \"";
+							error += resolvedPath + "\" is missing field \"neg_x\"";
+							engine_error(error);
+						}
 
 						auto posY = cubeSides->value.FindMember("pos_y");
-						assert(posX != doc.MemberEnd()); // TODO: Better error handling
-						assert(posX->value.IsString());
+						if (posY == doc.MemberEnd() || !posY->value.IsString()) {
+							std::string error = "Cube map \"";
+							error += resolvedPath + "\" is missing field \"pos_y\"";
+							engine_error(error);
+						}
 
 						auto negY = cubeSides->value.FindMember("neg_y");
-						assert(posX != doc.MemberEnd()); // TODO: Better error handling
-						assert(posX->value.IsString());
+						if (negY == doc.MemberEnd() || !negY->value.IsString()) {
+							std::string error = "Cube map \"";
+							error += resolvedPath + "\" is missing field \"neg_y\"";
+							engine_error(error);
+						}
 
 						auto posZ = cubeSides->value.FindMember("pos_z");
-						assert(posX != doc.MemberEnd()); // TODO: Better error handling
-						assert(posX->value.IsString());
+						if (posZ == doc.MemberEnd() || !posZ->value.IsString()) {
+							std::string error = "Cube map \"";
+							error += resolvedPath + "\" is missing field \"pos_z\"";
+							engine_error(error);
+						}
 
 						auto negZ = cubeSides->value.FindMember("neg_z");
-						assert(posX != doc.MemberEnd()); // TODO: Better error handling
-						assert(posX->value.IsString());
+						if (negZ == doc.MemberEnd() || !negZ->value.IsString()) {
+							std::string error = "Cube map \"";
+							error += resolvedPath + "\" is missing field \"neg_z\"";
+							engine_error(error);
+						}
+						
 
 						setupSplitSides({
 							engine::ResourcePath{posX->value.GetString()}.getResolvedPath(),
