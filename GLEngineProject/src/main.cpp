@@ -24,6 +24,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+// ImGui
+#define IMGUI_DISABLE_TEST_WINDOWS
+#include <imgui/imgui.h>
+// TODO: This is temp until i get around to doing this myself
+#include <imgui_test.hpp>
+
 // SOIL
 #include <SOIL.h>
 
@@ -42,12 +48,6 @@
 #include <engine/Material.hpp>
 #include <engine/Model.hpp>
 #include <engine/CubeMap.hpp>
-
-// ImGui
-// TODO: #define IMGUI_DISABLE_TEST_WINDOWS
-#include <imgui/imgui.h>
-// TODO: This is temp until i get around to doing this myself
-#include <imgui_test.hpp>
 
 // My includes
 #include "Camera.h"
@@ -272,6 +272,45 @@ void run() {
 	mat.setParameter("normalMap", normal_tex);
 	mat.setParameter("roughnessMap", roughness_tex);
 
+	// Render to Cubemap testing
+	int faceSize = 256;
+	GLuint frameBuffer;
+	GLuint cubeMapTexture;
+	{// Setup cubeMapTexture
+	
+		// Generate and bind the ccubemap texture
+		glGenTextures(1, &cubeMapTexture);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture);
+		
+		// Setup texture parameters
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, 0);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	
+		// Setup our faces
+		for (int face = 0; face < 6; ++face) {
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_SRGB8, faceSize, faceSize, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+		}
+	
+		// Unbind our cubemap texture
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	}
+	
+	{// Setup frameBuffer
+		// Generate frame buffer
+		glGenFramebuffers(1, &frameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+
+		// Do any setup here
+	
+		// Unbind our frame buffer
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
 
 	engine::util::checkGLErrors();
 
@@ -316,14 +355,20 @@ void run() {
 		glm::mat4 mvp = projMatrix * camera.getViewMatrix() * model;
 
 
-		// Models
-		{
+		// Models and Skybox
+		for (int i = 0; i < 7; ++i){
+
 			program.use();
 
 			glUniform1f(program.getUniformLocation("metalness"), metalness);
 			glUniform1f(program.getUniformLocation("intensity"), intensity);
 			
 			mat.loadParameters();
+
+			if (i > 0) {
+				glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i-1, cubeMapTexture, 0);
+			}
 
 			// TODO: need to handle this cubemap texture properly
 			glActiveTexture(GL_TEXTURE3);
@@ -370,24 +415,25 @@ void run() {
 			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
 			uvplane.render();
+		
+			// Skybox
+			{
+				skyboxProgram.use();
+
+				model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+				glm::mat4 mvp = projMatrix * glm::mat4{glm::mat3{camera.getViewMatrix()}} *model;
+
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap.getCubeMapTexture());
+
+				glUniformMatrix4fv(skyboxProgram.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+				glUniform1i(skyboxProgram.getUniformLocation("cubeMap"), 0);
+
+				skybox.render();
+			}
 		}
 
-		// Skybox
-		{
-			skyboxProgram.use();
-
-			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-			glm::mat4 mvp = projMatrix * glm::mat4{glm::mat3{camera.getViewMatrix()}} *model;
-
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap.getCubeMapTexture());
-
-			glUniformMatrix4fv(skyboxProgram.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-			glUniform1i(skyboxProgram.getUniformLocation("cubeMap"), 0);
-
-			skybox.render();
-		}
-
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// Imgui
 		runMenu(width, height, metalness, intensity);
@@ -400,6 +446,40 @@ void run() {
 
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE)) { glfwSetWindowShouldClose(window, GL_TRUE); }
 	}
+
+	{ // Save out screenshot of current frame buffer on exit
+		int width = faceSize;
+		int height = faceSize;
+		std::vector<glm::u8vec3> img;
+		img.resize(width * height);
+		
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+
+		for (int i=0; i < 6; ++i) {
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, cubeMapTexture, 0);
+			glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, &img[0].r);
+	
+			// Flip the image vertically
+			for (int x = 0; x < width; ++x) {
+				for (int y = 0; y < height / 2; ++y) {
+					size_t idx1 = x + y * width;
+					size_t idx2 = (height-y) * width - width + x;
+					auto temp = img[idx1];
+					img[idx1] = img[idx2];
+					img[idx2] = temp;
+				}
+			}
+
+			// Save to disk
+			std::string fileName = "face";
+			fileName += std::to_string(i);
+			fileName += ".bmp";
+			SOIL_save_image(fileName.c_str(), SOIL_SAVE_TYPE_BMP, width, height, 3, &img[0].r);
+		}
+	}
+
+	glDeleteTextures(1, &cubeMapTexture);
+	glDeleteFramebuffers(1, &frameBuffer);
 
 	engine::util::checkGLErrors();
 }
