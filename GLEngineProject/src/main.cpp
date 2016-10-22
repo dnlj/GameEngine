@@ -34,7 +34,7 @@
 
 // Engine
 #include <engine/engine.hpp>
-#include <engine/util.hpp>
+#include <engine/util/util.hpp>
 #include <engine/TextureFormat.hpp>
 #include <engine/Texture.hpp>
 #include <engine/Shader.hpp>

@@ -34,7 +34,8 @@
     <ClCompile Include="src\engine\Texture.cpp" />
     <ClCompile Include="src\engine\TextureData.cpp" />
     <ClCompile Include="src\engine\TextureFormat.cpp" />
-    <ClCompile Include="src\engine\util.cpp" />
+    <ClCompile Include="src\engine\json\json.cpp" />
+    <ClCompile Include="src\engine\util\util.cpp" />
     <ClCompile Include="src\glloadgen\gl_core_4_5.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
@@ -63,7 +64,8 @@
     <ClInclude Include="include\engine\TextureData.hpp" />
     <ClInclude Include="include\engine\TextureFormat.hpp" />
     <ClInclude Include="include\engine\Uniform.hpp" />
-    <ClInclude Include="include\engine\util.hpp" />
+    <ClInclude Include="include\engine\json\json.hpp" />
+    <ClInclude Include="include\engine\util\util.hpp" />
     <ClInclude Include="include\engine\Vertex.hpp" />
     <ClInclude Include="include\GLE\engine\Mesh.hpp" />
     <ClInclude Include="include\glloadgen\gl_core_4_5.hpp" />
@@ -161,6 +163,8 @@
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)dependencies/glm/include;$(ProjectDir)dependencies/glfw/glfw-3.1.2/include;$(ProjectDir)dependencies/soil/include;$(ProjectDir)dependencies/assimp/assimp-3.2/include;$(ProjectDir)dependencies/rapidjson/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)/%(RelativeDir)</ObjectFileName>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(ProjectDir)dependencies\glfw\glfw-3.1.2\_build\src\$(Configuration);$(ProjectDir)dependencies\soil\soil\projects\VC9\x64\$(Configuration);$(ProjectDir)dependencies\assimp\assimp-3.2\_build\code\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -190,6 +194,8 @@
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)dependencies/glm/include;$(ProjectDir)dependencies/glfw/glfw-3.1.2/include;$(ProjectDir)dependencies/soil/include;$(ProjectDir)dependencies/assimp/assimp-3.2/include;$(ProjectDir)dependencies/rapidjson/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)/%(RelativeDir)</ObjectFileName>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

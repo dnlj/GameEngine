@@ -2,7 +2,7 @@
 
 // Engine
 #include <engine/Shader.hpp>
-#include <engine/util.hpp>
+#include <engine/util/util.hpp>
 
 
 namespace engine {

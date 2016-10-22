@@ -11,7 +11,8 @@
 
 // Engine
 #include <engine/CubeMap.hpp>
-#include <engine/util.hpp>
+#include <engine/util/util.hpp>
+#include <engine/json/json.hpp>
 
 
 namespace engine {
@@ -46,84 +47,18 @@ namespace engine {
 				auto pos = resolvedPath.find_last_of('.');
 				if (pos != std::string::npos) {
 					if (resolvedPath.substr(pos + 1) == "cube") {
-						// TODO: wrap this stuff to have simpler file loading system
 						rapidjson::Document doc;
-						rapidjson::ParseResult res = doc.Parse(engine::util::loadFile(resolvedPath).c_str());
+						json::loadDocument(resolvedPath, doc);
 
-						if (!res) {
-							std::string error = "JSON parse error: ";
-							error += rapidjson::GetParseError_En(res.Code());
-							error += " (" + res.Offset();
-							error += ")";
-							engine_error(error);
-						}
-
-						if (!doc.IsObject()) {
-							std::string error = "Cube map \"";
-							error += resolvedPath;
-							error += "\" has invalid json";
-							engine_error(error);
-						}
-
-						rapidjson::Value::MemberIterator cubeSides = doc.FindMember("cube_sides");
-						if (cubeSides == doc.MemberEnd() || !cubeSides->value.IsObject()) {
-							std::string error = "Cube map \"";
-							error += resolvedPath;
-							error += "\" is missing field \"cube_sides\"";
-							engine_error(error);
-						}
-
-
-						auto posX = cubeSides->value.FindMember("pos_x");
-						if (posX == doc.MemberEnd() || !posX->value.IsString()) {
-							std::string error = "Cube map \"";
-							error += resolvedPath + "\" is missing field \"pos_x\"";
-							engine_error(error);
-						}
-
-						auto negX = cubeSides->value.FindMember("neg_x");
-						if (negX == doc.MemberEnd() || !negX->value.IsString()) {
-							std::string error = "Cube map \"";
-							error += resolvedPath + "\" is missing field \"neg_x\"";
-							engine_error(error);
-						}
-
-						auto posY = cubeSides->value.FindMember("pos_y");
-						if (posY == doc.MemberEnd() || !posY->value.IsString()) {
-							std::string error = "Cube map \"";
-							error += resolvedPath + "\" is missing field \"pos_y\"";
-							engine_error(error);
-						}
-
-						auto negY = cubeSides->value.FindMember("neg_y");
-						if (negY == doc.MemberEnd() || !negY->value.IsString()) {
-							std::string error = "Cube map \"";
-							error += resolvedPath + "\" is missing field \"neg_y\"";
-							engine_error(error);
-						}
-
-						auto posZ = cubeSides->value.FindMember("pos_z");
-						if (posZ == doc.MemberEnd() || !posZ->value.IsString()) {
-							std::string error = "Cube map \"";
-							error += resolvedPath + "\" is missing field \"pos_z\"";
-							engine_error(error);
-						}
-
-						auto negZ = cubeSides->value.FindMember("neg_z");
-						if (negZ == doc.MemberEnd() || !negZ->value.IsString()) {
-							std::string error = "Cube map \"";
-							error += resolvedPath + "\" is missing field \"neg_z\"";
-							engine_error(error);
-						}
-						
+						auto cubeSides = json::getObject(doc, "cube_sides");
 
 						setupSplitSides({
-							engine::ResourcePath{posX->value.GetString()}.getResolvedPath(),
-							engine::ResourcePath{negX->value.GetString()}.getResolvedPath(),
-							engine::ResourcePath{posY->value.GetString()}.getResolvedPath(),
-							engine::ResourcePath{negY->value.GetString()}.getResolvedPath(),
-							engine::ResourcePath{posZ->value.GetString()}.getResolvedPath(),
-							engine::ResourcePath{negZ->value.GetString()}.getResolvedPath()
+							engine::ResourcePath{json::getString(cubeSides->value, "pos_x")->value.GetString()}.getResolvedPath(),
+							engine::ResourcePath{json::getString(cubeSides->value, "neg_x")->value.GetString()}.getResolvedPath(),
+							engine::ResourcePath{json::getString(cubeSides->value, "pos_y")->value.GetString()}.getResolvedPath(),
+							engine::ResourcePath{json::getString(cubeSides->value, "neg_y")->value.GetString()}.getResolvedPath(),
+							engine::ResourcePath{json::getString(cubeSides->value, "pos_z")->value.GetString()}.getResolvedPath(),
+							engine::ResourcePath{json::getString(cubeSides->value, "neg_z")->value.GetString()}.getResolvedPath()
 						});
 							
 						return loadInfo.object;
