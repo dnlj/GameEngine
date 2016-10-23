@@ -445,25 +445,24 @@ void run() {
 
 				camera.setFOV(glm::radians(90.0f));
 				camera.setAspect(1.0f);
-				camera.setPosition({0,5,0});
 				switch (i) {
 					case 1:
-						camera.setOrientation(glm::toQuat(glm::lookAt(glm::vec3{0.0f,5.0f,0.0f}, glm::vec3{1.0f,0.0f,0.0f}, glm::vec3{0.0f,1.0f,0.0f})));
+						camera.lookAt({1.0f, 0.0f, 0.0f});
 						break;
 					case 2:
-						camera.setOrientation(glm::toQuat(glm::lookAt(glm::vec3{0.0f,5.0f,0.0f}, glm::vec3{-1.0f,0.0f,0.0f}, glm::vec3{0.0f,1.0f,0.0f})));
+						camera.lookAt({-1.0f, 0.0f, 0.0f});
 						break;
 					case 3:
-						camera.setOrientation(glm::toQuat(glm::lookAt(glm::vec3{0.0f,5.0f,0.0f}, glm::vec3{0.0f,1.0f,0.0f}, glm::vec3{0.0f,1.0f,0.0f})));
+						camera.lookAt({0.0f, 1.0f, 0.0f});
 						break;
 					case 4:
-						camera.setOrientation(glm::toQuat(glm::lookAt(glm::vec3{0.0f,5.0f,0.0f}, glm::vec3{0.0f,-1.0f,0.0f}, glm::vec3{0.0f,1.0f,0.0f})));
+						camera.lookAt({0.0f, -1.0f, 0.0f});
 						break;
 					case 5:
-						camera.setOrientation(glm::toQuat(glm::lookAt(glm::vec3{0.0f,5.0f,0.0f}, glm::vec3{0.0f,0.0f,1.0f}, glm::vec3{0.0f,1.0f,0.0f})));
+						camera.lookAt({0.0f, 0.0f, 1.0f});
 						break;
 					case 6:
-						camera.setOrientation(glm::toQuat(glm::lookAt(glm::vec3{0.0f,5.0f,0.0f}, glm::vec3{0.0f,0.0f,-1.0f}, glm::vec3{0.0f,1.0f,0.0f})));
+						camera.lookAt({0.0f, 0.0f,-1.0f});
 						break;
 				}
 			} else {
