@@ -48,9 +48,7 @@
 #include <engine/Material.hpp>
 #include <engine/Model.hpp>
 #include <engine/CubeMap.hpp>
-
-// My includes
-#include "Camera.h"
+#include <engine/Camera.hpp>
 
 // TODO: Add include statment for glsl to make code more re-usable
 // TODO: Need to add a way (in the material format?) to specify channels of textures to use for things. Such as using the r channel for the roughness and the g channel for the metalness and stuff like that.
@@ -161,6 +159,74 @@ void runMenu(int width, int height, float& metalness, float& intensity) {
 	}
 }
 
+void drawScene(const engine::ShaderProgram& program, const engine::ShaderProgram& skyboxProgram, const glm::vec3& lightPosition, const engine::Camera& camera, const engine::CubeMap& cubemap, const std::vector<engine::Model>& models) {
+	auto projection = camera.getProjectionMaterix();
+
+	glm::mat4 model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::mat4 mvp = projection * camera.getViewMatrix() * model;
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap.getCubeMapTexture());
+	glUniform1i(program.getUniformLocation("cubeMap"), 3);
+
+	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+	glUniform3fv(program.getUniformLocation("viewPos"), 1, &camera.getPosition()[0]);
+	glUniform3fv(program.getUniformLocation("lightPos"), 1, &lightPosition[0]);
+
+	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	mvp = projection * camera.getViewMatrix() * model;
+	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+	models[1].render();
+
+	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	mvp = projection * camera.getViewMatrix() * model;
+	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+	models[2].render();
+
+	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -2.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	mvp = projection * camera.getViewMatrix() * model;
+	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+	models[3].render();
+
+	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	mvp = projection * camera.getViewMatrix() * model;
+	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+	models[4].render();
+
+	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	mvp = projection * camera.getViewMatrix() * model;
+	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+	models[5].render();
+
+	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(10.0f, 0.01f, 0.0f)), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	mvp = projection * camera.getViewMatrix() * model;
+	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+	models[6].render();
+
+	// Skybox
+	{
+		skyboxProgram.use();
+
+		model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		glm::mat4 mvp = projection * glm::mat4{glm::mat3{camera.getViewMatrix()}} *model;
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap.getCubeMapTexture());
+
+		glUniformMatrix4fv(skyboxProgram.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+		glUniform1i(skyboxProgram.getUniformLocation("cubeMap"), 0);
+
+		models[0].render();
+	}
+}
+
 void run() {
 	// Register resource directories
 	engine::ResourcePath::AddResourceDir("Shader", "shaders/");
@@ -206,9 +272,8 @@ void run() {
 
 
 	// Camera
-	Camera camera;
+	engine::Camera camera{glm::radians(60.0f), static_cast<float>(width) / static_cast<float>(height), 0.1f, 1000.0f};
 	camera.setPosition(glm::vec3(0.0f, 8.0f, 0.0f));
-	glm::mat4 projMatrix = glm::perspective(glm::radians(60.0f), (float)width/(float)height, 0.1f, 1000.0f); // TODO: Move inside the camera class and add fov, nearz, farz as members with getters/setters
 
 	
 	// Load a CubeMap
@@ -220,22 +285,19 @@ void run() {
 	engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/stormydays_large.png");
 
 	// Load some meshes for testing
-	engine::Model ball = engine::Model::loadModel("Model:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f);
-	engine::Model hoola = engine::Model::loadModel("Model:_my_models/hoola.obj", 2.0f, 5.0f);
-	engine::Model sailor = engine::Model::loadModel("Model:sailor_giveaway/sailor.obj", 1.5f, 2.0f);
-	engine::Model skybox = engine::Model::loadModel("Model:_my_models/skybox.obj", 10.0f, 1.0f);
-	engine::Model hatman2 = engine::Model::loadModel("Model:_my_models/hatman2.obj", 1.0f, 2.0f);
-	engine::Model uvplane = engine::Model::loadModel("Model:_my_models/uvplane.obj", 10.0f, 1.0f);
-	engine::Model backdrop = engine::Model::loadModel("Model:_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f);
+	std::vector<engine::Model> models;
+	models.emplace_back(engine::Model::loadModel("Model:_my_models/skybox.obj", 10.0f, 1.0f));
+	models.emplace_back(engine::Model::loadModel("Model:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f));
+	models.emplace_back(engine::Model::loadModel("Model:_my_models/hoola.obj", 2.0f, 5.0f));
+	models.emplace_back(engine::Model::loadModel("Model:sailor_giveaway/sailor.obj", 1.5f, 2.0f));
+	models.emplace_back(engine::Model::loadModel("Model:_my_models/hatman2.obj", 1.0f, 2.0f));
+	models.emplace_back(engine::Model::loadModel("Model:_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f));
+	models.emplace_back(engine::Model::loadModel("Model:_my_models/uvplane.obj", 10.0f, 1.0f));
 
 	//////////
-	ball.tempSetupGLStuff(program);
-	hoola.tempSetupGLStuff(program);
-	sailor.tempSetupGLStuff(program);
-	skybox.tempSetupGLStuff(program);
-	hatman2.tempSetupGLStuff(program);
-	uvplane.tempSetupGLStuff(program);
-	backdrop.tempSetupGLStuff(program);
+	for (auto& model : models) {
+		model.tempSetupGLStuff(program);
+	}
 	/////////
 	
 	engine::TextureFormat albedoFormat;
@@ -276,6 +338,7 @@ void run() {
 	int faceSize = 256;
 	GLuint frameBuffer;
 	GLuint cubeMapTexture;
+	GLuint depthTexture;
 	{// Setup cubeMapTexture
 	
 		// Generate and bind the ccubemap texture
@@ -298,6 +361,23 @@ void run() {
 	
 		// Unbind our cubemap texture
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	}
+
+	{ // Setup Depth
+		glGenTextures(1, &depthTexture);
+		glBindTexture(GL_TEXTURE_2D, depthTexture);
+
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, 0);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, faceSize, faceSize, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	
 	{// Setup frameBuffer
@@ -345,18 +425,10 @@ void run() {
 			lastPressed = framePressed;
 		}
 		
-		
 		camera.handleInput(window, static_cast<float>(dt));
 
-
-		// OpenGL drawing
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glm::mat4 model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		glm::mat4 mvp = projMatrix * camera.getViewMatrix() * model;
-
-
 		// Models and Skybox
-		for (int i = 0; i < 7; ++i){
+		for (int i = 0; i < 1; ++i){
 
 			program.use();
 
@@ -366,71 +438,44 @@ void run() {
 			mat.loadParameters();
 
 			if (i > 0) {
+				glViewport(0, 0, faceSize, faceSize);
 				glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i-1, cubeMapTexture, 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+
+				camera.setFOV(glm::radians(90.0f));
+				camera.setAspect(1.0f);
+				camera.setPosition({0,5,0});
+				switch (i) {
+					case 1:
+						camera.setOrientation(glm::toQuat(glm::lookAt(glm::vec3{0.0f,5.0f,0.0f}, glm::vec3{1.0f,0.0f,0.0f}, glm::vec3{0.0f,1.0f,0.0f})));
+						break;
+					case 2:
+						camera.setOrientation(glm::toQuat(glm::lookAt(glm::vec3{0.0f,5.0f,0.0f}, glm::vec3{-1.0f,0.0f,0.0f}, glm::vec3{0.0f,1.0f,0.0f})));
+						break;
+					case 3:
+						camera.setOrientation(glm::toQuat(glm::lookAt(glm::vec3{0.0f,5.0f,0.0f}, glm::vec3{0.0f,1.0f,0.0f}, glm::vec3{0.0f,1.0f,0.0f})));
+						break;
+					case 4:
+						camera.setOrientation(glm::toQuat(glm::lookAt(glm::vec3{0.0f,5.0f,0.0f}, glm::vec3{0.0f,-1.0f,0.0f}, glm::vec3{0.0f,1.0f,0.0f})));
+						break;
+					case 5:
+						camera.setOrientation(glm::toQuat(glm::lookAt(glm::vec3{0.0f,5.0f,0.0f}, glm::vec3{0.0f,0.0f,1.0f}, glm::vec3{0.0f,1.0f,0.0f})));
+						break;
+					case 6:
+						camera.setOrientation(glm::toQuat(glm::lookAt(glm::vec3{0.0f,5.0f,0.0f}, glm::vec3{0.0f,0.0f,-1.0f}, glm::vec3{0.0f,1.0f,0.0f})));
+						break;
+				}
+			} else {
+				glViewport(0, 0, width, height);
+				camera.setFOV(glm::radians(70.0f));
+				camera.setAspect(static_cast<float>(width) / static_cast<float>(height));
 			}
 
-			// TODO: need to handle this cubemap texture properly
-			glActiveTexture(GL_TEXTURE3);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap.getCubeMapTexture());
-			glUniform1i(program.getUniformLocation("cubeMap"), 3);
-			
-			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-			glUniform3fv(program.getUniformLocation("viewPos"), 1, &camera.getPosition()[0]);
-			glUniform3fv(program.getUniformLocation("lightPos"), 1, &lightPosition[0]);
-			
-			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-			mvp = projMatrix * camera.getViewMatrix() * model;
-			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-			ball.render();
-			
-			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-			mvp = projMatrix * camera.getViewMatrix() * model;
-			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-			hoola.render();
-			
-			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -2.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-			mvp = projMatrix * camera.getViewMatrix() * model;
-			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-			sailor.render();
-			
-			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-			mvp = projMatrix * camera.getViewMatrix() * model;
-			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-			hatman2.render();
-			
-			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			mvp = projMatrix * camera.getViewMatrix() * model;
-			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-			backdrop.render();
-			
-			model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(10.0f, 0.01f, 0.0f)), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			mvp = projMatrix * camera.getViewMatrix() * model;
-			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-			uvplane.render();
-		
-			// Skybox
-			{
-				skyboxProgram.use();
+			// OpenGL drawing
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-				model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-				glm::mat4 mvp = projMatrix * glm::mat4{glm::mat3{camera.getViewMatrix()}} *model;
-
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap.getCubeMapTexture());
-
-				glUniformMatrix4fv(skyboxProgram.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-				glUniform1i(skyboxProgram.getUniformLocation("cubeMap"), 0);
-
-				skybox.render();
-			}
+			drawScene(program, skyboxProgram, lightPosition, camera, cubeMap, models);
 		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -438,47 +483,47 @@ void run() {
 		// Imgui
 		runMenu(width, height, metalness, intensity);
 
-
 		// Buffers and events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
-
+		// Check for close
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE)) { glfwSetWindowShouldClose(window, GL_TRUE); }
 	}
 
-	{ // Save out screenshot of current frame buffer on exit
-		int width = faceSize;
-		int height = faceSize;
-		std::vector<glm::u8vec3> img;
-		img.resize(width * height);
-		
-		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-
-		for (int i=0; i < 6; ++i) {
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, cubeMapTexture, 0);
-			glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, &img[0].r);
-	
-			// Flip the image vertically
-			for (int x = 0; x < width; ++x) {
-				for (int y = 0; y < height / 2; ++y) {
-					size_t idx1 = x + y * width;
-					size_t idx2 = (height-y) * width - width + x;
-					auto temp = img[idx1];
-					img[idx1] = img[idx2];
-					img[idx2] = temp;
-				}
-			}
-
-			// Save to disk
-			std::string fileName = "face";
-			fileName += std::to_string(i);
-			fileName += ".bmp";
-			SOIL_save_image(fileName.c_str(), SOIL_SAVE_TYPE_BMP, width, height, 3, &img[0].r);
-		}
-	}
+	//{ // Save out screenshot of current frame buffer on exit
+	//	int width = faceSize;
+	//	int height = faceSize;
+	//	std::vector<glm::u8vec3> img;
+	//	img.resize(width * height);
+	//	
+	//	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	//
+	//	for (int i=0; i < 6; ++i) {
+	//		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, cubeMapTexture, 0);
+	//		glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, &img[0].r);
+	//
+	//		// Flip the image vertically
+	//		for (int x = 0; x < width; ++x) {
+	//			for (int y = 0; y < height / 2; ++y) {
+	//				size_t idx1 = x + y * width;
+	//				size_t idx2 = (height-y) * width - width + x;
+	//				auto temp = img[idx1];
+	//				img[idx1] = img[idx2];
+	//				img[idx2] = temp;
+	//			}
+	//		}
+	//
+	//		// Save to disk
+	//		std::string fileName = "face";
+	//		fileName += std::to_string(i);
+	//		fileName += ".bmp";
+	//		SOIL_save_image(fileName.c_str(), SOIL_SAVE_TYPE_BMP, width, height, 3, &img[0].r);
+	//	}
+	//}
 
 	glDeleteTextures(1, &cubeMapTexture);
+	glDeleteTextures(1, &depthTexture);
 	glDeleteFramebuffers(1, &frameBuffer);
 
 	engine::util::checkGLErrors();

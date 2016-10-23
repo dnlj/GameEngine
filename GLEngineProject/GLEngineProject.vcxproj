@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\engine\Camera.cpp" />
     <ClCompile Include="src\engine\CubeMap.cpp" />
     <ClCompile Include="src\engine\CubeMapData.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
@@ -44,6 +44,7 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\engine\Camera.hpp" />
     <ClInclude Include="include\engine\CubeMap.hpp" />
     <ClInclude Include="include\engine\CubeMapData.hpp" />
     <ClInclude Include="include\engine\engine.hpp" />
@@ -76,7 +77,6 @@
     <ClInclude Include="include\imgui\stb_textedit.h" />
     <ClInclude Include="include\imgui\stb_truetype.h" />
     <ClInclude Include="include\imgui_test.hpp" />
-    <ClInclude Include="src\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\engine\Resource.tpp">

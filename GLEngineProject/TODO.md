@@ -5,6 +5,7 @@
 * Convert back over to using exceptions hey seem like the better option (especially for hot reloading shaders/scripts/assets). Just make sure you stil have some kind of logging and use them properly.
 * Look into nanogui
 * Make resource directories ignore case on prefix
+* Add a frame buffer class
 
 # Maintenance
 * Move unnecessary includes into the cpp files and out of the headers
