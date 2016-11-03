@@ -63,7 +63,8 @@ namespace engine {
 		cleanup();
 		
 		// Shutdown ImGui
-		ImGui::Shutdown();
+		ImGui_ImplGlfwGL3_Shutdown();
+		//ImGui::Shutdown(); // Called by the above
 
 		// Destroy the GLFW window and OpenGL context
 		glfwDestroyWindow(getWindow());
