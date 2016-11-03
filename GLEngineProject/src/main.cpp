@@ -229,13 +229,10 @@ void drawScene(const engine::ShaderProgram& program, const engine::ShaderProgram
 
 void run() {
 	// Register resource directories
-	engine::ResourcePath::AddResourceDir("Shader", "shaders/");
-	engine::ResourcePath::AddResourceDir("Model", "D:/OpenGL Projects/Models/");
-	engine::ResourcePath::AddResourceDir("Texture", "D:/OpenGL Projects/Textures/");
-
-	//engine::CubeMap::loadCubeMap("Texture:CubeMaps/single_sides.cube");
-	//getchar();
-	//return;
+	engine::ResourcePath::AddResourceDir("Shaders", "shaders/");
+	engine::ResourcePath::AddResourceDir("Models", "D:/OpenGL Projects/Models/");
+	engine::ResourcePath::AddResourceDir("Textures", "D:/OpenGL Projects/Resources/Textures/");
+	engine::ResourcePath::AddResourceDir("CubeMaps", "D:/OpenGL Projects/Resources/CubeMaps/");
 
 	// Setup the window
 	static char *windowTitle = "Window Title";
@@ -261,53 +258,48 @@ void run() {
 
 	// Program
 	engine::ShaderProgram program({
-		engine::Shader::loadShader("Shader:vertex_brdf_ibl.glsl", GL_VERTEX_SHADER),
-		engine::Shader::loadShader("Shader:fragment_brdf_ibl.glsl", GL_FRAGMENT_SHADER),
+		engine::Shader::loadShader("Shaders:vertex_brdf_ibl.glsl", GL_VERTEX_SHADER),
+		engine::Shader::loadShader("Shaders:fragment_brdf_ibl.glsl", GL_FRAGMENT_SHADER),
 	});
 	
 	engine::ShaderProgram skyboxProgram({
-		engine::Shader::loadShader("Shader:vertex_skybox.glsl", GL_VERTEX_SHADER),
-		engine::Shader::loadShader("Shader:fragment_skybox.glsl", GL_FRAGMENT_SHADER),
+		engine::Shader::loadShader("Shaders:vertex_skybox.glsl", GL_VERTEX_SHADER),
+		engine::Shader::loadShader("Shaders:fragment_skybox.glsl", GL_FRAGMENT_SHADER),
 	});
 
 
 	// Camera
 	engine::Camera camera{glm::radians(60.0f), static_cast<float>(width) / static_cast<float>(height), 0.1f, 1000.0f};
-	camera.setPosition(glm::vec3(0.0f, 8.0f, 0.0f));
+	camera.setPosition(glm::vec3(20.0f, 10.0f, 0.0f));
+	camera.lookAt({0, 5, 0});
 
 	
 	// Load a CubeMap
-	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/split_sides.cube");
-	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/horizontal_cross.png");
-	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/horizontal_line.png");
-	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/vertical_cross.png");
-	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/vertical_line.png");
-	engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("Texture:CubeMaps/stormydays_large.png");
+	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("CubeMaps:split_sides.cube");
+	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("CubeMaps:horizontal_cross.png");
+	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("CubeMaps:horizontal_line.png");
+	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("CubeMaps:vertical_cross.png");
+	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("CubeMaps:vertical_line.png");
+	engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("CubeMaps:stormydays_large.png");
 
 	// Load some meshes for testing
 	std::vector<engine::Model> models;
-	models.emplace_back(engine::Model::loadModel("Model:_my_models/skybox.obj", 10.0f, 1.0f));
-	models.emplace_back(engine::Model::loadModel("Model:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f));
-	models.emplace_back(engine::Model::loadModel("Model:_my_models/hoola.obj", 2.0f, 5.0f));
-	models.emplace_back(engine::Model::loadModel("Model:sailor_giveaway/sailor.obj", 1.5f, 2.0f));
-	models.emplace_back(engine::Model::loadModel("Model:_my_models/hatman2.obj", 1.0f, 2.0f));
-	models.emplace_back(engine::Model::loadModel("Model:_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f));
-	models.emplace_back(engine::Model::loadModel("Model:_my_models/uvplane.obj", 10.0f, 1.0f));
+	models.emplace_back(engine::Model::loadModel("Models:_my_models/skybox.obj", 10.0f, 1.0f));
+	models.emplace_back(engine::Model::loadModel("Models:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f));
+	models.emplace_back(engine::Model::loadModel("Models:_my_models/hoola.obj", 2.0f, 5.0f));
+	models.emplace_back(engine::Model::loadModel("Models:sailor_giveaway/sailor.obj", 1.5f, 2.0f));
+	models.emplace_back(engine::Model::loadModel("Models:_my_models/hatman2.obj", 1.0f, 2.0f));
+	models.emplace_back(engine::Model::loadModel("Models:_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f));
+	models.emplace_back(engine::Model::loadModel("Models:_my_models/uvplane.obj", 10.0f, 1.0f));
 
 	//////////
 	for (auto& model : models) {
 		model.tempSetupGLStuff(program);
 	}
 	/////////
-	
-	engine::TextureFormat albedoFormat;
-	engine::TextureFormat normalFormat;
-	normalFormat.useGammaCorrection = false;
-
-	// Tile
-	engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_tiles/old_tiles_a.tga", albedoFormat);
-	engine::Texture normal_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_tiles/old_tiles_n.tga", normalFormat);
-	engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_tiles/old_tiles_r.tga", normalFormat);
+	engine::Texture tile_a = engine::Texture::load("Textures:old_tiles/old_tiles_a.tex");
+	engine::Texture tile_n = engine::Texture::load("Textures:old_tiles/old_tiles_n.tex");
+	engine::Texture tile_r = engine::Texture::load("Textures:old_tiles/old_tiles_r.tex");
 
 	// Clay Brick
 	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/clay_brick/clay_brick_a.tga", albedoFormat);
@@ -330,9 +322,9 @@ void run() {
 	program.use(); // TODO: if this isnt here the first call to mat.loadParameters causes a GL_INVALID_OPERATION. figure out why
 	program.loadProgramUniforms();
 	engine::Material mat{program};
-	mat.setParameter("albedoMap", albedo_tex);
-	mat.setParameter("normalMap", normal_tex);
-	mat.setParameter("roughnessMap", roughness_tex);
+	mat.setParameter("albedoMap", tile_a);
+	mat.setParameter("normalMap", tile_n);
+	mat.setParameter("roughnessMap", tile_r);
 
 	// Render to Cubemap testing
 	int faceSize = 256;

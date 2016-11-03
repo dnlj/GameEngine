@@ -1,5 +1,8 @@
 #pragma once
 
+// C++ STD
+#include <string>
+
 // glLoadGen
 #include <glloadgen/gl_core_4_5.hpp>
 
@@ -23,6 +26,15 @@ namespace engine {
 		// Static
 		////////////////////////////////////////////////////////////////
 		public:
-			static Texture loadTexture(const ResourcePath& path, const TextureFormat& format);
+			static Texture load(const ResourcePath& path);
+			//static Texture load(const ResourcePath& path);
+
+		private:
+			using LoadInfo = Resource<Texture, TextureData>::Resource::ResourceLoadInfo;
+
+			//static void load1DTexture
+			static void load2DTexture(const std::string& resolvedPath, const TextureFormat& format, LoadInfo& loadInfo);
+			//static void load3DTexture
+			//static void loadCubeTexture
 	};
 }

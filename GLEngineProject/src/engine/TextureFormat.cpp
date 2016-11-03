@@ -1,8 +1,46 @@
 // Engine
+#include <engine/util/util.hpp>
 #include <engine/TextureFormat.hpp>
 
 
 namespace engine {
+	bool TextureFormat::operator==(const TextureFormat &format) const {
+		return (useGammaCorrection == format.useGammaCorrection)
+			&& (useMipmaps == format.useMipmaps)
+			&& (wrapU == format.wrapU)
+			&& (wrapV == format.wrapV)
+			&& (filter == format.filter);
+	}
+
+	TextureFormat::FilterMag TextureFormat::getMagFilter() const {
+		switch (filter) {
+			case Filter::NEAREST:
+				return FilterMag::NEAREST;
+			case Filter::BILINEAR:
+			case Filter::TRILINEAR:
+				return FilterMag::LINEAR;
+			case Filter::ANISOTROPIC:
+				engine_error("Not yet implemented");
+		}
+
+		return FilterMag::NEAREST;
+	}
+
+	TextureFormat::FilterMin TextureFormat::getMinFilter() const {
+		switch (filter) {
+			case Filter::NEAREST:
+				return FilterMin::NEAREST;
+			case Filter::BILINEAR:
+				return FilterMin::LINEAR_MIPMAP_NEAREST;
+			case Filter::TRILINEAR:
+				return FilterMin::LINEAR_MIPMAP_LINEAR;
+			case Filter::ANISOTROPIC:
+				engine_error("Not yet implemented");
+		}
+
+		return FilterMin::NEAREST;
+	}
+
 	GLenum TextureFormat::enumToOpenGL(FilterMin e) {
 		switch (e) {
 			case FilterMin::NEAREST:
@@ -18,7 +56,7 @@ namespace engine {
 			case FilterMin::LINEAR_MIPMAP_LINEAR:
 				return GL_LINEAR_MIPMAP_LINEAR;
 			default:
-				return GL_INVALID_ENUM; // TODO: Not sure if this is the right thing to return
+				return GL_INVALID_ENUM;
 		}
 	}
 	
@@ -29,7 +67,7 @@ namespace engine {
 			case FilterMag::LINEAR:
 				return GL_LINEAR;
 			default:
-				return GL_INVALID_ENUM; // TODO: Not sure if this is the right thing to return
+				return GL_INVALID_ENUM;
 		}
 	}
 	
@@ -46,16 +84,54 @@ namespace engine {
 			case Wrap::MIRROR_CLAMP_TO_EDGE:
 				return GL_MIRROR_CLAMP_TO_EDGE;
 			default:
-				return GL_INVALID_ENUM; // TODO: Not sure if this is the right thing to return
+				return GL_INVALID_ENUM;
 		}
 	}
 
-	bool TextureFormat::operator==(const TextureFormat &format) const {
-		return (useGammaCorrection == format.useGammaCorrection)
-			&& (useMipmaps == format.useMipmaps)
-			&& (wrapModeU == format.wrapModeU)
-			&& (wrapModeV == format.wrapModeV)
-			&& (filterModeMin == format.filterModeMin)
-			&& (filterModeMag == format.filterModeMag);
+	TextureFormat::Type TextureFormat::stringToType(const std::string& type) {
+		if (type == "TEXTURE_1D") {
+			return Type::TEXTURE_1D;
+		} else if (type == "TEXTURE_2D") {
+			return Type::TEXTURE_2D;
+		} else if (type == "TEXTURE_3D") {
+			return Type::TEXTURE_3D;
+		} else if (type == "TEXTURE_CUBE") {
+			return Type::TEXTURE_CUBE;
+		}
+
+		engine_error("Unable to convert " + type + " to TextureFormat::Type");
+		return Type::TEXTURE_1D;
+	}
+
+	TextureFormat::Filter TextureFormat::stringToFilter(const std::string& filter) {
+		if (filter == "NEAREST") {
+			return Filter::NEAREST;
+		} else if (filter == "BILINEAR") {
+			return Filter::BILINEAR;
+		} else if (filter == "TRILINEAR") {
+			return Filter::TRILINEAR;
+		} else if (filter == "ANISOTROPIC") {
+			return Filter::ANISOTROPIC;
+		}
+
+		engine_error("Unable to convert " + filter + " to TextureFormat::Filter");
+		return Filter::NEAREST;
+	}
+
+	TextureFormat::Wrap TextureFormat::stringToWrap(const std::string& wrap) {
+		if (wrap == "REPEAT") {
+			return Wrap::REPEAT;
+		} else if (wrap == "CLAMP_TO_EDGE") {
+			return Wrap::CLAMP_TO_EDGE;
+		} else if (wrap == "CLAMP_TO_BORDER") {
+			return Wrap::CLAMP_TO_BORDER;
+		} else if (wrap == "MIRRORED_REPEAT") {
+			return Wrap::MIRRORED_REPEAT;
+		} else if (wrap == "MIRROR_CLAMP_TO_EDGE") {
+			return Wrap::MIRROR_CLAMP_TO_EDGE;
+		}
+
+		engine_error("Unable to convert " + wrap + " to TextureFormat::Wrap");
+		return Wrap::CLAMP_TO_EDGE;
 	}
 }

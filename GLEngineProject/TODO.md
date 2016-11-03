@@ -1,3 +1,6 @@
+# Urgent
+* CodeXL Says i am leaking 7 OpenGL objects. Fix.
+
 # General
 * Add support for HDR cube maps
 * Add the cleanup functions to the Resource classes. Currently leaking memory i think. Maybe handle this by adding deconstructors to the xxxxData types?.
@@ -6,6 +9,8 @@
 * Look into nanogui
 * Make resource directories ignore case on prefix
 * Add a frame buffer class
+* Make the material class a Resource. Will need to figure out how to deal with the ShaderProgram
+* Add anisotropic filtering
 
 # Maintenance
 * Move unnecessary includes into the cpp files and out of the headers

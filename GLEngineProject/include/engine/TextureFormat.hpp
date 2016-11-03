@@ -1,5 +1,8 @@
 #pragma once
 
+// C++ STD
+#include <string>
+
 // glLoadGen
 #include <glloadgen/gl_core_4_5.hpp>
 
@@ -7,7 +10,7 @@
 namespace engine {
 	class TextureFormat {
 		public:
-			enum class FilterMin { // TODO: Should i make this Nearest, Bilinear, Trilinear, Anisotropic 2x, Anisotropic 4x, ..., Anisotropic 32x, Anisotropic 64x, etc, probably just pass a int for the power of two
+			enum class FilterMin {
 				NEAREST,
 				LINEAR,
 				NEAREST_MIPMAP_NEAREST,
@@ -21,23 +24,41 @@ namespace engine {
 				LINEAR,
 			};
 
+			enum class Filter {
+				NEAREST,
+				BILINEAR,
+				TRILINEAR,
+				ANISOTROPIC, // TODO: implement anisotropic
+			};
+
 			enum class Wrap {
+				REPEAT,
 				CLAMP_TO_EDGE,
 				CLAMP_TO_BORDER,
 				MIRRORED_REPEAT,
-				REPEAT,
 				MIRROR_CLAMP_TO_EDGE,
 			};
 
+			enum class Type {
+				TEXTURE_ERROR,
+				TEXTURE_1D,
+				TEXTURE_2D,
+				TEXTURE_3D,
+				TEXTURE_CUBE,
+			};
+
 			bool operator==(const TextureFormat &format) const;
+			
+			FilterMin getMinFilter() const;
+			FilterMag getMagFilter() const;
 
 			bool useGammaCorrection = true;
 			bool useMipmaps = true;
-			Wrap wrapModeU = Wrap::REPEAT;
-			Wrap wrapModeV = Wrap::REPEAT;
-			FilterMin filterModeMin = FilterMin::LINEAR_MIPMAP_LINEAR;
-			FilterMag filterModeMag = FilterMag::LINEAR;
-		
+			Wrap wrapU = Wrap::REPEAT;
+			Wrap wrapV = Wrap::REPEAT;
+			Filter filter = Filter::BILINEAR;
+			unsigned char filterLevel = 0; // 2, 4, 8, 16
+
 
 		////////////////////////////////////////////////////////////////
 		// Static Stuff
@@ -46,5 +67,9 @@ namespace engine {
 			static GLenum enumToOpenGL(FilterMin e);
 			static GLenum enumToOpenGL(FilterMag e);
 			static GLenum enumToOpenGL(Wrap e);
+
+			static Type stringToType(const std::string& type);
+			static Filter stringToFilter(const std::string& type);
+			static Wrap stringToWrap(const std::string& type);
 	};
 }

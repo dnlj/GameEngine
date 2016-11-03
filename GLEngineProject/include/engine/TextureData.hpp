@@ -12,7 +12,6 @@ namespace engine {
 	class TextureData {
 		public:
 			GLuint texture;
-			TextureFormat format;
 
 		private:
 			template<class Type, class TypeData>

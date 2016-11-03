@@ -47,4 +47,18 @@ namespace engine::json {
 
 		return it;
 	}
+
+	rapidjson::Value::MemberIterator getBool(rapidjson::Value::ValueType& object, const std::string& name) {
+		auto it = object.FindMember(name.c_str());
+
+		if (it == object.MemberEnd()) {
+			std::string error = "Unable to find member \"" + name + "\".";
+			engine_error(error);
+		} else if (!it->value.IsBool()) {
+			std::string error = "Member \"" + name + "\" is not of type Bool.";
+			engine_error(error);
+		}
+
+		return it;
+	}
 }
