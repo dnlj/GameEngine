@@ -47,7 +47,6 @@
 #include <engine/ShaderProgram.hpp>
 #include <engine/Material.hpp>
 #include <engine/Model.hpp>
-#include <engine/CubeMap.hpp>
 #include <engine/Camera.hpp>
 
 // TODO: Add include statment for glsl to make code more re-usable
@@ -159,14 +158,14 @@ void runMenu(int width, int height, float& metalness, float& intensity) {
 	}
 }
 
-void drawScene(const engine::ShaderProgram& program, const engine::ShaderProgram& skyboxProgram, const glm::vec3& lightPosition, const engine::Camera& camera, const engine::CubeMap& cubemap, const std::vector<engine::Model>& models) {
+void drawScene(const engine::ShaderProgram& program, const engine::ShaderProgram& skyboxProgram, const glm::vec3& lightPosition, const engine::Camera& camera, const engine::Texture& cubemap, const std::vector<engine::Model>& models) {
 	auto projection = camera.getProjectionMaterix();
 
 	glm::mat4 model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	glm::mat4 mvp = projection * camera.getViewMatrix() * model;
 
 	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap.getCubeMapTexture());
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap.getTexture());
 	glUniform1i(program.getUniformLocation("cubeMap"), 3);
 
 	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
@@ -218,7 +217,7 @@ void drawScene(const engine::ShaderProgram& program, const engine::ShaderProgram
 		glm::mat4 mvp = projection * glm::mat4{glm::mat3{camera.getViewMatrix()}} *model;
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap.getCubeMapTexture());
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap.getTexture());
 
 		glUniformMatrix4fv(skyboxProgram.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
 		glUniform1i(skyboxProgram.getUniformLocation("cubeMap"), 0);
@@ -275,12 +274,12 @@ void run() {
 
 	
 	// Load a CubeMap
-	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("CubeMaps:split_sides.cube");
-	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("CubeMaps:horizontal_cross.png");
-	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("CubeMaps:horizontal_line.png");
-	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("CubeMaps:vertical_cross.png");
-	//engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("CubeMaps:vertical_line.png");
-	engine::CubeMap cubeMap = engine::CubeMap::loadCubeMap("CubeMaps:stormydays_large.png");
+	//engine::Texture cubeMap = engine::Texture::load("CubeMaps:split_sides.cube");
+	//engine::Texture cubeMap = engine::Texture::load("CubeMaps:horizontal_cross.cube");
+	//engine::Texture cubeMap = engine::Texture::load("CubeMaps:horizontal_line.cube");
+	//engine::Texture cubeMap = engine::Texture::load("CubeMaps:vertical_cross.cube");
+	//engine::Texture cubeMap = engine::Texture::load("CubeMaps:vertical_line.cube");
+	engine::Texture cubeMap = engine::Texture::load("CubeMaps:stormydays_large.cube");
 
 	// Load some meshes for testing
 	std::vector<engine::Model> models;
@@ -430,6 +429,8 @@ void run() {
 			mat.loadParameters();
 
 			if (i > 0) {
+				// TODO: Shouldnt the camera be orthogonal for this?
+
 				glViewport(0, 0, faceSize, faceSize);
 				glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i-1, cubeMapTexture, 0);

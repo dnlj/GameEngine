@@ -6,6 +6,9 @@
 // glLoadGen
 #include <glloadgen/gl_core_4_5.hpp>
 
+// RapidJSON
+#include <rapidjson/document.h>
+
 // Engine
 #include <engine/Resource.hpp>
 #include <engine/TextureData.hpp>
@@ -35,6 +38,14 @@ namespace engine {
 			//static void load1DTexture
 			static void load2DTexture(const std::string& resolvedPath, const TextureFormat& format, LoadInfo& loadInfo);
 			//static void load3DTexture
-			//static void loadCubeTexture
+			static void loadCubeTexture(rapidjson::Document& document, const TextureFormat& format, LoadInfo& loadInfo);
+
+			// Cubemap functions
+			static void setupHorizontalCross(unsigned char* image, int width, int height, int channels);
+			static void setupVerticalCross(unsigned char* image, int width, int height, int channels);
+			static void setupHorizontalLine(unsigned char* image, int width, int height, int channels);
+			static void setupVerticalLine(unsigned char* image, int width, int height, int channels);
+			static void setupSplitSides(const std::vector<std::string>& images);
+
 	};
 }

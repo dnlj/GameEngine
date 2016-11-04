@@ -13,7 +13,6 @@
 
 // Engine
 #include <engine/engine.hpp>
-#include <engine/CubeMap.hpp>
 #include <engine/Texture.hpp>
 #include <engine/Shader.hpp>
 #include <engine/Model.hpp>
@@ -72,7 +71,6 @@ namespace engine {
 	}
 
 	void cleanup() {
-		engine::CubeMap::cleanup();
 		engine::Texture::cleanup();
 		engine::Model::cleanup();
 		engine::Shader::cleanup();

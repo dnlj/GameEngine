@@ -1,5 +1,5 @@
 # Urgent
-* CodeXL Says i am leaking 7 OpenGL objects. Fix.
+* CodeXL Says i am leaking 2 OpenGL objects. Fix.
 
 # General
 * Add support for HDR cube maps

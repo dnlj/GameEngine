@@ -60,12 +60,6 @@
     <ClCompile Include="src\glloadgen\gl_core_4_5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\CubeMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\CubeMapData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\ShaderData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -166,12 +160,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui_test.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\engine\CubeMap.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\engine\CubeMapData.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\glloadgen\gl_core_4_5.hpp">

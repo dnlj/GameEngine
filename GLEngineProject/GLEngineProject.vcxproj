@@ -20,8 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\Camera.cpp" />
-    <ClCompile Include="src\engine\CubeMap.cpp" />
-    <ClCompile Include="src\engine\CubeMapData.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\engine\Material.cpp" />
     <ClCompile Include="src\engine\Model.cpp" />
@@ -45,8 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\engine\Camera.hpp" />
-    <ClInclude Include="include\engine\CubeMap.hpp" />
-    <ClInclude Include="include\engine\CubeMapData.hpp" />
     <ClInclude Include="include\engine\engine.hpp" />
     <ClInclude Include="include\engine\FileSystem\FileSystem.hpp" />
     <ClInclude Include="include\engine\IndexData.hpp" />
