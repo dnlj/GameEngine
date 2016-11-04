@@ -1,0 +1,11 @@
+{
+	"type": "TEXTURE_CUBE",
+	"path": "CubeMaps:horizontal_line.png",
+	"format": {
+		"filter": "TRILINEAR",
+		"use_mipmaps": true,
+		"use_gamma_correction": true,
+		"wrap_u": "CLAMP_TO_EDGE",
+		"wrap_v": "CLAMP_TO_EDGE"
+	}
+}

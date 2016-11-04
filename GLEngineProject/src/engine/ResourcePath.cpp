@@ -64,6 +64,7 @@ namespace engine {
 		}
 
 		// The path doesnt exist
+		engine_error("Unable to find file \"" + path + "\"");
 		return path;
 	}
 

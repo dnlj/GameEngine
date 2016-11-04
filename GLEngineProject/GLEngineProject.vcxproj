@@ -78,12 +78,21 @@
     <ClInclude Include="include\engine\Resource.tpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <None Include="src\shaders\fragment_brdf.glsl" />
-    <None Include="src\shaders\fragment_brdf_ibl.glsl" />
-    <None Include="src\shaders\fragment_skybox.glsl" />
-    <None Include="src\shaders\vertex_brdf.glsl" />
-    <None Include="src\shaders\vertex_brdf_ibl.glsl" />
-    <None Include="src\shaders\vertex_skybox.glsl" />
+    <None Include="resources\cubemaps\horizontal_cross.cube" />
+    <None Include="resources\cubemaps\horizontal_line.cube" />
+    <None Include="resources\cubemaps\split_sides.cube" />
+    <None Include="resources\cubemaps\stormydays_large.cube" />
+    <None Include="resources\cubemaps\vertical_cross.cube" />
+    <None Include="resources\cubemaps\vertical_line.cube" />
+    <None Include="resources\shaders\fragment_brdf.glsl" />
+    <None Include="resources\shaders\fragment_brdf_ibl.glsl" />
+    <None Include="resources\shaders\fragment_skybox.glsl" />
+    <None Include="resources\shaders\vertex_brdf.glsl" />
+    <None Include="resources\shaders\vertex_brdf_ibl.glsl" />
+    <None Include="resources\shaders\vertex_skybox.glsl" />
+    <None Include="resources\textures\old_tiles\old_tiles_a.tex" />
+    <None Include="resources\textures\old_tiles\old_tiles_n.tex" />
+    <None Include="resources\textures\old_tiles\old_tiles_r.tex" />
     <None Include="TODO.md" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

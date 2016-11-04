@@ -1,0 +1,18 @@
+{
+	"type": "TEXTURE_CUBE",
+	"format": {
+		"filter": "TRILINEAR",
+		"use_mipmaps": true,
+		"use_gamma_correction": true,
+		"wrap_u": "CLAMP_TO_EDGE",
+		"wrap_v": "CLAMP_TO_EDGE"
+	},
+	"cube_sides": {
+		"pos_x": "CubeMaps:split_sides/pos_x.png",
+		"neg_x": "CubeMaps:split_sides/neg_x.png",
+		"pos_y": "CubeMaps:split_sides/pos_y.png",
+		"neg_y": "CubeMaps:split_sides/neg_y.png",
+		"pos_z": "CubeMaps:split_sides/pos_z.png",
+		"neg_z": "CubeMaps:split_sides/neg_z.png"
+	}
+}

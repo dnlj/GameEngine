@@ -228,10 +228,13 @@ void drawScene(const engine::ShaderProgram& program, const engine::ShaderProgram
 
 void run() {
 	// Register resource directories
-	engine::ResourcePath::AddResourceDir("Shaders", "shaders/");
-	engine::ResourcePath::AddResourceDir("Models", "D:/OpenGL Projects/Models/");
-	engine::ResourcePath::AddResourceDir("Textures", "D:/OpenGL Projects/Resources/Textures/");
-	engine::ResourcePath::AddResourceDir("CubeMaps", "D:/OpenGL Projects/Resources/CubeMaps/");
+	// NOTE: These will need to be updated when running the project on a different machine
+	engine::ResourcePath::AddResourceDir("Shaders", "D:/OpenGL Projects/GameEngine/GLEngineProject/resources/shaders/"); // This is the "resources/shaders/" folder that is included in git
+	engine::ResourcePath::AddResourceDir("Models", "D:/OpenGL Projects/Models/"); // This is where the models are stored. Not included in git.
+	engine::ResourcePath::AddResourceDir("Textures", "D:/OpenGL Projects/Resources/Textures/"); // This is where the texture bitmaps are stored. Not included in git.
+	engine::ResourcePath::AddResourceDir("Textures", "D:/OpenGL Projects/GameEngine/GLEngineProject/resources/textures/"); // This is the "resources/textures/" folder that is included in git
+	engine::ResourcePath::AddResourceDir("CubeMaps", "D:/OpenGL Projects/Resources/CubeMaps/"); // This is where the cubemap bitmaps are stored. Not included in git.
+	engine::ResourcePath::AddResourceDir("CubeMaps", "D:/OpenGL Projects/GameEngine/GLEngineProject/resources/cubemaps/"); // This is the "resources/cubemaps/" folder that is included in git
 
 	// Setup the window
 	static char *windowTitle = "Window Title";
