@@ -12,10 +12,19 @@ namespace engine {
 			&& (filter == format.filter);
 	}
 
+	void TextureFormat::checkValid() const {
+		if (!useMipmaps) {
+			if (filter != Filter::NEAREST && filter != Filter::LINEAR) {
+				throw InvalidTextureFormat{"When TextureFormat::filter is not Filter::NEAREST or Filter::LINEAR mipmaps must be enabled"};
+			}
+		}
+	}
+
 	TextureFormat::FilterMag TextureFormat::getMagFilter() const {
 		switch (filter) {
 			case Filter::NEAREST:
 				return FilterMag::NEAREST;
+			case Filter::LINEAR:
 			case Filter::BILINEAR:
 			case Filter::TRILINEAR:
 				return FilterMag::LINEAR;
@@ -30,6 +39,8 @@ namespace engine {
 		switch (filter) {
 			case Filter::NEAREST:
 				return FilterMin::NEAREST;
+			case Filter::LINEAR:
+				return FilterMin::LINEAR;
 			case Filter::BILINEAR:
 				return FilterMin::LINEAR_MIPMAP_NEAREST;
 			case Filter::TRILINEAR:
@@ -106,6 +117,8 @@ namespace engine {
 	TextureFormat::Filter TextureFormat::stringToFilter(const std::string& filter) {
 		if (filter == "NEAREST") {
 			return Filter::NEAREST;
+		} else if (filter == "LINEAR") {
+			return Filter::LINEAR;
 		} else if (filter == "BILINEAR") {
 			return Filter::BILINEAR;
 		} else if (filter == "TRILINEAR") {

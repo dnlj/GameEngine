@@ -111,8 +111,11 @@ namespace engine {
 		
 		// Load the object if it has not already been loaded
 		if (!loadInfo.alreadyLoaded) {
+			// Load the json document
 			rapidjson::Document doc;
 			json::loadDocument(resolvedPath, doc);
+
+			// Setup the TextureFormat
 			auto type = TextureFormat::stringToType(json::getString(doc, "type")->value.GetString());
 			auto formatObj = json::getObject(doc, "format");
 			std::string filter = json::getString(formatObj->value, "filter")->value.GetString();
@@ -130,6 +133,10 @@ namespace engine {
 			format.wrapU = TextureFormat::stringToWrap(json::getString(formatObj->value, "wrap_u")->value.GetString());
 			format.wrapV = TextureFormat::stringToWrap(json::getString(formatObj->value, "wrap_v")->value.GetString());
 
+			// Make sure the TextureFormat is valid
+			format.checkValid();
+
+			// Load the texture
 			if (type == TextureFormat::Type::TEXTURE_CUBE) {
 				loadCubeTexture(doc, format, loadInfo);
 			} else {
@@ -153,16 +160,6 @@ namespace engine {
 
 		// TODO: Add an option to the TextureFormat for the internal format (GL_RGBA, GL_SRGB8_ALPHA8, GL_RGB, etc)
 		//			So that you can make rgba, rgb, and grayscale textures if you need them
-
-		auto filterMin = format.getMinFilter();
-		auto filterMag = format.getMagFilter();
-
-		if (!format.useMipmaps && filterMin != TextureFormat::FilterMin::NEAREST) {
-			engine_error("Invalid filter setting in texture \"" + resolvedPath + "\"\n"\
-				"When not using min filter NEAREST mipmaps must be enabled."
-			);
-		}
-
 		int width;
 		int height;
 		int channels;
@@ -175,8 +172,8 @@ namespace engine {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, TextureFormat::enumToOpenGL(format.wrapU));
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, TextureFormat::enumToOpenGL(format.wrapV));
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, TextureFormat::enumToOpenGL(filterMin));
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, TextureFormat::enumToOpenGL(filterMag));
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, TextureFormat::enumToOpenGL(format.getMinFilter()));
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, TextureFormat::enumToOpenGL(format.getMagFilter()));
 
 		// Load the image from a file
 		unsigned char* image;
@@ -225,19 +222,16 @@ namespace engine {
 	void Texture::loadCubeTexture(rapidjson::Document& document, const TextureFormat& format, LoadInfo& loadInfo) {
 		// TODO: add support for generate mip-maps and gamma correction, p mush everythign format supports
 		auto& cubeMapData = loadInfo.data;
-
+		
+		// Create and bind a texture
 		glGenTextures(1, &cubeMapData.texture);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapData.texture);
 
-		// will also need to add filter checks, maybe add a  isValid() to TextureFromat or something
-		// TODO: make it get this from format
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-		// TODO: p sure wrap_r isnt needed
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		// Set parameteres
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, TextureFormat::enumToOpenGL(format.getMagFilter()));
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, TextureFormat::enumToOpenGL(format.getMinFilter()));
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, TextureFormat::enumToOpenGL(format.wrapU));
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, TextureFormat::enumToOpenGL(format.wrapV));
 
 
 		if (document.HasMember("cube_sides")) {
@@ -275,6 +269,12 @@ namespace engine {
 			SOIL_free_image_data(image);
 		}
 
+		// Generate mipmaps if needed
+		if (format.useMipmaps) {
+			glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+		}
+
+		// Unbind the texture
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	}
 

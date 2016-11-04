@@ -8,6 +8,19 @@
 
 
 namespace engine {
+	// TODO: move into own class
+	class InvalidTextureFormat : public std::runtime_error {
+		public:
+			InvalidTextureFormat(const std::string& message) : runtime_error{message} {
+			}
+
+		//	virtual const char* what() const override {
+		//		return message.c_str();
+		//	}
+		//private:
+		//	const std::string message;
+	};
+
 	class TextureFormat {
 		public:
 			enum class FilterMin {
@@ -26,6 +39,7 @@ namespace engine {
 
 			enum class Filter {
 				NEAREST,
+				LINEAR,
 				BILINEAR,
 				TRILINEAR,
 				ANISOTROPIC, // TODO: implement anisotropic
@@ -48,6 +62,8 @@ namespace engine {
 			};
 
 			bool operator==(const TextureFormat &format) const;
+
+			void checkValid() const;
 			
 			FilterMin getMinFilter() const;
 			FilterMag getMagFilter() const;
