@@ -38,7 +38,7 @@ namespace engine {
 			//static void load1DTexture
 			static void load2DTexture(const std::string& resolvedPath, const TextureFormat& format, LoadInfo& loadInfo);
 			//static void load3DTexture
-			static void loadCubeTexture(rapidjson::Document& document, const TextureFormat& format, LoadInfo& loadInfo);
+			static void loadCubeTexture(rapidjson::Document& document, const TextureFormat& format, LoadInfo& loadInfo, const std::string& resolvedPath);
 
 			// Cubemap functions
 			static void setupHorizontalCross(unsigned char* image, int width, int height, int channels);

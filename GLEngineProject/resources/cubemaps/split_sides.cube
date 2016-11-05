@@ -1,8 +1,8 @@
 {
 	"type": "TEXTURE_CUBE",
 	"format": {
-		"filter": "TRILINEAR",
-		"use_mipmaps": true,
+		"filter": "LINEAR",
+		"use_mipmaps": false,
 		"use_gamma_correction": true,
 		"wrap_u": "CLAMP_TO_EDGE",
 		"wrap_v": "CLAMP_TO_EDGE"

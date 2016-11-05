@@ -138,7 +138,7 @@ namespace engine {
 
 			// Load the texture
 			if (type == TextureFormat::Type::TEXTURE_CUBE) {
-				loadCubeTexture(doc, format, loadInfo);
+				loadCubeTexture(doc, format, loadInfo, resolvedPath);
 			} else {
 				ResourcePath texPath = json::getString(doc, "path")->value.GetString();
 				// TODO: change this to pass in doc like cubemap does, it gives the loadign funcitons more freedom
@@ -219,7 +219,7 @@ namespace engine {
 		}
 	}
 
-	void Texture::loadCubeTexture(rapidjson::Document& document, const TextureFormat& format, LoadInfo& loadInfo) {
+	void Texture::loadCubeTexture(rapidjson::Document& document, const TextureFormat& format, LoadInfo& loadInfo, const std::string& resolvedPath) {
 		// TODO: add support for generate mip-maps and gamma correction, p mush everythign format supports
 		auto& cubeMapData = loadInfo.data;
 		
@@ -272,6 +272,7 @@ namespace engine {
 		// Generate mipmaps if needed
 		if (format.useMipmaps) {
 			glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+			engine_warning("It is not recommended to use mipsmaps with skyboxes ("+ resolvedPath +")");
 		}
 
 		// Unbind the texture
