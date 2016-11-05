@@ -260,13 +260,13 @@ void run() {
 
 	// Program
 	engine::ShaderProgram program({
-		engine::Shader::loadShader("Shaders:vertex_brdf_ibl.glsl", GL_VERTEX_SHADER),
-		engine::Shader::loadShader("Shaders:fragment_brdf_ibl.glsl", GL_FRAGMENT_SHADER),
+		engine::Shader::load("Shaders:vertex_brdf_ibl.glsl", GL_VERTEX_SHADER),
+		engine::Shader::load("Shaders:fragment_brdf_ibl.glsl", GL_FRAGMENT_SHADER),
 	});
 	
 	engine::ShaderProgram skyboxProgram({
-		engine::Shader::loadShader("Shaders:vertex_skybox.glsl", GL_VERTEX_SHADER),
-		engine::Shader::loadShader("Shaders:fragment_skybox.glsl", GL_FRAGMENT_SHADER),
+		engine::Shader::load("Shaders:vertex_skybox.glsl", GL_VERTEX_SHADER),
+		engine::Shader::load("Shaders:fragment_skybox.glsl", GL_FRAGMENT_SHADER),
 	});
 
 
@@ -286,13 +286,13 @@ void run() {
 
 	// Load some meshes for testing
 	std::vector<engine::Model> models;
-	models.emplace_back(engine::Model::loadModel("Models:_my_models/skybox.obj", 10.0f, 1.0f));
-	models.emplace_back(engine::Model::loadModel("Models:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f));
-	models.emplace_back(engine::Model::loadModel("Models:_my_models/hoola.obj", 2.0f, 5.0f));
-	models.emplace_back(engine::Model::loadModel("Models:sailor_giveaway/sailor.obj", 1.5f, 2.0f));
-	models.emplace_back(engine::Model::loadModel("Models:_my_models/hatman2.obj", 1.0f, 2.0f));
-	models.emplace_back(engine::Model::loadModel("Models:_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f));
-	models.emplace_back(engine::Model::loadModel("Models:_my_models/uvplane.obj", 10.0f, 1.0f));
+	models.emplace_back(engine::Model::load("Models:_my_models/skybox.obj", 10.0f, 1.0f));
+	models.emplace_back(engine::Model::load("Models:shaderBallNoCrease/shaderBall.obj", 0.025f, 2.0f));
+	models.emplace_back(engine::Model::load("Models:_my_models/hoola.obj", 2.0f, 5.0f));
+	models.emplace_back(engine::Model::load("Models:sailor_giveaway/sailor.obj", 1.5f, 2.0f));
+	models.emplace_back(engine::Model::load("Models:_my_models/hatman2.obj", 1.0f, 2.0f));
+	models.emplace_back(engine::Model::load("Models:_my_models/Backdrop/backdrop.obj", 0.1f, 3.5f));
+	models.emplace_back(engine::Model::load("Models:_my_models/uvplane.obj", 10.0f, 1.0f));
 
 	//////////
 	for (auto& model : models) {
@@ -302,23 +302,6 @@ void run() {
 	engine::Texture tile_a = engine::Texture::load("Textures:old_tiles/old_tiles_a.tex");
 	engine::Texture tile_n = engine::Texture::load("Textures:old_tiles/old_tiles_n.tex");
 	engine::Texture tile_r = engine::Texture::load("Textures:old_tiles/old_tiles_r.tex");
-
-	// Clay Brick
-	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/clay_brick/clay_brick_a.tga", albedoFormat);
-	//engine::Texture normal_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/clay_brick/clay_brick_n.tga", normalFormat);
-	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/clay_brick/clay_brick_r.tga", normalFormat);
-	
-	// Old Wooden Planks
-	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_a.tga", albedoFormat);
-	//engine::Texture normal_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_n.tga", normalFormat);
-	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:s_schulz_mat_pack_free_dl/old_wooden_planks/old_wooden_planks_r.tga", normalFormat);
-
-	// Error Checker
-	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_basecolor.png", albedoFormat);
-	//engine::Texture normal_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_normal_fixed.png", normalFormat);
-	//engine::Texture roughness_tex = engine::Texture::loadTexture("Texture:error_checker/error_checker_roughness.png", normalFormat);
-	
-	//engine::Texture albedo_tex = engine::Texture::loadTexture("Texture:test.jpg", albedoFormat);
 
 	// Material Testing
 	program.use(); // TODO: if this isnt here the first call to mat.loadParameters causes a GL_INVALID_OPERATION. figure out why

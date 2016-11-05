@@ -27,7 +27,7 @@ namespace engine {
 		// Static
 		////////////////////////////////////////////////////////////////
 		public:
-			static Model loadModel(const ResourcePath& path, const float scale = 1.0f, const float textureScale = 1.0f);
+			static Model load(const ResourcePath& path, const float scale = 1.0f, const float textureScale = 1.0f);
 			static ModelData setupGLObjects(const std::vector<Vertex> &vertices, const std::vector<std::vector<GLuint>> &indices);
 	};
 }

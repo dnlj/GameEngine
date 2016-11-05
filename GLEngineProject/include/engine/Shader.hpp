@@ -19,6 +19,6 @@ namespace engine {
 		// Static
 		////////////////////////////////////////////////////////////////
 		public:
-			static Shader loadShader(const ResourcePath& path, const GLenum type);
+			static Shader load(const ResourcePath& path, const GLenum type);
 	};
 }

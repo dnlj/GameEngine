@@ -76,7 +76,7 @@ namespace engine {
 	////////////////////////////////////////////////////////////////
 	// Static
 	////////////////////////////////////////////////////////////////
-	Model Model::loadModel(const ResourcePath& path, const float scale, const float textureScale) {
+	Model Model::load(const ResourcePath& path, const float scale, const float textureScale) {
 		const auto resolvedPath = path.getResolvedPath();
 		auto& loadInfo = loadResource(resolvedPath);
 

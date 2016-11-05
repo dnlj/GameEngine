@@ -22,7 +22,7 @@ namespace engine {
 	// Static
 	////////////////////////////////////////////////////////////////
 	// TODO: Should i make "type" part of the shader file? maybe
-	Shader Shader::loadShader(const ResourcePath& path, const GLenum type) {
+	Shader Shader::load(const ResourcePath& path, const GLenum type) {
 		const auto resolvedPath = path.getResolvedPath();
 		auto& loadInfo = loadResource(resolvedPath);
 
