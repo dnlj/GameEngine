@@ -11,6 +11,7 @@
 * Add a frame buffer class
 * Make the material class a Resource. Will need to figure out how to deal with the ShaderProgram
 * Add anisotropic filtering
+* Figure out how to log uncaught exceptions
 
 # Maintenance
 * Move unnecessary includes into the cpp files and out of the headers
