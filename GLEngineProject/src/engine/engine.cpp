@@ -20,7 +20,7 @@
 
 
 namespace engine {
-	void _error(const std::string &file, const std::size_t line, const std::string &msg) {
+	void _error(const std::string& file, const std::size_t line, const std::string& msg) {
 		// TODO: Add a (cross platform) stack trace.
 
 		std::string date = engine::util::getDateString();
@@ -38,7 +38,7 @@ namespace engine {
 		abort();
 	}
 
-	void _warning(const std::string &file, const std::size_t line, const std::string &msg) {
+	void _warning(const std::string& file, const std::size_t line, const std::string& msg) {
 		// TODO: Add a (cross platform) stack trace.
 
 		std::string date = engine::util::getDateString();
