@@ -140,12 +140,10 @@ namespace engine {
 			if (type == TextureFormat::Type::TEXTURE_CUBE) {
 				loadCubeTexture(doc, format, loadInfo, resolvedPath);
 			} else {
-				ResourcePath texPath = json::getString(doc, "path")->value.GetString();
-				// TODO: change this to pass in doc like cubemap does, it gives the loadign funcitons more freedom
 				if (type == TextureFormat::Type::TEXTURE_1D) {
 					// TODO: implement
 				} else if (type == TextureFormat::Type::TEXTURE_2D) {
-					load2DTexture(texPath.getResolvedPath(), format, loadInfo);
+					load2DTexture(doc, format, loadInfo);
 				} else if (type == TextureFormat::Type::TEXTURE_3D) {
 					// TODO: implement
 				}
@@ -155,8 +153,9 @@ namespace engine {
 		return loadInfo.object;
 	}
 
-	void Texture::load2DTexture(const std::string& resolvedPath, const TextureFormat& format, LoadInfo& loadInfo) {
+	void Texture::load2DTexture(rapidjson::Document& document, const TextureFormat& format, LoadInfo& loadInfo) {
 		auto& textureData = loadInfo.data;
+		const std::string path = ResourcePath{json::getString(document, "path")->value.GetString()}.getResolvedPath();
 
 		// TODO: Add an option to the TextureFormat for the internal format (GL_RGBA, GL_SRGB8_ALPHA8, GL_RGB, etc)
 		//			So that you can make rgba, rgb, and grayscale textures if you need them
@@ -177,11 +176,12 @@ namespace engine {
 
 		// Load the image from a file
 		unsigned char* image;
-		image = SOIL_load_image(resolvedPath.c_str(), &width, &height, &channels, SOIL_LOAD_RGBA);
+		image = SOIL_load_image(path.c_str(), &width, &height, &channels, SOIL_LOAD_RGBA);
 
+		// TODO: Not sure why i dont have this just erroring/throwing
 		bool failedToLoad = false;
 		if (image == nullptr) {
-			std::string err = "Failed to load image \"" + resolvedPath + "\" with error: ";
+			std::string err = "Failed to load image \"" + path + "\" with error: ";
 			err += SOIL_last_result();
 			engine_warning(err);
 

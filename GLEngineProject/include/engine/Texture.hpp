@@ -36,7 +36,7 @@ namespace engine {
 			using LoadInfo = Resource<Texture, TextureData>::Resource::ResourceLoadInfo;
 
 			//static void load1DTexture
-			static void load2DTexture(const std::string& resolvedPath, const TextureFormat& format, LoadInfo& loadInfo);
+			static void load2DTexture(rapidjson::Document& document, const TextureFormat& format, LoadInfo& loadInfo);
 			//static void load3DTexture
 			static void loadCubeTexture(rapidjson::Document& document, const TextureFormat& format, LoadInfo& loadInfo, const std::string& resolvedPath);
 

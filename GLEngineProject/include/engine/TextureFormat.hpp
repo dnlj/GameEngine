@@ -13,12 +13,6 @@ namespace engine {
 		public:
 			InvalidTextureFormat(const std::string& message) : runtime_error{message} {
 			}
-
-		//	virtual const char* what() const override {
-		//		return message.c_str();
-		//	}
-		//private:
-		//	const std::string message;
 	};
 
 	class TextureFormat {
