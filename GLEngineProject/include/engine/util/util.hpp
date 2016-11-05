@@ -6,6 +6,9 @@
 // glLoadGen
 #include <glloadgen/gl_core_4_5.hpp>
 
+// GLM
+#include <glm/glm.hpp>
+
 // GLFW
 #include <GLFW/glfw3.h>
 
@@ -20,4 +23,5 @@ namespace engine::util {
 	void initializeOpenGL();
 	std::string getDateString();
 	std::string typeEnumToString(const GLenum &type);
+	std::string toString(const glm::vec3& vec);
 }

@@ -3,6 +3,7 @@ GLEngineProject/dependencies
 GLEngineProject/output
 GLEngineProject/temp
 GLEngineProject/src/imgui.ini
+docs/
 *.log
 
 # Visual Studio files

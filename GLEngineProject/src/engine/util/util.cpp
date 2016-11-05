@@ -187,4 +187,8 @@ namespace engine::util {
 			default: return std::to_string(type);
 		}
 	}
+
+	std::string toString(const glm::vec3& vec) {
+		return "(" + std::to_string(vec.x)  + ", " + std::to_string(vec.y) + ", " + std::to_string(vec.z) + ")";
+	}
 }
