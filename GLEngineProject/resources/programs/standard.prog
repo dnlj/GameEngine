@@ -1,0 +1,4 @@
+{
+  "VERTEX_SHADER": "Shaders:vertex_brdf_ibl.glsl",
+  "FRAGMENT_SHADER": "Shaders:fragment_brdf_ibl.glsl"
+}

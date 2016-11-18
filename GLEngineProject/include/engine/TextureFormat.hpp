@@ -8,8 +8,10 @@
 
 
 namespace engine {
+	// TODO: move to own file
 	class InvalidTextureFormat : public std::runtime_error {
 		public:
+		// TODO: since this does nothing change it to  "using std::runtime_error::runtime_error;"
 			InvalidTextureFormat(const std::string& message) : runtime_error{message} {
 			}
 	};

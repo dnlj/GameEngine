@@ -45,7 +45,9 @@
 #include <engine/Texture.hpp>
 #include <engine/Shader.hpp>
 #include <engine/ShaderProgram.hpp>
+#include <engine/ShaderProgram2.hpp>
 #include <engine/Material.hpp>
+#include <engine/Material2.hpp>
 #include <engine/Model.hpp>
 #include <engine/Camera.hpp>
 
@@ -235,6 +237,7 @@ void run() {
 	engine::ResourcePath::AddResourceDir("Textures", "D:/OpenGL Projects/GameEngine/GLEngineProject/resources/textures/"); // This is the "resources/textures/" folder that is included in git
 	engine::ResourcePath::AddResourceDir("CubeMaps", "D:/OpenGL Projects/Resources/CubeMaps/"); // This is where the cubemap bitmaps are stored. Not included in git.
 	engine::ResourcePath::AddResourceDir("CubeMaps", "D:/OpenGL Projects/GameEngine/GLEngineProject/resources/cubemaps/"); // This is the "resources/cubemaps/" folder that is included in git
+	engine::ResourcePath::AddResourceDir("Programs", "D:/OpenGL Projects/GameEngine/GLEngineProject/resources/programs/"); // This is the "resources/programs/" folder that is included in git
 
 	// Setup the window
 	static char *windowTitle = "Window Title";

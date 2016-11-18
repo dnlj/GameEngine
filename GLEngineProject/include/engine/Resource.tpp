@@ -11,6 +11,9 @@ namespace engine {
 	template<class Type, class TypeData>
 	decltype(Resource<Type, TypeData>::deletedIndices) Resource<Type, TypeData>::deletedIndices;
 
+	template<class Type, class TypeData>
+	Resource<Type, TypeData>::Resource() : index{0} {
+	}
 
 	template<class Type, class TypeData>
 	Resource<Type, TypeData>::Resource(engine::index index) : index{index} {

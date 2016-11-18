@@ -22,6 +22,7 @@
     <ClCompile Include="src\engine\Camera.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\engine\Material.cpp" />
+    <ClCompile Include="src\engine\Material2.cpp" />
     <ClCompile Include="src\engine\Model.cpp" />
     <ClCompile Include="src\engine\ModelData.cpp" />
     <ClCompile Include="src\engine\ReferenceCounter.cpp" />
@@ -29,6 +30,8 @@
     <ClCompile Include="src\engine\Shader.cpp" />
     <ClCompile Include="src\engine\ShaderData.cpp" />
     <ClCompile Include="src\engine\ShaderProgram.cpp" />
+    <ClCompile Include="src\engine\ShaderProgram2.cpp" />
+    <ClCompile Include="src\engine\ShaderProgramData2.cpp" />
     <ClCompile Include="src\engine\Texture.cpp" />
     <ClCompile Include="src\engine\TextureData.cpp" />
     <ClCompile Include="src\engine\TextureFormat.cpp" />
@@ -47,6 +50,8 @@
     <ClInclude Include="include\engine\FileSystem\FileSystem.hpp" />
     <ClInclude Include="include\engine\IndexData.hpp" />
     <ClInclude Include="include\engine\Material.hpp" />
+    <ClInclude Include="include\engine\Material2.hpp" />
+    <ClInclude Include="include\engine\MaterialData2.hpp" />
     <ClInclude Include="include\engine\MaterialParameter.hpp" />
     <ClInclude Include="include\engine\Model.hpp" />
     <ClInclude Include="include\engine\ModelData.hpp" />
@@ -56,12 +61,16 @@
     <ClInclude Include="include\engine\Shader.hpp" />
     <ClInclude Include="include\engine\ShaderData.hpp" />
     <ClInclude Include="include\engine\ShaderProgram.hpp" />
+    <ClInclude Include="include\engine\ShaderProgram2.hpp" />
+    <ClInclude Include="include\engine\ShaderProgramData2.hpp" />
     <ClInclude Include="include\engine\SubModelData.hpp" />
     <ClInclude Include="include\engine\Texture.hpp" />
     <ClInclude Include="include\engine\TextureData.hpp" />
     <ClInclude Include="include\engine\TextureFormat.hpp" />
     <ClInclude Include="include\engine\Uniform.hpp" />
     <ClInclude Include="include\engine\json\json.hpp" />
+    <ClInclude Include="include\engine\Uniform2.hpp" />
+    <ClInclude Include="include\engine\UniformValue.hpp" />
     <ClInclude Include="include\engine\util\util.hpp" />
     <ClInclude Include="include\engine\Vertex.hpp" />
     <ClInclude Include="include\GLE\engine\Mesh.hpp" />
@@ -84,6 +93,8 @@
     <None Include="resources\cubemaps\stormydays_large.cube" />
     <None Include="resources\cubemaps\vertical_cross.cube" />
     <None Include="resources\cubemaps\vertical_line.cube" />
+    <None Include="resources\materials\tiles.mat" />
+    <None Include="resources\programs\standard.prog" />
     <None Include="resources\shaders\fragment_brdf.glsl" />
     <None Include="resources\shaders\fragment_brdf_ibl.glsl" />
     <None Include="resources\shaders\fragment_skybox.glsl" />

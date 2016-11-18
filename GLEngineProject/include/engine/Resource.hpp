@@ -17,6 +17,7 @@ namespace engine {
 	template<class Type, class TypeData>
 	class Resource {
 		public:
+			Resource();
 			Resource(engine::index index);
 			Resource(const IndexData& data);
 			virtual ~Resource() = 0;

@@ -78,6 +78,15 @@
     <ClCompile Include="src\engine\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\ShaderProgram2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ShaderProgramData2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Material2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GLE\engine\Mesh.hpp">
@@ -174,6 +183,24 @@
     <ClInclude Include="include\engine\Camera.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\engine\ShaderProgram2.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\ShaderProgramData2.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\Uniform2.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\UniformValue.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\Material2.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\MaterialData2.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="TODO.md" />
@@ -192,5 +219,7 @@
     <None Include="resources\textures\old_tiles\old_tiles_a.tex" />
     <None Include="resources\textures\old_tiles\old_tiles_n.tex" />
     <None Include="resources\textures\old_tiles\old_tiles_r.tex" />
+    <None Include="resources\programs\standard.prog" />
+    <None Include="resources\materials\tiles.mat" />
   </ItemGroup>
 </Project>
