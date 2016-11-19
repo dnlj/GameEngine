@@ -1,9 +1,9 @@
 #version 440 core
 
-in vec3 vertPosition;
-in vec3 vertNormal;
-in vec3 vertTangent;
-in vec2 vertTexCoord;
+layout(location=0) in vec3 vertPosition;
+layout(location=1) in vec3 vertNormal;
+layout(location=2) in vec3 vertTangent;
+layout(location=3) in vec2 vertTexCoord;
 
 uniform mat4 mvp;
 uniform mat4 modelMatrix;

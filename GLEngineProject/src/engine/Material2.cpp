@@ -4,9 +4,25 @@
 
 namespace engine {
 
-	void Material2::setupUniforms() {
+	ShaderProgram2 Material2::getProgram() const {
+		return getDataAt(index).program;
+	}
+
+	void Material2::use() const {
 		const auto& data = getDataAt(index);
+		glUseProgram(data.program.getProgram());
+		
+		// Set textures
+		// TODO: isnt this stored in the vao? shouldnt need to do this every use only once i think. check that
+		for (int i = 0; i < data.textures.size(); i++) {
+			glActiveTexture(GL_TEXTURE0 + static_cast<GLenum>(i));
+			// TODO: will need to make this use textures[i].getType()
+			glBindTexture(GL_TEXTURE_2D, data.textures[i].getTexture());
+		}
+
+		// Set uniforms
 		for (const auto& uniform : data.uniforms) {
+			uniform->setUniform(data.program);
 		}
 	}
 
@@ -23,7 +39,7 @@ namespace engine {
 			json::loadDocument(resolvedPath, doc);
 
 			// Load the resource paths
-			ResourcePath program = json::getString(doc, "path")->value.GetString();
+			ResourcePath program = json::getString(doc, "shader_program")->value.GetString();
 			auto params = json::getObject(doc, "parameters");
 
 			ResourcePath albedo = json::getString(params->value, "albedo")->value.GetString();
@@ -36,30 +52,36 @@ namespace engine {
 
 
 			// TODO: Need to make these auto detect what is used based on the .mat file
+			// TODO: shouldnt i be useing ShaderProgram2 properties that i pre load?
+			// TODO: make this simpler to add values to
 
 			// Albedo
 			materialData.uniforms.emplace_back(
-				std::make_unique<UniformValue<Texture>>(
+				std::make_unique<UniformValue<GLint>>(
 					materialData.program.getUniformIndex("albedoMap"),
-					Texture::load(albedo)
+					static_cast<GLint>(materialData.textures.size())
 				)
 			);
+			materialData.textures.emplace_back(Texture::load(albedo));
+
 
 			// Normal
 			materialData.uniforms.emplace_back(
-				std::make_unique<UniformValue<Texture>>(
+				std::make_unique<UniformValue<GLint>>(
 					materialData.program.getUniformIndex("normalMap"),
-					Texture::load(normal)
+					static_cast<GLint>(materialData.textures.size())
 				)
 			);
+			materialData.textures.emplace_back(Texture::load(normal));
 
 			// Roughness
 			materialData.uniforms.emplace_back(
-				std::make_unique<UniformValue<Texture>>(
+				std::make_unique<UniformValue<GLint>>(
 					materialData.program.getUniformIndex("roughnessMap"),
-					Texture::load(roughness)
+					static_cast<GLint>(materialData.textures.size())
 				)
 			);
+			materialData.textures.emplace_back(Texture::load(roughness));
 		}
 
 		return loadInfo.object;

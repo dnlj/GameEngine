@@ -22,16 +22,17 @@ namespace engine {
 
 			// TODO: split into tpp file
 			template<class T>
-			void setUniform(const std::string& name, const T& data) {
+			void setUniform(const std::string& name, const T& data) const {
 				setUniform(getUniformIndex(name), data);
 			}
 
-			void setUniform(const GLint location, const GLint data);
-			void setUniform(const GLint location, const GLuint data);
-			void setUniform(const GLint location, const GLfloat data);
-			void setUniform(const GLint location, const Texture& data);
+			void setUniform(const GLint location, const GLint data) const;
+			void setUniform(const GLint location, const GLuint data) const;
+			void setUniform(const GLint location, const GLfloat data) const;
+			void setUniform(const GLint location, const Texture& data) const;
 
-			GLint getUniformIndex(const std::string& name);
+			// TODO: rename location instead of index
+			GLint getUniformIndex(const std::string& name) const;
 
 		private:
 

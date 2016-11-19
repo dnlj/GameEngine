@@ -9,26 +9,25 @@ namespace engine {
 		return getDataAt(index).program;
 	}
 
-	void ShaderProgram2::setUniform(const GLint location, const GLint data) {
+	void ShaderProgram2::setUniform(const GLint location, const GLint data) const {
 		glUniform1i(location, data);
 	}
 
-	void ShaderProgram2::setUniform(const GLint location, const GLuint data) {
+	void ShaderProgram2::setUniform(const GLint location, const GLuint data) const {
 		glUniform1ui(location, data);
 	}
 
-	void ShaderProgram2::setUniform(const GLint location, const GLfloat data) {
+	void ShaderProgram2::setUniform(const GLint location, const GLfloat data) const {
 		glUniform1f(location, data);
 	}
 
-	void ShaderProgram2::setUniform(const GLint location, const Texture& data) {
-		glUniform1ui(location, data.getTexture());
+	void ShaderProgram2::setUniform(const GLint location, const Texture& data) const {
+		glUniform1i(location, data.getTexture());
 	}
 
-	GLint ShaderProgram2::getUniformIndex(const std::string& name) {
+	GLint ShaderProgram2::getUniformIndex(const std::string& name) const {
 		const auto& properties = getDataAt(index).properties;
 		
-
 		for (const auto& prop : properties) {
 			if (prop.name == name) {
 				return prop.location;

@@ -11,7 +11,8 @@ namespace engine {
 			using Resource<Material2, MaterialData2>::Resource;
 			~Material2() = default;
 
-			void setupUniforms();
+			ShaderProgram2 getProgram() const;
+			void use() const;
 
 		////////////////////////////////////////////////////////////////
 		// Static

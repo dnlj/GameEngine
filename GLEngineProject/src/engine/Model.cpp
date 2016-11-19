@@ -5,6 +5,7 @@
 
 // Engine
 #include <engine/Model.hpp>
+#include <engine/util/util.hpp>
 
 
 namespace engine {
@@ -13,56 +14,38 @@ namespace engine {
 
 	// TODO: Eventually this render function should be removed and everything that needs to be rendered should be
 	//			sorted by material/texture to reduce gl calls
-	void Model::render() const {
-		const ModelData &model = getDataAt(index); // TODO: Since this is a reference could this cause problems if the vector re-allocates?
+	void Model::render(const glm::mat4& mvp, const glm::mat4& model, const Camera& camera, const glm::vec3& lightPosition) const {
+		const ModelData &modelData = getDataAt(index); // TODO: Since this is a reference could this cause problems if the vector re-allocates?
 
-		glBindVertexArray(model.vao);
+		glBindVertexArray(modelData.vao);
 
 		// TODO: need to make this handle multiple materials
 
 		// Draw all sub models
-		for (int i = 0; i < model.subModels.size(); i++) {
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.subModels[i].ebo);
-			glDrawElements(GL_TRIANGLES, model.subModels[i].count, GL_UNSIGNED_INT, nullptr);
-		}
+		for (const auto& subModel : modelData.subModels) {
+			subModel.material.use();
+			// TODO: some kind of cacheing so you dont have to call this if the last draw was of the same material/program
+			const auto& program = subModel.material.getProgram();
 
-		glBindVertexArray(0);
-	}
+			glUseProgram(program.getProgram()); // TODO: this gets rid of some errors
+			// Probably just revert back to the old system and convert over pice by pice instaed of all at once
+			// eneed to do this stuff
+			//glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_2D, 1);
 
-	void Model::tempSetupGLStuff(const ShaderProgram& program) {
-		const auto& modelData = getDataAt(index);
+			// TODO: move these calls into the program class. program.setUniform(name, matrix)
+			glUniform3fv(program.getUniformIndex("viewPos"), 1, &camera.getPosition()[0]);
+			glUniform3fv(program.getUniformIndex("lightPos"), 1, &lightPosition[0]);
 
-		glBindVertexArray(modelData.vao);
-		glBindBuffer(GL_ARRAY_BUFFER, modelData.vbo);
+			glUniformMatrix4fv(program.getUniformIndex("mvp"), 1, GL_FALSE, &mvp[0][0]);
+			glUniformMatrix4fv(program.getUniformIndex("modelMatrix"), 1, GL_FALSE, &model[0][0]);
 
+			// TODO: need to make these controlled by imgui again
+			glUniform1f(program.getUniformIndex("metalness"), 0.0f);
+			glUniform1f(program.getUniformIndex("intensity"), 1.0f);
 
-		// TODO: Need to redo this to make shaderes handled by the mesh/material classes
-		// Position
-		GLint location = program.getAttribLocation("vertPosition");
-		glEnableVertexAttribArray(location);
-		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, sizeof(engine::Vertex), (GLvoid*)offsetof(engine::Vertex, position));
-
-		// Normals
-		location = program.getAttribLocation("vertNormal");
-		glEnableVertexAttribArray(location);
-		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, sizeof(engine::Vertex), (GLvoid*)offsetof(engine::Vertex, normal));
-
-		// Normals
-		location = program.getAttribLocation("vertTangent");
-		glEnableVertexAttribArray(location);
-		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, sizeof(engine::Vertex), (GLvoid*)offsetof(engine::Vertex, tangent));
-
-		// UV
-		location = program.getAttribLocation("vertTexCoord");
-		glEnableVertexAttribArray(location);
-		glVertexAttribPointer(location, 2, GL_FLOAT, GL_FALSE, sizeof(engine::Vertex), (GLvoid*)offsetof(engine::Vertex, uv));
-
-
-
-		std::cout << "vao: " << modelData.vao << std::endl;
-		std::cout << "\tvbo: " << modelData.vbo << std::endl;
-		for (int j = 0; j < modelData.subModels.size(); j++) {
-			std::cout << "\tebo: " << modelData.subModels[j].ebo << std::endl;
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, subModel.ebo);
+			glDrawElements(GL_TRIANGLES, subModel.count, GL_UNSIGNED_INT, nullptr);
 		}
 
 		glBindVertexArray(0);
@@ -199,20 +182,62 @@ namespace engine {
 		std::cout << "\tvbo: " << modelData.vbo << std::endl;
 
 
+		// TODO: Temp while testing new material system
+		Material2 material = Material2::load("Materials:tiles.mat");
+
+
 		for (unsigned int i = 0; i < indices.size(); i++) {
 			glGenBuffers(1, &modelData.subModels[i].ebo);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, modelData.subModels[i].ebo);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices[i].size() * sizeof(GLuint), &indices[i][0], GL_STATIC_DRAW);
 
 			modelData.subModels[i].count = static_cast<GLsizei>(indices[i].size());
+			modelData.subModels[i].material = material;
 
 			// TODO: Temp for debugging
 			std::cout << "\tebo: " << modelData.subModels[i].ebo << std::endl;
 		}
 
-
 		glBindVertexArray(0);
+
+		setupVertexAttributes(modelData);
+
 		return modelData;
 	}
 
+	void Model::setupVertexAttributes(const ModelData& modelData) {
+		glBindVertexArray(modelData.vao);
+		glBindBuffer(GL_ARRAY_BUFFER, modelData.vbo);
+
+		// TODO: Wouldl like to handle this better, look at ogre3d. For now just used fixed positions
+
+		// vertPosition
+		GLint location = 0;
+		glEnableVertexAttribArray(location);
+		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, sizeof(engine::Vertex), (GLvoid*)offsetof(engine::Vertex, position));
+
+		// vertNormal
+		location = 1;
+		glEnableVertexAttribArray(location);
+		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, sizeof(engine::Vertex), (GLvoid*)offsetof(engine::Vertex, normal));
+
+		// vertTangent
+		location = 2;
+		glEnableVertexAttribArray(location);
+		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, sizeof(engine::Vertex), (GLvoid*)offsetof(engine::Vertex, tangent));
+
+		// vertTexCoord
+		location = 3;
+		glEnableVertexAttribArray(location);
+		glVertexAttribPointer(location, 2, GL_FLOAT, GL_FALSE, sizeof(engine::Vertex), (GLvoid*)offsetof(engine::Vertex, uv));
+
+		std::cout << "vao: " << modelData.vao << std::endl;
+		std::cout << "\tvbo: " << modelData.vbo << std::endl;
+		for (int j = 0; j < modelData.subModels.size(); j++) {
+			std::cout << "\tebo: " << modelData.subModels[j].ebo << std::endl;
+		}
+
+		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 }

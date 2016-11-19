@@ -4,9 +4,9 @@
 #include <engine/Resource.hpp>
 #include <engine/ModelData.hpp>
 #include <engine/Vertex.hpp>
+#include <engine/Camera.hpp>
 
 // TODO: remove this is a temp include
-#include <engine/ShaderProgram.hpp>
 
 
 // TODO: More testing, to make sure the Resrouce class is working with cleanup and duplicate load files
@@ -15,13 +15,10 @@ namespace engine {
 		public:
 			using Resource<Model, ModelData>::Resource;
 			virtual ~Model();
-
-			void render() const;
-
-			// TODO: Remove this its temp untill i get materials/model/shader colab working
-			void tempSetupGLStuff(const ShaderProgram& program);
-
+			void render(const glm::mat4& mvp, const glm::mat4& model, const Camera& camera, const glm::vec3& lightPosition) const;
 			bool operator==(const Model &model) const;
+
+
 
 		////////////////////////////////////////////////////////////////
 		// Static
@@ -29,5 +26,6 @@ namespace engine {
 		public:
 			static Model load(const ResourcePath& path, const float scale = 1.0f, const float textureScale = 1.0f);
 			static ModelData setupGLObjects(const std::vector<Vertex> &vertices, const std::vector<std::vector<GLuint>> &indices);
+			static void setupVertexAttributes(const ModelData& modelData);
 	};
 }

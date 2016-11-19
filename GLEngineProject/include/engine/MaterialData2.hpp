@@ -15,10 +15,10 @@ namespace engine {
 		friend static void Resource<Type, TypeData>::cleanup();
 
 		public:
-			// TODO: split into files
 			ShaderProgram2 program;
 
 			std::vector<std::unique_ptr<UniformValueBase>> uniforms;
+			std::vector<Texture> textures;
 
 		private:
 			void deleteData() {

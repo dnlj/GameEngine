@@ -160,72 +160,62 @@ void runMenu(int width, int height, float& metalness, float& intensity) {
 	}
 }
 
-void drawScene(const engine::ShaderProgram& program, const engine::ShaderProgram& skyboxProgram, const glm::vec3& lightPosition, const engine::Camera& camera, const engine::Texture& cubemap, const std::vector<engine::Model>& models) {
+void drawScene(const glm::vec3& lightPosition, const engine::Camera& camera, const engine::Texture& cubemap, const std::vector<engine::Model>& models) {
 	auto projection = camera.getProjectionMaterix();
 
 	glm::mat4 model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	glm::mat4 mvp = projection * camera.getViewMatrix() * model;
 
-	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap.getTexture());
-	glUniform1i(program.getUniformLocation("cubeMap"), 3);
-
-	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-	glUniform3fv(program.getUniformLocation("viewPos"), 1, &camera.getPosition()[0]);
-	glUniform3fv(program.getUniformLocation("lightPos"), 1, &lightPosition[0]);
+	//glActiveTexture(GL_TEXTURE3);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap.getTexture());
+	//glUniform1i(program.getUniformLocation("cubeMap"), 3);
+	//
+	//glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+	//glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+	//glUniform3fv(program.getUniformLocation("viewPos"), 1, &camera.getPosition()[0]);
+	//glUniform3fv(program.getUniformLocation("lightPos"), 1, &lightPosition[0]);
 
 	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	mvp = projection * camera.getViewMatrix() * model;
-	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-	models[1].render();
+	models[1].render(mvp, model, camera, lightPosition);
 
 	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	mvp = projection * camera.getViewMatrix() * model;
-	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-	models[2].render();
+	models[2].render(mvp, model, camera, lightPosition);
 
 	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -2.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	mvp = projection * camera.getViewMatrix() * model;
-	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-	models[3].render();
+	models[3].render(mvp, model, camera, lightPosition);
 
 	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	mvp = projection * camera.getViewMatrix() * model;
-	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-	models[4].render();
+	models[4].render(mvp, model, camera, lightPosition);
 
 	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	mvp = projection * camera.getViewMatrix() * model;
-	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-	models[5].render();
+	models[5].render(mvp, model, camera, lightPosition);
 
 	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(10.0f, 0.01f, 0.0f)), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	mvp = projection * camera.getViewMatrix() * model;
-	glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-	glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
-	models[6].render();
+	models[6].render(mvp, model, camera, lightPosition);
 
 	// Skybox
-	{
-		skyboxProgram.use();
+	//{
+	//	skyboxProgram.use();
+	//
+	//	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	//	glm::mat4 mvp = projection * glm::mat4{glm::mat3{camera.getViewMatrix()}} *model;
+	//
+	//	glActiveTexture(GL_TEXTURE0);
+	//	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap.getTexture());
+	//
+	//	glUniformMatrix4fv(skyboxProgram.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+	//	glUniform1i(skyboxProgram.getUniformLocation("cubeMap"), 0);
+	//
+	//	models[0].render();
+	//}
 
-		model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		glm::mat4 mvp = projection * glm::mat4{glm::mat3{camera.getViewMatrix()}} *model;
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap.getTexture());
-
-		glUniformMatrix4fv(skyboxProgram.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
-		glUniform1i(skyboxProgram.getUniformLocation("cubeMap"), 0);
-
-		models[0].render();
-	}
+	engine::util::checkGLErrors();
 }
 
 void run() {
@@ -235,6 +225,7 @@ void run() {
 	engine::ResourcePath::AddResourceDir("Models", "D:/OpenGL Projects/Models/"); // This is where the models are stored. Not included in git.
 	engine::ResourcePath::AddResourceDir("Textures", "D:/OpenGL Projects/Resources/Textures/"); // This is where the texture bitmaps are stored. Not included in git.
 	engine::ResourcePath::AddResourceDir("Textures", "D:/OpenGL Projects/GameEngine/GLEngineProject/resources/textures/"); // This is the "resources/textures/" folder that is included in git
+	engine::ResourcePath::AddResourceDir("Materials", "D:/OpenGL Projects/GameEngine/GLEngineProject/resources/materials/"); // This is the "resources/materials/" folder that is included in git
 	engine::ResourcePath::AddResourceDir("CubeMaps", "D:/OpenGL Projects/Resources/CubeMaps/"); // This is where the cubemap bitmaps are stored. Not included in git.
 	engine::ResourcePath::AddResourceDir("CubeMaps", "D:/OpenGL Projects/GameEngine/GLEngineProject/resources/cubemaps/"); // This is the "resources/cubemaps/" folder that is included in git
 	engine::ResourcePath::AddResourceDir("Programs", "D:/OpenGL Projects/GameEngine/GLEngineProject/resources/programs/"); // This is the "resources/programs/" folder that is included in git
@@ -262,15 +253,17 @@ void run() {
 	glEnable(GL_CULL_FACE);
 
 	// Program
-	engine::ShaderProgram program({
-		engine::Shader::load("Shaders:vertex_brdf_ibl.glsl", GL_VERTEX_SHADER),
-		engine::Shader::load("Shaders:fragment_brdf_ibl.glsl", GL_FRAGMENT_SHADER),
-	});
-	
-	engine::ShaderProgram skyboxProgram({
-		engine::Shader::load("Shaders:vertex_skybox.glsl", GL_VERTEX_SHADER),
-		engine::Shader::load("Shaders:fragment_skybox.glsl", GL_FRAGMENT_SHADER),
-	});
+	//engine::ShaderProgram program({
+	//	engine::Shader::load("Shaders:vertex_brdf_ibl.glsl", GL_VERTEX_SHADER),
+	//	engine::Shader::load("Shaders:fragment_brdf_ibl.glsl", GL_FRAGMENT_SHADER),
+	//});
+	//
+	//engine::ShaderProgram skyboxProgram({
+	//	engine::Shader::load("Shaders:vertex_skybox.glsl", GL_VERTEX_SHADER),
+	//	engine::Shader::load("Shaders:fragment_skybox.glsl", GL_FRAGMENT_SHADER),
+	//});
+
+	//engine::ShaderProgram2 program = engine::ShaderProgram2::load("Program:standard.prog");
 
 
 	// Camera
@@ -298,78 +291,78 @@ void run() {
 	models.emplace_back(engine::Model::load("Models:_my_models/uvplane.obj", 10.0f, 1.0f));
 
 	//////////
-	for (auto& model : models) {
-		model.tempSetupGLStuff(program);
-	}
+	//for (auto& model : models) {
+	//	model.tempSetupGLStuff(program);
+	//}
 	/////////
 	engine::Texture tile_a = engine::Texture::load("Textures:old_tiles/old_tiles_a.tex");
 	engine::Texture tile_n = engine::Texture::load("Textures:old_tiles/old_tiles_n.tex");
 	engine::Texture tile_r = engine::Texture::load("Textures:old_tiles/old_tiles_r.tex");
 
 	// Material Testing
-	program.use(); // TODO: if this isnt here the first call to mat.loadParameters causes a GL_INVALID_OPERATION. figure out why
-	program.loadProgramUniforms();
-	engine::Material mat{program};
-	mat.setParameter("albedoMap", tile_a);
-	mat.setParameter("normalMap", tile_n);
-	mat.setParameter("roughnessMap", tile_r);
+	//program.use(); // TODO: if this isnt here the first call to mat.loadParameters causes a GL_INVALID_OPERATION. figure out why
+	//program.loadProgramUniforms();
+	//engine::Material mat{program};
+	//mat.setParameter("albedoMap", tile_a);
+	//mat.setParameter("normalMap", tile_n);
+	//mat.setParameter("roughnessMap", tile_r);
 
 	// Render to Cubemap testing
-	int faceSize = 256;
-	GLuint frameBuffer;
-	GLuint cubeMapTexture;
-	GLuint depthTexture;
-	{// Setup cubeMapTexture
-	
-		// Generate and bind the ccubemap texture
-		glGenTextures(1, &cubeMapTexture);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture);
-		
-		// Setup texture parameters
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, 0);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	
-		// Setup our faces
-		for (int face = 0; face < 6; ++face) {
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_SRGB8, faceSize, faceSize, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-		}
-	
-		// Unbind our cubemap texture
-		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-	}
-
-	{ // Setup Depth
-		glGenTextures(1, &depthTexture);
-		glBindTexture(GL_TEXTURE_2D, depthTexture);
-
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, 0);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, faceSize, faceSize, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
-
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-	
-	{// Setup frameBuffer
-		// Generate frame buffer
-		glGenFramebuffers(1, &frameBuffer);
-		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-
-		// Do any setup here
-	
-		// Unbind our frame buffer
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
+	//int faceSize = 256;
+	//GLuint frameBuffer;
+	//GLuint cubeMapTexture;
+	//GLuint depthTexture;
+	//{// Setup cubeMapTexture
+	//
+	//	// Generate and bind the ccubemap texture
+	//	glGenTextures(1, &cubeMapTexture);
+	//	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture);
+	//	
+	//	// Setup texture parameters
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0);
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, 0);
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	//
+	//	// Setup our faces
+	//	for (int face = 0; face < 6; ++face) {
+	//		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_SRGB8, faceSize, faceSize, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	//	}
+	//
+	//	// Unbind our cubemap texture
+	//	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	//}
+	//
+	//{ // Setup Depth
+	//	glGenTextures(1, &depthTexture);
+	//	glBindTexture(GL_TEXTURE_2D, depthTexture);
+	//
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0);
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, 0);
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	//	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	//
+	//	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, faceSize, faceSize, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
+	//
+	//	glBindTexture(GL_TEXTURE_2D, 0);
+	//}
+	//
+	//{// Setup frameBuffer
+	//	// Generate frame buffer
+	//	glGenFramebuffers(1, &frameBuffer);
+	//	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	//
+	//	// Do any setup here
+	//
+	//	// Unbind our frame buffer
+	//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//}
 
 
 	engine::util::checkGLErrors();
@@ -410,53 +403,53 @@ void run() {
 		// Models and Skybox
 		for (int i = 0; i < 1; ++i){
 
-			program.use();
+			//program.use();
+			//
+			//glUniform1f(program.getUniformLocation("metalness"), metalness);
+			//glUniform1f(program.getUniformLocation("intensity"), intensity);
+			//
+			//mat.loadParameters();
 
-			glUniform1f(program.getUniformLocation("metalness"), metalness);
-			glUniform1f(program.getUniformLocation("intensity"), intensity);
-			
-			mat.loadParameters();
-
-			if (i > 0) {
-				// TODO: Shouldnt the camera be orthogonal for this?
-
-				glViewport(0, 0, faceSize, faceSize);
-				glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i-1, cubeMapTexture, 0);
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
-
-				camera.setFOV(glm::radians(90.0f));
-				camera.setAspect(1.0f);
-				switch (i) {
-					case 1:
-						camera.lookAt({1.0f, 0.0f, 0.0f});
-						break;
-					case 2:
-						camera.lookAt({-1.0f, 0.0f, 0.0f});
-						break;
-					case 3:
-						camera.lookAt({0.0f, 1.0f, 0.0f});
-						break;
-					case 4:
-						camera.lookAt({0.0f, -1.0f, 0.0f});
-						break;
-					case 5:
-						camera.lookAt({0.0f, 0.0f, 1.0f});
-						break;
-					case 6:
-						camera.lookAt({0.0f, 0.0f,-1.0f});
-						break;
-				}
-			} else {
+			//if (i > 0) {
+			//	// TODO: Shouldnt the camera be orthogonal for this?
+			//
+			//	glViewport(0, 0, faceSize, faceSize);
+			//	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+			//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i-1, cubeMapTexture, 0);
+			//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+			//
+			//	camera.setFOV(glm::radians(90.0f));
+			//	camera.setAspect(1.0f);
+			//	switch (i) {
+			//		case 1:
+			//			camera.lookAt({1.0f, 0.0f, 0.0f});
+			//			break;
+			//		case 2:
+			//			camera.lookAt({-1.0f, 0.0f, 0.0f});
+			//			break;
+			//		case 3:
+			//			camera.lookAt({0.0f, 1.0f, 0.0f});
+			//			break;
+			//		case 4:
+			//			camera.lookAt({0.0f, -1.0f, 0.0f});
+			//			break;
+			//		case 5:
+			//			camera.lookAt({0.0f, 0.0f, 1.0f});
+			//			break;
+			//		case 6:
+			//			camera.lookAt({0.0f, 0.0f,-1.0f});
+			//			break;
+			//	}
+			//} else {
 				glViewport(0, 0, width, height);
 				camera.setFOV(glm::radians(70.0f));
 				camera.setAspect(static_cast<float>(width) / static_cast<float>(height));
-			}
+			//}
 
 			// OpenGL drawing
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			drawScene(program, skyboxProgram, lightPosition, camera, cubeMap, models);
+			drawScene(lightPosition, camera, cubeMap, models);
 		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -503,9 +496,9 @@ void run() {
 	//	}
 	//}
 
-	glDeleteTextures(1, &cubeMapTexture);
-	glDeleteTextures(1, &depthTexture);
-	glDeleteFramebuffers(1, &frameBuffer);
+	//glDeleteTextures(1, &cubeMapTexture);
+	//glDeleteTextures(1, &depthTexture);
+	//glDeleteFramebuffers(1, &frameBuffer);
 
 	engine::util::checkGLErrors();
 }

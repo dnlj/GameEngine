@@ -1,11 +1,6 @@
 {
-  "shader_program": "Program:standard.prog",
-  // These may differ per material
-  // Should these be pared to program uniforms or what?
-  // Dont like that because i dont want to have two things
-  // roughness_map and roughness (float)
-  // or metalness_map and metalness (float)
-  // So how should i map these to uniforms?
+  "shader_program": "Programs:standard.prog",
+
   "parameters": {
     "albedo": "Textures:old_tiles/old_tiles_a.tex",
     "normal": "Textures:old_tiles/old_tiles_n.tex",
