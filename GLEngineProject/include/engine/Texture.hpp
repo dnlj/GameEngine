@@ -31,6 +31,13 @@ namespace engine {
 			bool operator==(const Texture& tex) const;
 
 			/**
+			 * Gets the OpenGL texture type.
+			 *
+			 * @return The OpenGL texture type.
+			 */
+			GLuint getType() const;
+
+			/**
 			 * Gets the OpenGL texture id.
 			 * 
 			 * @return The OpenGL texture id.

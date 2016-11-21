@@ -15,7 +15,7 @@ namespace engine {
 		public:
 			using Resource<Model, ModelData>::Resource;
 			virtual ~Model();
-			void render(const glm::mat4& mvp, const glm::mat4& model, const Camera& camera, const glm::vec3& lightPosition) const;
+			void render(const glm::mat4& mvp, const glm::mat4& model, const Camera& camera, const glm::vec3& lightPosition, float metalness, float intensity) const;
 			bool operator==(const Model &model) const;
 
 

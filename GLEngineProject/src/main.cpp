@@ -160,7 +160,7 @@ void runMenu(int width, int height, float& metalness, float& intensity) {
 	}
 }
 
-void drawScene(const glm::vec3& lightPosition, const engine::Camera& camera, const engine::Texture& cubemap, const std::vector<engine::Model>& models) {
+void drawScene(const glm::vec3& lightPosition, const engine::Camera& camera, const engine::Texture& cubemap, const std::vector<engine::Model>& models, float metalness, float intensity) {
 	auto projection = camera.getProjectionMaterix();
 
 	glm::mat4 model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -177,27 +177,27 @@ void drawScene(const glm::vec3& lightPosition, const engine::Camera& camera, con
 
 	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	mvp = projection * camera.getViewMatrix() * model;
-	models[1].render(mvp, model, camera, lightPosition);
+	models[1].render(mvp, model, camera, lightPosition, metalness, intensity);
 
 	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -1.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	mvp = projection * camera.getViewMatrix() * model;
-	models[2].render(mvp, model, camera, lightPosition);
+	models[2].render(mvp, model, camera, lightPosition, metalness, intensity);
 
 	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -2.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	mvp = projection * camera.getViewMatrix() * model;
-	models[3].render(mvp, model, camera, lightPosition);
+	models[3].render(mvp, model, camera, lightPosition, metalness, intensity);
 
 	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -3.0f*18.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	mvp = projection * camera.getViewMatrix() * model;
-	models[4].render(mvp, model, camera, lightPosition);
+	models[4].render(mvp, model, camera, lightPosition, metalness, intensity);
 
 	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	mvp = projection * camera.getViewMatrix() * model;
-	models[5].render(mvp, model, camera, lightPosition);
+	models[5].render(mvp, model, camera, lightPosition, metalness, intensity);
 
 	model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(10.0f, 0.01f, 0.0f)), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	mvp = projection * camera.getViewMatrix() * model;
-	models[6].render(mvp, model, camera, lightPosition);
+	models[6].render(mvp, model, camera, lightPosition, metalness, intensity);
 
 	// Skybox
 	//{
@@ -214,8 +214,6 @@ void drawScene(const glm::vec3& lightPosition, const engine::Camera& camera, con
 	//
 	//	models[0].render();
 	//}
-
-	engine::util::checkGLErrors();
 }
 
 void run() {
@@ -449,7 +447,7 @@ void run() {
 			// OpenGL drawing
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			drawScene(lightPosition, camera, cubeMap, models);
+			drawScene(lightPosition, camera, cubeMap, models, metalness, intensity);
 		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);

@@ -16,8 +16,7 @@ namespace engine {
 		// TODO: isnt this stored in the vao? shouldnt need to do this every use only once i think. check that
 		for (int i = 0; i < data.textures.size(); i++) {
 			glActiveTexture(GL_TEXTURE0 + static_cast<GLenum>(i));
-			// TODO: will need to make this use textures[i].getType()
-			glBindTexture(GL_TEXTURE_2D, data.textures[i].getTexture());
+			glBindTexture(data.textures[i].getType(), data.textures[i].getTexture());
 		}
 
 		// Set uniforms
@@ -58,7 +57,7 @@ namespace engine {
 			// Albedo
 			materialData.uniforms.emplace_back(
 				std::make_unique<UniformValue<GLint>>(
-					materialData.program.getUniformIndex("albedoMap"),
+					materialData.program.getUniformLocation("albedoMap"),
 					static_cast<GLint>(materialData.textures.size())
 				)
 			);
@@ -68,7 +67,7 @@ namespace engine {
 			// Normal
 			materialData.uniforms.emplace_back(
 				std::make_unique<UniformValue<GLint>>(
-					materialData.program.getUniformIndex("normalMap"),
+					materialData.program.getUniformLocation("normalMap"),
 					static_cast<GLint>(materialData.textures.size())
 				)
 			);
@@ -77,7 +76,7 @@ namespace engine {
 			// Roughness
 			materialData.uniforms.emplace_back(
 				std::make_unique<UniformValue<GLint>>(
-					materialData.program.getUniformIndex("roughnessMap"),
+					materialData.program.getUniformLocation("roughnessMap"),
 					static_cast<GLint>(materialData.textures.size())
 				)
 			);

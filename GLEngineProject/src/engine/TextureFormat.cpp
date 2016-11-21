@@ -99,6 +99,21 @@ namespace engine {
 		}
 	}
 
+	GLenum TextureFormat::enumToOpenGL(Type e) {
+		switch (e) {
+			case Type::TEXTURE_1D:
+				return GL_TEXTURE_1D;
+			case Type::TEXTURE_2D:
+				return GL_TEXTURE_2D;
+			case Type::TEXTURE_3D:
+				return GL_TEXTURE_3D;
+			case Type::TEXTURE_CUBE:
+				return GL_TEXTURE_CUBE_MAP;
+			default:
+				return GL_INVALID_ENUM;
+		}
+	}
+
 	TextureFormat::Type TextureFormat::stringToType(const std::string& type) {
 		if (type == "TEXTURE_1D") {
 			return Type::TEXTURE_1D;

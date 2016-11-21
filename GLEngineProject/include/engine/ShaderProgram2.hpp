@@ -31,8 +31,7 @@ namespace engine {
 			void setUniform(const GLint location, const GLfloat data) const;
 			void setUniform(const GLint location, const Texture& data) const;
 
-			// TODO: rename location instead of index
-			GLint getUniformIndex(const std::string& name) const;
+			GLint getUniformLocation(const std::string& name) const;
 
 		private:
 

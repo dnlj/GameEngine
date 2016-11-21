@@ -14,7 +14,7 @@ namespace engine {
 
 	// TODO: Eventually this render function should be removed and everything that needs to be rendered should be
 	//			sorted by material/texture to reduce gl calls
-	void Model::render(const glm::mat4& mvp, const glm::mat4& model, const Camera& camera, const glm::vec3& lightPosition) const {
+	void Model::render(const glm::mat4& mvp, const glm::mat4& model, const Camera& camera, const glm::vec3& lightPosition, float metalness, float intensity) const {
 		const ModelData &modelData = getDataAt(index); // TODO: Since this is a reference could this cause problems if the vector re-allocates?
 
 		glBindVertexArray(modelData.vao);
@@ -27,22 +27,15 @@ namespace engine {
 			// TODO: some kind of cacheing so you dont have to call this if the last draw was of the same material/program
 			const auto& program = subModel.material.getProgram();
 
-			glUseProgram(program.getProgram()); // TODO: this gets rid of some errors
-			// Probably just revert back to the old system and convert over pice by pice instaed of all at once
-			// eneed to do this stuff
-			//glActiveTexture(GL_TEXTURE0);
-			//glBindTexture(GL_TEXTURE_2D, 1);
-
 			// TODO: move these calls into the program class. program.setUniform(name, matrix)
-			glUniform3fv(program.getUniformIndex("viewPos"), 1, &camera.getPosition()[0]);
-			glUniform3fv(program.getUniformIndex("lightPos"), 1, &lightPosition[0]);
+			glUniform3fv(program.getUniformLocation("viewPos"), 1, &camera.getPosition()[0]);
+			glUniform3fv(program.getUniformLocation("lightPos"), 1, &lightPosition[0]);
 
-			glUniformMatrix4fv(program.getUniformIndex("mvp"), 1, GL_FALSE, &mvp[0][0]);
-			glUniformMatrix4fv(program.getUniformIndex("modelMatrix"), 1, GL_FALSE, &model[0][0]);
+			glUniformMatrix4fv(program.getUniformLocation("mvp"), 1, GL_FALSE, &mvp[0][0]);
+			glUniformMatrix4fv(program.getUniformLocation("modelMatrix"), 1, GL_FALSE, &model[0][0]);
 
-			// TODO: need to make these controlled by imgui again
-			glUniform1f(program.getUniformIndex("metalness"), 0.0f);
-			glUniform1f(program.getUniformIndex("intensity"), 1.0f);
+			glUniform1f(program.getUniformLocation("metalness"), metalness);
+			glUniform1f(program.getUniformLocation("intensity"), intensity);
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, subModel.ebo);
 			glDrawElements(GL_TRIANGLES, subModel.count, GL_UNSIGNED_INT, nullptr);

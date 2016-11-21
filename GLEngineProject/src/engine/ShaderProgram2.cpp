@@ -25,7 +25,7 @@ namespace engine {
 		glUniform1i(location, data.getTexture());
 	}
 
-	GLint ShaderProgram2::getUniformIndex(const std::string& name) const {
+	GLint ShaderProgram2::getUniformLocation(const std::string& name) const {
 		const auto& properties = getDataAt(index).properties;
 		
 		for (const auto& prop : properties) {

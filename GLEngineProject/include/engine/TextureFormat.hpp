@@ -68,6 +68,7 @@ namespace engine {
 			Wrap wrapU = Wrap::REPEAT;
 			Wrap wrapV = Wrap::REPEAT;
 			Filter filter = Filter::BILINEAR;
+			Type type = Type::TEXTURE_ERROR;
 			unsigned char filterLevel = 0; // 2, 4, 8, 16
 
 
@@ -78,6 +79,7 @@ namespace engine {
 			static GLenum enumToOpenGL(FilterMin e);
 			static GLenum enumToOpenGL(FilterMag e);
 			static GLenum enumToOpenGL(Wrap e);
+			static GLenum enumToOpenGL(Type e);
 
 			static Type stringToType(const std::string& type);
 			static Filter stringToFilter(const std::string& type);
